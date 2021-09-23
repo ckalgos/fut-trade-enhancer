@@ -33,7 +33,7 @@ const findSbcs = function (item) {
         const itemDetail = {
           futBinId: filteredPlayer[0].id,
           futBinUrl: `https://www.futbin.com/stc/squads?player=${filteredPlayer[0].id}&page=1`,
-          resourceId: item.resourceId,
+          definitionId: item.definitionId,
           name,
         };
         findAllSbcs(itemDetail).then(() => {

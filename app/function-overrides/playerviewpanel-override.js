@@ -50,9 +50,6 @@ export const playerViewPanelOverride = () => {
     };
 
   addBtnListner("#btnSbcApplicable", () => {
-    sendUINotification(
-      "Not implemented yet !!!",
-      enums.UINotificationType.NEGATIVE
-    );
+    sendUINotification("Not implemented yet !!!", UINotificationType.NEGATIVE);
   });
 };

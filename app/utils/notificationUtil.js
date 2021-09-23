@@ -1,4 +1,4 @@
 export const sendUINotification = function (message, notificationType) {
-  notificationType = notificationType || enums.UINotificationType.POSITIVE;
+  notificationType = notificationType || UINotificationType.POSITIVE;
   services.Notification.queue([message, notificationType]);
 };

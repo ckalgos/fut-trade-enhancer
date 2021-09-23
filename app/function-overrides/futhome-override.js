@@ -32,9 +32,9 @@ const getScriptMessages = () => {
 const clickOption = () => {
   showPopUp(
     [
-      atob("UGF5cGFs"),
-      atob("WW91dHViZSBTdWJzY3JpcHRpb24="),
-      atob("UGF0cmVvbg=="),
+      { labelEnum: atob("UGF5cGFs") },
+      { labelEnum: atob("WW91dHViZSBTdWJzY3JpcHRpb24=") },
+      { labelEnum: atob("UGF0cmVvbg==") },
     ],
     atob("RG9uYXRpb24gb3B0aW9u"),
     atob(
@@ -143,12 +143,16 @@ export const futHomeOverride = () => {
         this._playerPicksTile.getRootElement().classList.add("col-1-1"),
         t.appendChild(this._playerPicksTile.getRootElement()),
         (this._objectivesTile = new UTObjectivesHubTileView()),
+        this._objectivesTile
+          .getRootElement()
+          .classList.add("ut-tile-view--with-gfx"),
         this._objectivesTile.getRootElement().classList.add("col-1-2"),
         this._objectivesTile
           .getRootElement()
           .classList.add("ut-tile-hub-objective"),
         t.appendChild(this._objectivesTile.getRootElement()),
         (this._sbcTile = new UTGraphicalInfoTileView()),
+        this._sbcTile.getRootElement().classList.add("ut-tile-view--with-gfx"),
         this._sbcTile.getRootElement().classList.add("col-1-2"),
         this._sbcTile.getRootElement().classList.add("ut-tile-hub-sbc"),
         t.appendChild(this._sbcTile.getRootElement()),
@@ -162,6 +166,9 @@ export const futHomeOverride = () => {
           .classList.add("ut-tile-transfer-list"),
         t.appendChild(this._transferListTile.getRootElement()),
         (this._customizeTile = new UTGraphicalInfoTileView()),
+        this._customizeTile
+          .getRootElement()
+          .classList.add("ut-tile-view--with-gfx"),
         this._customizeTile.getRootElement().classList.add("col-1-2"),
         this._customizeTile
           .getRootElement()
@@ -170,12 +177,26 @@ export const futHomeOverride = () => {
         (this._activeSquadTile = new UTSquadTileView()),
         this._activeSquadTile.getRootElement().classList.add("col-1-1"),
         t.appendChild(this._activeSquadTile.getRootElement()),
-        (this._weekendLeagueProgress = new UTWeekendLeagueProgressView()),
-        this._weekendLeagueProgress.getRootElement().classList.add("col-1-1"),
-        t.appendChild(this._weekendLeagueProgress.getRootElement()),
+        (this._cgeTile = new UTGraphicalInfoTileView()),
+        this._cgeTile.getRootElement().classList.add("ut-tile-view--with-gfx"),
+        this._cgeTile.getRootElement().classList.add("ut-tile-hub-cge"),
+        this._cgeTile.getRootElement().classList.add("col-1-2"),
+        t.appendChild(this._cgeTile.getRootElement()),
+        (this._proClubsTile = new UTGraphicalInfoTileView()),
+        this._proClubsTile
+          .getRootElement()
+          .classList.add("ut-tile-view--with-gfx"),
+        this._proClubsTile
+          .getRootElement()
+          .classList.add("ut-tile-hub-proclubs"),
+        this._proClubsTile.getRootElement().classList.add("col-1-2"),
+        t.appendChild(this._proClubsTile.getRootElement()),
         (this._leaderboardsTile = new UTLeaderboardsTileView()),
         this._leaderboardsTile.getRootElement().classList.add("col-1-1"),
         t.appendChild(this._leaderboardsTile.getRootElement()),
+        (this._weekendLeagueProgress = new UTWeekendLeagueProgressView()),
+        this._weekendLeagueProgress.getRootElement().classList.add("col-1-1"),
+        t.appendChild(this._weekendLeagueProgress.getRootElement()),
         e.appendChild(t),
         (this.__root = e),
         (this._generated = !0);

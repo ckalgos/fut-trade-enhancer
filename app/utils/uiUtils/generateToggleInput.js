@@ -1,4 +1,5 @@
 import { getValue, setValue } from "../../services/repository";
+let eventMappers = new Set();
 
 const clickHandler = (key, evt) => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
@@ -23,11 +24,14 @@ export const generateToggleInput = (
   if (isToggled) {
     setTimeout(() => {
       jQuery(`#${id[key]}`).click();
-    }, 200);
+    }, 400);
   }
-  jQuery(document).on("click", `#${id[key]}`, (evt) => {
-    clickHandler(key, evt);
-  });
+  if (!eventMappers.has(key)) {
+    jQuery(document).on("click touchend", `#${id[key]}`, (evt) => {
+      clickHandler(key, evt);
+    });
+    eventMappers.add(key);
+  }
   return `
     <div class="price-filter  ${additionalClasses}">
         <div class="ut-toggle-cell-view">

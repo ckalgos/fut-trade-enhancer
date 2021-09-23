@@ -14,7 +14,7 @@ export const getSquadPlayerIds = () => {
     const squadPlayerIds = new Set();
     getAllClubPlayers(true).then((squadMembers) => {
       squadMembers.forEach((member) => {
-        if (member.loans < 0) squadPlayerIds.add(member.resourceId);
+        if (member.loans < 0) squadPlayerIds.add(member.definitionId);
       });
       resolve(squadPlayerIds);
     });
@@ -59,12 +59,12 @@ export const getPlayersForSbc = async (playerIds) => {
   for (const playerId in playerIds) {
     const parsedPlayerId = parseInt(playerId, 10);
     let playerInfo = (await getAllClubPlayers(true, parsedPlayerId)).find(
-      (player) => player.resourceId === parsedPlayerId
+      (player) => player.definitionId === parsedPlayerId
     );
     if (!playerInfo) {
       await wait(1);
       playerInfo = (await getConceptPlayers(parsedPlayerId)).find(
-        (player) => player.resourceId === parsedPlayerId
+        (player) => player.definitionId === parsedPlayerId
       );
     }
     players[playerId] = playerInfo;

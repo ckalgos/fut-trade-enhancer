@@ -30,7 +30,7 @@ export const sbcViewOverride = () => {
     if (!squadId) {
       sendUINotification(
         "Squad Id is missing !!!",
-        enums.UINotificationType.NEGATIVE
+        UINotificationType.NEGATIVE
       );
       return;
     }

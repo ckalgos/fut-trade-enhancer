@@ -4,9 +4,9 @@ import { fetchPricesFromFutBin } from "../services/futbin";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 import { trackMarketPrices, trackPlayers } from "../services/analytics";
 
-const appendDuplicateTag = (resourceId, rootElement) => {
+const appendDuplicateTag = (definitionId, rootElement) => {
   const squadMemberIds = getValue("SquadMemberIds");
-  if (squadMemberIds && squadMemberIds.has(resourceId)) {
+  if (squadMemberIds && squadMemberIds.has(definitionId)) {
     rootElement.find(".rowContent").append(
       `<div class="show-duplicate active-tag">
             <div class="label-container">
@@ -23,7 +23,7 @@ const appendDuplicateTag = (resourceId, rootElement) => {
 const formRequestPayLoad = (e, platform) => {
   const {
     id,
-    resourceId,
+    definitionId,
     _auction: { buyNowPrice, tradeId: auctionId, expires: expiresOn },
     _metaData: { id: assetId, skillMoves, weakFoot } = {},
     _attributes,
@@ -36,7 +36,7 @@ const formRequestPayLoad = (e, platform) => {
   const expireDate = new Date();
   expireDate.setSeconds(expireDate.getSeconds() + expiresOn);
   const trackPayLoad = {
-    resourceId,
+    definitionId,
     price: buyNowPrice,
     expiresOn: expireDate,
     id: id + "",
@@ -46,7 +46,7 @@ const formRequestPayLoad = (e, platform) => {
     updatedOn: new Date(),
   };
   const playerPayLoad = {
-    _id: resourceId,
+    _id: definitionId,
     nationId,
     leagueId,
     staticData: { firstName, knownAs, lastName, name },
@@ -78,7 +78,7 @@ export const transferResultOverride = () => {
         const {
           type,
           contract,
-          resourceId,
+          definitionId,
           _auction: { buyNowPrice, currentBid, startingBid },
           untradeable,
         } = e.getData();
@@ -101,12 +101,12 @@ export const transferResultOverride = () => {
             : null;
           if (trackPayLoad.price) auctionPrices.push(trackPayLoad);
           players.push(playerPayLoad);
-          appendDuplicateTag(resourceId, rootElement);
+          appendDuplicateTag(definitionId, rootElement);
           addFutBinPrice &&
-            fetchPricesFromFutBin(resourceId, retryCount).then((res) => {
+            fetchPricesFromFutBin(definitionId, retryCount).then((res) => {
               if (res.status === 200) {
                 appendFutBinPrice(
-                  resourceId,
+                  definitionId,
                   buyNowPrice,
                   bidPrice,
                   platform,

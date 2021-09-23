@@ -1,5 +1,5 @@
 export const appendFutBinPrice = (
-  resourceId,
+  definitionId,
   buyNowPrice,
   bidPrice,
   platform,
@@ -8,7 +8,9 @@ export const appendFutBinPrice = (
   rootElement
 ) => {
   const futBinPrices = JSON.parse(response);
-  let futbinLessPrice = futBinPrices[resourceId].prices[platform].LCPrice;
+  let futbinLessPrice =
+    futBinPrices[definitionId] &&
+    futBinPrices[definitionId].prices[platform].LCPrice;
   if (!auctionElement.find(".futbinprice").length) {
     auctionElement.prepend(`
         <div class="auctionValue futbinprice">
