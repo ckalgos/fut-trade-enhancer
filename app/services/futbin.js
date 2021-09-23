@@ -15,7 +15,7 @@ export const fetchPricesFromFutBin = (definitionId, retries) => {
 };
 
 export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
-  const futBinUrl = `https://www.futbin.com/21/squad/${squadId}/sbc`;
+  const futBinUrl = `https://www.futbin.com/22/squad/${squadId}/sbc`;
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
       method: "GET",
@@ -53,7 +53,7 @@ const fetchPrices = (definitionId) => {
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
       method: "GET",
-      url: `https://www.futbin.com/21/playerPrices?player=${definitionId}`,
+      url: `https://www.futbin.com/22/playerPrices?player=${definitionId}`,
       onload: (res) => {
         if (res.status === 200) {
           res.expiryTimeStamp = new Date(Date.now() + 15 * 60 * 1000);

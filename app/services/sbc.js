@@ -4,7 +4,7 @@ const findSbcs = function (item) {
       " ",
       "-"
     );
-  const url = `https://www.futbin.com/search?year=21&term=${name}`;
+  const url = `https://www.futbin.com/search?year=22&term=${name}`;
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
       method: "GET",
