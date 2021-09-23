@@ -12,10 +12,6 @@ import { generateButton } from "../utils/uiUtils/generateButton";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 
 export const transferListOverride = () => {
-  const applicableHeader = new Set([
-    services.Localization.localize("infopanel.label.addplayer"),
-    services.Localization.localize("tradepile.button.relistall"),
-  ]);
   UTSectionedTableHeaderView.prototype._generate = function _generate() {
     if (!this._generated) {
       var e = document.createElement("header");
@@ -45,7 +41,12 @@ export const transferListOverride = () => {
   UTSectionedTableHeaderView.prototype.setButtonText = function (header) {
     this._optionButton.setText(header);
     if (this._optionRelist) {
-      if (!applicableHeader.has(header)) {
+      if (
+        !new Set([
+          services.Localization.localize("infopanel.label.addplayer"),
+          services.Localization.localize("tradepile.button.relistall"),
+        ]).has(header)
+      ) {
         this._optionRelist.classList.add("hide");
         return;
       }
@@ -66,7 +67,10 @@ export const transferListOverride = () => {
     services.Item.requestTransferItems().observe(
       this,
       async function (t, response) {
-        if (sectionHeader === "Re-list All") {
+        if (
+          sectionHeader ===
+          services.Localization.localize("tradepile.button.relistall")
+        ) {
           let unSoldItems = response.data.items.filter(function (item) {
             var t = item.getAuctionData();
             return (
@@ -76,7 +80,10 @@ export const transferListOverride = () => {
           });
 
           listCardForFutBIN(unSoldItems);
-        } else if (sectionHeader === "Add Player") {
+        } else if (
+          sectionHeader ===
+          services.Localization.localize("infopanel.label.addplayer")
+        ) {
           const availableItems = response.data.items.filter(function (item) {
             return item.type === "player" && !item.getAuctionData().isValid();
           });
@@ -88,7 +95,7 @@ export const transferListOverride = () => {
 
   const listCardForFutBIN = async (players) => {
     const platform = getUserPlatform();
-    const futBinPercent = 95;
+    const futBinPercent = 100;
     if (!players.length) {
       sendUINotification(
         "No players found to be listed",
