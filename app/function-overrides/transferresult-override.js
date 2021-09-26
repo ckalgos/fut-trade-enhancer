@@ -1,6 +1,6 @@
 import { getValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
-import { fetchPricesFromFutBin } from "../services/futbin";
+import { fetchPricesFromFutBinBulk } from "../services/futbin";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 import { trackMarketPrices, trackPlayers } from "../services/analytics";
 
@@ -31,6 +31,7 @@ const formRequestPayLoad = (e, platform) => {
     nationId,
     leagueId,
     rareflag,
+    playStyle,
   } = e.getData();
 
   const expireDate = new Date();
@@ -42,8 +43,9 @@ const formRequestPayLoad = (e, platform) => {
     id: id + "",
     assetId: assetId + "_" + platform + "_" + rareflag,
     auctionId,
-    year: 21,
+    year: 22,
     updatedOn: new Date(),
+    playStyle,
   };
   const playerPayLoad = {
     _id: definitionId,
@@ -66,7 +68,9 @@ export const transferResultOverride = () => {
     const n = this;
     const platform = getUserPlatform();
     const auctionPrices = [];
-    const players = [];
+    const players = new Map();
+    const playersRequestMap = new Map();
+    const playersId = new Set();
     const enhancerSetting = getValue("EnhancerSettings");
     void 0 === o && (o = 0),
       this.listRows.forEach(function (e) {
@@ -79,10 +83,14 @@ export const transferResultOverride = () => {
           type,
           contract,
           definitionId,
-          _auction: { buyNowPrice, currentBid, startingBid },
+          _auction: {
+            buyNowPrice,
+            currentBid,
+            startingBid,
+            tradeId: auctionId,
+          },
           untradeable,
         } = e.getData();
-        const retryCount = 5;
         const auctionElement = rootElement.find(".auction");
         let addFutBinPrice = enhancerSetting["idFutBinPrice"];
         if (auctionElement.attr("style")) {
@@ -100,22 +108,29 @@ export const transferResultOverride = () => {
             ? currentBid || startingBid
             : null;
           if (trackPayLoad.price) auctionPrices.push(trackPayLoad);
-          players.push(playerPayLoad);
+          players.set(definitionId, playerPayLoad);
           appendDuplicateTag(definitionId, rootElement);
-          addFutBinPrice &&
-            fetchPricesFromFutBin(definitionId, retryCount).then((res) => {
-              if (res.status === 200) {
-                appendFutBinPrice(
-                  definitionId,
-                  buyNowPrice,
-                  bidPrice,
-                  platform,
-                  res.responseText,
-                  auctionElement,
-                  rootElement
-                );
-              }
-            });
+          if (addFutBinPrice) {
+            const existingValue = getValue(definitionId);
+            if (existingValue) {
+              appendFutBinPrice(
+                existingValue.price,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement
+              );
+            } else {
+              playersRequestMap.set(auctionId, {
+                definitionId,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement,
+              });
+              playersId.add(definitionId);
+            }
+          }
         }
         n.__itemList.appendChild(e.getRootElement());
       }),
@@ -125,7 +140,11 @@ export const transferResultOverride = () => {
 
     if (auctionPrices.length) {
       trackMarketPrices(auctionPrices);
-      trackPlayers(players);
+      trackPlayers(Array.from(players.values()));
+    }
+
+    if (playersId.size) {
+      fetchPricesFromFutBinBulk(playersRequestMap, playersId, platform);
     }
   };
 };

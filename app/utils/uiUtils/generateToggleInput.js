@@ -13,6 +13,12 @@ const clickHandler = (key, evt) => {
   setValue("EnhancerSettings", enhancerSetting);
 };
 
+const resetToDefault = (key) => {
+  const enhancerSetting = getValue("EnhancerSettings") || {};
+  enhancerSetting[key] = false;
+  setValue("EnhancerSettings", enhancerSetting);
+};
+
 export const generateToggleInput = (
   label,
   id,
@@ -22,9 +28,10 @@ export const generateToggleInput = (
 ) => {
   const key = Object.keys(id)[0];
   if (isToggled) {
+    resetToDefault(key);
     setTimeout(() => {
       jQuery(`#${id[key]}`).click();
-    }, 400);
+    }, 300);
   }
   if (!eventMappers.has(key)) {
     jQuery(document).on("click touchend", `#${id[key]}`, (evt) => {

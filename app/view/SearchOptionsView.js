@@ -1,5 +1,6 @@
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { idFutBinPrice, idBidBargain, idHideBinPop } from "../app.constants";
+import { getValue } from "../services/repository";
 
 export const initSearchOptionView = () => {
   const filterViewGenerate = UTMarketSearchFiltersView.prototype._generate;
@@ -9,6 +10,7 @@ export const initSearchOptionView = () => {
     if (this.__root) {
       const searchPrices = jQuery(this.__root).find(".search-prices").first();
       if (!jQuery(".enhancer-option-header").length && searchPrices.length) {
+        const enhancerSetting = getValue("EnhancerSettings") || {};
         searchPrices.append(`<div> 
         <div class="enhancer-option-header"> 
                <h1>Enhancer Options:</h1>
@@ -17,21 +19,27 @@ export const initSearchOptionView = () => {
           "Show FutBin Price",
           { idFutBinPrice },
           "Shows Futbin Price and marks Bargains",
-          true,
+          "idFutBinPrice" in enhancerSetting
+            ? enhancerSetting["idFutBinPrice"]
+            : true,
           "enhancer-toggle"
         )}
         ${generateToggleInput(
           "Mark Bid Bargains",
           { idBidBargain },
           "Highlights Bargains based on current bid",
-          false,
+          "idBidBargain" in enhancerSetting
+            ? enhancerSetting["idBidBargain"]
+            : false,
           "enhancer-toggle"
         )}
         ${generateToggleInput(
           "Hide Bin Popup",
           { idHideBinPop },
           "Automatically confirms the Bin popup",
-          false,
+          "idHideBinPop" in enhancerSetting
+            ? enhancerSetting["idHideBinPop"]
+            : false,
           "enhancer-toggle"
         )}
       </div>`);

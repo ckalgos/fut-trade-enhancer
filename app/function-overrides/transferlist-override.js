@@ -1,5 +1,9 @@
 import { idResetFutBin } from "../app.constants";
-import { fetchPricesFromFutBin } from "../services/futbin";
+import {
+  fetchPricesFromFutBin,
+  fetchPricesFromFutBinBulk,
+} from "../services/futbin";
+import { getValue, setValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
 import {
   createElementFromHTML,
@@ -95,7 +99,6 @@ export const transferListOverride = () => {
 
   const listCardForFutBIN = async (players) => {
     const platform = getUserPlatform();
-    const futBinPercent = 100;
     if (!players.length) {
       sendUINotification(
         "No players found to be listed",
@@ -104,32 +107,36 @@ export const transferListOverride = () => {
       return;
     }
     sendUINotification("Listing the players for FUTBIN price");
+    const playerIds = new Set();
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
+      const existingValue = getValue(player.definitionId);
+      if (existingValue) {
+        await listForPrice(existingValue.price, player);
+      } else {
+        playerIds.add(player.definitionId);
+      }
+    }
+    if (playerIds.size) {
+      const playersIdArray = Array.from(playersId);
+      const playerId = playersIdArray.shift();
+      const refIds = playersIdArray.join(",");
       try {
-        const futBinResponse = await fetchPricesFromFutBin(
-          player.definitionId,
-          3
-        );
+        const futBinResponse = await fetchPricesFromFutBin(playerId, refIds, 3);
         if (futBinResponse.status === 200) {
           const futBinPrices = JSON.parse(futBinResponse.responseText);
-          if (futBinPrices[player.definitionId]) {
-            let sellPrice = parseInt(
-              futBinPrices[player.definitionId].prices[
-                platform
-              ].LCPrice.replace(/[,.]/g, "")
-            );
-            if (sellPrice) {
-              const calculatedPrice = roundOffPrice(
-                (sellPrice * futBinPercent) / 100
-              );
-              services.Item.list(
-                player,
-                getSellBidPrice(calculatedPrice),
-                calculatedPrice,
-                3600
-              );
-              await wait(getRandWaitTime("3-8"));
+          const futbinLessPrice =
+            futBinPrices[definitionId] &&
+            futBinPrices[definitionId].prices[platform].LCPrice;
+          for (let i = 0; i < players.length; i++) {
+            const player = players[i];
+            if (futBinPrices[player.definitionId]) {
+              const cacheValue = {
+                expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+                price: futbinLessPrice,
+              };
+              setValue(player.definitionId, cacheValue);
+              await listForPrice(futbinLessPrice, player);
             }
           }
         }
@@ -141,6 +148,8 @@ export const transferListOverride = () => {
   UTSectionedItemList.prototype.render = function () {
     const t = this;
     const platform = getUserPlatform();
+    const playersRequestMap = new Map();
+    const playersId = new Set();
     this.listRows.length === 0
       ? this.showEmptyMessage()
       : (this.removeEmptyMessage(),
@@ -149,11 +158,15 @@ export const transferListOverride = () => {
           const rootElement = jQuery(e.getRootElement());
           const {
             definitionId,
-            _auction: { buyNowPrice, currentBid, startingBid },
+            _auction: {
+              buyNowPrice,
+              currentBid,
+              startingBid,
+              tradeId: auctionId,
+            },
             type,
             untradeable,
           } = e.getData();
-          const retryCount = 5;
           const auctionElement = rootElement.find(".auction");
           if (auctionElement.attr("style")) {
             auctionElement.removeAttr("style");
@@ -161,22 +174,46 @@ export const transferListOverride = () => {
           }
           const bidPrice = currentBid || startingBid;
           if (auctionElement && type === "player" && !untradeable) {
-            fetchPricesFromFutBin(definitionId, retryCount).then((res) => {
-              if (res.status === 200) {
-                appendFutBinPrice(
-                  definitionId,
-                  buyNowPrice,
-                  bidPrice,
-                  platform,
-                  res.responseText,
-                  auctionElement,
-                  rootElement
-                );
-              }
-            });
+            const existingValue = getValue(definitionId);
+            if (existingValue) {
+              appendFutBinPrice(
+                existingValue.price,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement
+              );
+            } else {
+              playersRequestMap.set(auctionId, {
+                definitionId,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement,
+              });
+              playersId.add(definitionId);
+            }
           }
-
           t.__list.appendChild(e.getRootElement());
         }));
+
+    if (playersId.size) {
+      fetchPricesFromFutBinBulk(playersRequestMap, playersId, platform);
+    }
+  };
+
+  const listForPrice = async (sellPrice, player) => {
+    sellPrice = parseInt(sellPrice.replace(/[,.]/g, ""));
+    if (sellPrice) {
+      const futBinPercent = 100;
+      const calculatedPrice = roundOffPrice((sellPrice * futBinPercent) / 100);
+      services.Item.list(
+        player,
+        getSellBidPrice(calculatedPrice),
+        calculatedPrice,
+        3600
+      );
+      await wait(getRandWaitTime("3-8"));
+    }
   };
 };

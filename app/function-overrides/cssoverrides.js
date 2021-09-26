@@ -169,6 +169,10 @@ export const overrideStyle = () => {
       border-radius: 50%;
       animation: button-loading-spinner 1s ease infinite;
     }
+    .ui-layout-right .enhancer-option-header,
+    .ui-layout-right .enhancer-toggle {
+      display: none;
+    }
     
     @keyframes button-loading-spinner {
       from {

@@ -1,14 +1,49 @@
+import { appendFutBinPrice } from "../function-overrides/common-override/appendFutBinPrice";
 import { networkCallWithRetry } from "../utils/commonUtil";
-import { getValue, setValue } from "./repository";
+import { setValue } from "./repository";
 
-export const fetchPricesFromFutBin = (definitionId, retries) => {
-  if (getValue(definitionId)) {
-    return new Promise((resolve, reject) => {
-      resolve(getValue(definitionId));
-    });
-  }
+export const fetchPricesFromFutBinBulk = (
+  playersRequestMap,
+  playersId,
+  platform
+) => {
+  const playersIdArray = Array.from(playersId);
+  const playerId = playersIdArray.shift();
+  const refIds = playersIdArray.join(",");
+  fetchPricesFromFutBin(playerId, refIds, 5).then((res) => {
+    if (res.status === 200) {
+      const futBinPrices = JSON.parse(res.responseText);
+      for (let value of playersRequestMap.values()) {
+        let {
+          definitionId,
+          buyNowPrice,
+          bidPrice,
+          auctionElement,
+          rootElement,
+        } = value;
+        const futbinLessPrice =
+          futBinPrices[definitionId] &&
+          futBinPrices[definitionId].prices[platform].LCPrice;
+        const cacheValue = {
+          expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+          price: futbinLessPrice,
+        };
+        setValue(definitionId, cacheValue);
+        appendFutBinPrice(
+          futbinLessPrice,
+          buyNowPrice,
+          bidPrice,
+          auctionElement,
+          rootElement
+        );
+      }
+    }
+  });
+};
+
+export const fetchPricesFromFutBin = (definitionId, refIds, retries) => {
   return networkCallWithRetry(
-    fetchPrices.bind(null, definitionId),
+    fetchPrices.bind(null, definitionId, refIds),
     0.5,
     retries
   );
@@ -36,7 +71,7 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
 
           if (playerDetail.length) {
             const definitionId = parseInt(
-              playerDetail[0].dataset.definitionId,
+              playerDetail[0].dataset.resourceId,
               10
             );
             const playerPos = playerDetail[0].dataset.formposOriginal;
@@ -49,15 +84,13 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
   });
 };
 
-const fetchPrices = (definitionId) => {
+const fetchPrices = (definitionId, refIds) => {
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
       method: "GET",
-      url: `https://www.futbin.com/22/playerPrices?player=${definitionId}`,
+      url: `https://www.futbin.com/22/playerPrices?player=${definitionId}&rids=${refIds}`,
       onload: (res) => {
         if (res.status === 200) {
-          res.expiryTimeStamp = new Date(Date.now() + 15 * 60 * 1000);
-          setValue(definitionId, res);
           resolve(res);
         } else {
           reject(res);

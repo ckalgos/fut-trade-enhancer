@@ -1,16 +1,10 @@
 export const appendFutBinPrice = (
-  definitionId,
+  futbinLessPrice,
   buyNowPrice,
   bidPrice,
-  platform,
-  response,
   auctionElement,
   rootElement
 ) => {
-  const futBinPrices = JSON.parse(response);
-  let futbinLessPrice =
-    futBinPrices[definitionId] &&
-    futBinPrices[definitionId].prices[platform].LCPrice;
   if (!auctionElement.find(".futbinprice").length) {
     auctionElement.prepend(`
         <div class="auctionValue futbinprice">
