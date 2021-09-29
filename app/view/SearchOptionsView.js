@@ -8,8 +8,8 @@ export const initSearchOptionView = () => {
   UTMarketSearchFiltersView.prototype._generate = function () {
     filterViewGenerate.call(this);
     if (this.__root) {
-      const searchPrices = jQuery(this.__root).find(".search-prices").first();
-      if (!jQuery(".enhancer-option-header").length && searchPrices.length) {
+      const searchPrices = $(this.__root).find(".search-prices").first();
+      if (!$(".enhancer-option-header").length && searchPrices.length) {
         const enhancerSetting = getValue("EnhancerSettings") || {};
         searchPrices.append(`<div> 
         <div class="enhancer-option-header"> 

@@ -7,3 +7,4 @@ export const idFutBinPrice = "elem_" + generateId(15);
 export const idBidBargain = "elem_" + generateId(15);
 export const idHideBinPop = "elem_" + generateId(15);
 export const idResetFutBin = "elem_" + generateId(15);
+export const idPlayerPack = "elem_" + generateId(15);

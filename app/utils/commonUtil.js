@@ -1,11 +1,11 @@
 export const addBtnListner = (selector, callback) => {
-  jQuery(document).on(
+  $(document).on(
     {
       mouseenter: function () {
-        jQuery(selector).addClass("hover");
+        $(selector).addClass("hover");
       },
       mouseleave: function () {
-        jQuery(selector).removeClass("hover");
+        $(selector).removeClass("hover");
       },
       click: callback,
       touchend: callback,
@@ -40,13 +40,13 @@ export const getRandWaitTime = (range) => {
 };
 
 export const showLoader = () => {
-  jQuery(".ut-click-shield").addClass("showing");
-  jQuery(".loaderIcon ").css("display", "block");
+  $(".ut-click-shield").addClass("showing");
+  $(".loaderIcon ").css("display", "block");
 };
 
 export const hideLoader = () => {
-  jQuery(".ut-click-shield").removeClass("showing");
-  jQuery(".loaderIcon ").css("display", "none");
+  $(".ut-click-shield").removeClass("showing");
+  $(".loaderIcon ").css("display", "none");
 };
 
 export const networkCallWithRetry = (execution, delay, retries) =>

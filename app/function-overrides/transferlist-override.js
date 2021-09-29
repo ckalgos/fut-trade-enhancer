@@ -148,24 +148,18 @@ export const transferListOverride = () => {
   UTSectionedItemList.prototype.render = function () {
     const t = this;
     const platform = getUserPlatform();
-    const playersRequestMap = new Map();
+    const playersRequestMap = [];
     const playersId = new Set();
     this.listRows.length === 0
       ? this.showEmptyMessage()
       : (this.removeEmptyMessage(),
         this.listRows.forEach(function (e) {
           e.render();
-          const rootElement = jQuery(e.getRootElement());
+          const rootElement = $(e.getRootElement());
           const {
             definitionId,
-            _auction: {
-              buyNowPrice,
-              currentBid,
-              startingBid,
-              tradeId: auctionId,
-            },
+            _auction: { buyNowPrice, currentBid, startingBid },
             type,
-            untradeable,
           } = e.getData();
           const auctionElement = rootElement.find(".auction");
           if (auctionElement.attr("style")) {
@@ -173,7 +167,7 @@ export const transferListOverride = () => {
             auctionElement.addClass("hideauction");
           }
           const bidPrice = currentBid || startingBid;
-          if (auctionElement && type === "player" && !untradeable) {
+          if (auctionElement && type === "player") {
             const existingValue = getValue(definitionId);
             if (existingValue) {
               appendFutBinPrice(
@@ -184,7 +178,7 @@ export const transferListOverride = () => {
                 rootElement
               );
             } else {
-              playersRequestMap.set(auctionId, {
+              playersRequestMap.push({
                 definitionId,
                 buyNowPrice,
                 bidPrice,
@@ -198,7 +192,14 @@ export const transferListOverride = () => {
         }));
 
     if (playersId.size) {
-      fetchPricesFromFutBinBulk(playersRequestMap, playersId, platform);
+      const playersIdArray = Array.from(playersId);
+      while (playersIdArray.length) {
+        fetchPricesFromFutBinBulk(
+          playersRequestMap,
+          playersIdArray.splice(0, 30),
+          platform
+        );
+      }
     }
   };
 

@@ -9,9 +9,9 @@ export const sbcViewOverride = () => {
   UTSBCSquadDetailPanelView.prototype.render = function (...params) {
     squladDetailPanelView.call(this, ...params);
     setTimeout(() => {
-      if (!jQuery(".futBinFill").length) {
-        jQuery(".challenge-content").append(
-          jQuery(
+      if (!$(".futBinFill").length) {
+        $(".challenge-content").append(
+          $(
             `<div class="futBinFill" >
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id">
                 <button id="squadFillFutBin" class="btn-standard call-to-action">
@@ -26,7 +26,7 @@ export const sbcViewOverride = () => {
   };
 
   addBtnListner("#squadFillFutBin", async () => {
-    const squadId = jQuery("#squadId").val();
+    const squadId = $("#squadId").val();
     if (!squadId) {
       sendUINotification(
         "Squad Id is missing !!!",

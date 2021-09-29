@@ -11,6 +11,7 @@ import { xmlRequestOverride } from "./common-override/xmlRequest-override";
 import { futHomeOverride } from "./futhome-override";
 import { popupOverride } from "./popup-override";
 import { binPopUpOverride } from "./binpopup-override";
+import { packItemOverride } from "./packitem-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -23,6 +24,7 @@ export const initOverrides = () => {
   sbcViewOverride();
   transferListOverride();
   futHomeOverride();
+  packItemOverride();
   popupOverride();
   binPopUpOverride();
   overrideStyle();

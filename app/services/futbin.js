@@ -1,19 +1,21 @@
 import { appendFutBinPrice } from "../function-overrides/common-override/appendFutBinPrice";
 import { networkCallWithRetry } from "../utils/commonUtil";
-import { setValue } from "./repository";
+import { getValue, setValue } from "./repository";
 
 export const fetchPricesFromFutBinBulk = (
   playersRequestMap,
-  playersId,
-  platform
+  playersIdArray,
+  platform,
+  priceValCb
 ) => {
-  const playersIdArray = Array.from(playersId);
+  const playerIdLookup = new Set(playersIdArray);
   const playerId = playersIdArray.shift();
   const refIds = playersIdArray.join(",");
   fetchPricesFromFutBin(playerId, refIds, 5).then((res) => {
     if (res.status === 200) {
+      console.log(playersIdArray);
       const futBinPrices = JSON.parse(res.responseText);
-      for (let value of playersRequestMap.values()) {
+      for (let value of playersRequestMap) {
         let {
           definitionId,
           buyNowPrice,
@@ -21,13 +23,17 @@ export const fetchPricesFromFutBinBulk = (
           auctionElement,
           rootElement,
         } = value;
-        const futbinLessPrice =
+        if (!playerIdLookup.has(definitionId)) {
+          continue;
+        }
+        let futbinLessPrice =
           futBinPrices[definitionId] &&
           futBinPrices[definitionId].prices[platform].LCPrice;
         const cacheValue = {
           expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
           price: futbinLessPrice,
         };
+        priceValCb && futbinLessPrice && priceValCb(futbinLessPrice);
         setValue(definitionId, cacheValue);
         appendFutBinPrice(
           futbinLessPrice,
@@ -60,14 +66,14 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
           return resolve(null);
         }
 
-        const playersDetail = jQuery(res.response).find(".cardetails");
+        const playersDetail = $(res.response).find(".cardetails");
 
         const playerIds = {};
         playersDetail.each((_, player) => {
-          if (jQuery(player).hasClass("hide")) {
+          if ($(player).hasClass("hide")) {
             return;
           }
-          const playerDetail = jQuery(player).find("a > div");
+          const playerDetail = $(player).find("a > div");
 
           if (playerDetail.length) {
             const definitionId = parseInt(

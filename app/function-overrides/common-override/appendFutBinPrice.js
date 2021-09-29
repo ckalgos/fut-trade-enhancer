@@ -13,7 +13,7 @@ export const appendFutBinPrice = (
         </div>`);
   }
   if (futbinLessPrice) {
-    futbinLessPrice = futbinLessPrice.toString().replace(/[,.]/g, "");
+    futbinLessPrice = futbinLessPrice.toString().replace(/[,.]/g, "") * 0.95;
     if (buyNowPrice) {
       futbinLessPrice > buyNowPrice && rootElement.addClass("futbinLessPrice");
     }

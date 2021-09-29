@@ -3,8 +3,8 @@ import { sendUINotification } from "../utils/notificationUtil";
 
 export const playerViewPanelOverride = () => {
   const calcTaxPrice = (buyPrice) => {
-    const priceAfterTax = (buyPrice - (buyPrice / 100) * 5).toLocaleString();
-    jQuery("#saleAfterTax").html(`Price: ${priceAfterTax}`);
+    const priceAfterTax = (buyPrice * 0.95).toLocaleString();
+    $("#saleAfterTax").html(`Price: ${priceAfterTax}`);
   };
 
   const panelViewFunc =
@@ -21,22 +21,19 @@ export const playerViewPanelOverride = () => {
     function _getPanelViewInstanceFromData(e, t) {
       panelViewFunc.call(this, e, t);
       setTimeout(() => {
-        const binControl = jQuery(".ut-numeric-input-spinner-control").last();
+        const binControl = $(".ut-numeric-input-spinner-control").last();
         const binInput = binControl.find(".numericInput");
-        if (jQuery(".more").length) {
-          if (!jQuery("#btnSbcApplicable").length) {
-            jQuery(
+        if ($(".more").length) {
+          if (!$("#btnSbcApplicable").length) {
+            $(
               `<button
             id="btnSbcApplicable">
             <span class="btn-text">Find Sbcs</span><span class="btn-subtext"></span>
             </button>`
-            ).insertAfter(jQuery(".more"));
+            ).insertAfter($(".more"));
           }
-          if (
-            jQuery(".panelActions").length &&
-            !jQuery("#saleAfterTax").length
-          ) {
-            jQuery(
+          if ($(".panelActions").length && !$("#saleAfterTax").length) {
+            $(
               `<div  class="buttonInfoLabel hasPriceBanding">
                     <span class="spinnerLabel">After Tax:</span>
                     <span id="saleAfterTax" class="currency-coins bandingLabel">Price: 10,000</span>

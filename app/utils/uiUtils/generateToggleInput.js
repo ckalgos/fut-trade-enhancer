@@ -5,10 +5,10 @@ const clickHandler = (key, evt) => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
   if (enhancerSetting[key]) {
     enhancerSetting[key] = false;
-    jQuery(evt.currentTarget).removeClass("toggled");
+    $(evt.currentTarget).removeClass("toggled");
   } else {
     enhancerSetting[key] = true;
-    jQuery(evt.currentTarget).addClass("toggled");
+    $(evt.currentTarget).addClass("toggled");
   }
   setValue("EnhancerSettings", enhancerSetting);
 };
@@ -30,11 +30,11 @@ export const generateToggleInput = (
   if (isToggled) {
     resetToDefault(key);
     setTimeout(() => {
-      jQuery(`#${id[key]}`).click();
+      $(`#${id[key]}`).click();
     }, 300);
   }
   if (!eventMappers.has(key)) {
-    jQuery(document).on("click touchend", `#${id[key]}`, (evt) => {
+    $(document).on("click touchend", `#${id[key]}`, (evt) => {
       clickHandler(key, evt);
     });
     eventMappers.add(key);
