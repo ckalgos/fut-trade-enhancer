@@ -6,7 +6,7 @@ export const appendFutBinPrice = (
   rootElement
 ) => {
   if (!auctionElement.find(".futbinprice").length) {
-    auctionElement.prepend(`
+    auctionElement.append(`
         <div class="auctionValue futbinprice">
           <span class="label">FUT Bin</span>
           <span class="currency-coins value">${futbinLessPrice || "---"}</span>
