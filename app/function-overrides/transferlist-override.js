@@ -1,18 +1,15 @@
-import { idResetFutBin } from "../app.constants";
+import { idFutBinPercent, idResetFutBin } from "../app.constants";
 import {
   fetchPricesFromFutBin,
   fetchPricesFromFutBinBulk,
 } from "../services/futbin";
 import { getValue, setValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
-import {
-  createElementFromHTML,
-  getRandWaitTime,
-  wait,
-} from "../utils/commonUtil";
+import { createElementFromHTML } from "../utils/commonUtil";
 import { sendUINotification } from "../utils/notificationUtil";
-import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
+import { listForPrice } from "../utils/sellUtil";
 import { generateButton } from "../utils/uiUtils/generateButton";
+import { showFUTBINPercentPopUp } from "../view/futBinView";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 
 export const transferListOverride = () => {
@@ -98,7 +95,6 @@ export const transferListOverride = () => {
   };
 
   const listCardForFutBIN = async (players) => {
-    const platform = getUserPlatform();
     if (!players.length) {
       sendUINotification(
         "No players found to be listed",
@@ -106,15 +102,28 @@ export const transferListOverride = () => {
       );
       return;
     }
+
+    showFUTBINPercentPopUp(() => {
+      const futBinPercent = parseInt($(`#${idFutBinPercent}`).val());
+      listCardConfirm(players, futBinPercent);
+    });
+  };
+
+  const listCardConfirm = async (players, futBinPercent) => {
+    const platform = getUserPlatform();
     sendUINotification("Listing the players for FUTBIN price");
     const playerIds = new Set();
+    const playersLookup = [];
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
       const existingValue = getValue(player.definitionId);
       if (existingValue) {
-        await listForPrice(existingValue.price, player);
+        await listForPrice(existingValue.price, player, futBinPercent);
       } else {
         playerIds.add(player.definitionId);
+        playersLookup.push({
+          players,
+        });
       }
     }
     if (playerIds.size) {
@@ -125,18 +134,16 @@ export const transferListOverride = () => {
         const futBinResponse = await fetchPricesFromFutBin(playerId, refIds, 3);
         if (futBinResponse.status === 200) {
           const futBinPrices = JSON.parse(futBinResponse.responseText);
-          const futbinLessPrice =
-            futBinPrices[definitionId] &&
-            futBinPrices[definitionId].prices[platform].LCPrice;
-          for (let i = 0; i < players.length; i++) {
-            const player = players[i];
+          for (let player of playersLookup) {
             if (futBinPrices[player.definitionId]) {
+              const futbinLessPrice =
+                futBinPrices[definitionId].prices[platform].LCPrice;
               const cacheValue = {
                 expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
                 price: futbinLessPrice,
               };
               setValue(player.definitionId, cacheValue);
-              await listForPrice(futbinLessPrice, player);
+              await listForPrice(futbinLessPrice, player, futBinPercent);
             }
           }
         }
@@ -200,21 +207,6 @@ export const transferListOverride = () => {
           platform
         );
       }
-    }
-  };
-
-  const listForPrice = async (sellPrice, player) => {
-    sellPrice = parseInt(sellPrice.replace(/[,.]/g, ""));
-    if (sellPrice) {
-      const futBinPercent = 100;
-      const calculatedPrice = roundOffPrice((sellPrice * futBinPercent) / 100);
-      services.Item.list(
-        player,
-        getSellBidPrice(calculatedPrice),
-        calculatedPrice,
-        3600
-      );
-      await wait(getRandWaitTime("3-8"));
     }
   };
 };

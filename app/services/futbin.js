@@ -1,6 +1,6 @@
 import { appendFutBinPrice } from "../function-overrides/common-override/appendFutBinPrice";
 import { networkCallWithRetry } from "../utils/commonUtil";
-import { getValue, setValue } from "./repository";
+import { setValue } from "./repository";
 
 export const fetchPricesFromFutBinBulk = (
   playersRequestMap,
@@ -35,13 +35,14 @@ export const fetchPricesFromFutBinBulk = (
         };
         priceValCb && futbinLessPrice && priceValCb(futbinLessPrice);
         setValue(definitionId, cacheValue);
-        appendFutBinPrice(
-          futbinLessPrice,
-          buyNowPrice,
-          bidPrice,
-          auctionElement,
-          rootElement
-        );
+        auctionElement &&
+          appendFutBinPrice(
+            futbinLessPrice,
+            buyNowPrice,
+            bidPrice,
+            auctionElement,
+            rootElement
+          );
       }
     }
   });

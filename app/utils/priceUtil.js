@@ -23,5 +23,5 @@ export const roundOffPrice = (price) => {
     return price >= e.min;
   });
   var nearestPrice = Math.round(price / range.inc) * range.inc;
-  return Math.max(Math.min(nearestPrice, 14999000), 0);
+  return Math.max(Math.min(nearestPrice, 14999000), 200);
 };

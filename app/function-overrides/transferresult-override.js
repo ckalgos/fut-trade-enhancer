@@ -2,7 +2,7 @@ import { getValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
 import { fetchPricesFromFutBinBulk } from "../services/futbin";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
-import { trackMarketPrices, trackPlayers } from "../services/analytics";
+import { trackMarketPrices } from "../services/analytics";
 
 const appendDuplicateTag = (definitionId, rootElement) => {
   const squadMemberIds = getValue("SquadMemberIds");
@@ -25,13 +25,8 @@ const formRequestPayLoad = (e, platform) => {
     id,
     definitionId,
     _auction: { buyNowPrice, tradeId: auctionId, expires: expiresOn },
-    _metaData: { id: assetId, skillMoves, weakFoot } = {},
-    _attributes,
-    _staticData: { firstName, knownAs, lastName, name } = {},
-    nationId,
-    leagueId,
+    _metaData: { id: assetId } = {},
     rareflag,
-    playStyle,
   } = e.getData();
 
   const expireDate = new Date();
@@ -45,22 +40,9 @@ const formRequestPayLoad = (e, platform) => {
     auctionId,
     year: 22,
     updatedOn: new Date(),
-    playStyle,
-  };
-  const playerPayLoad = {
-    _id: definitionId,
-    nationId,
-    leagueId,
-    staticData: { firstName, knownAs, lastName, name },
-    skillMoves,
-    weakFoot,
-    assetId,
-    attributes: _attributes,
-    year: 21,
-    rareflag,
   };
 
-  return { trackPayLoad, playerPayLoad };
+  return { trackPayLoad };
 };
 
 export const transferResultOverride = () => {
@@ -68,7 +50,6 @@ export const transferResultOverride = () => {
     const n = this;
     const platform = getUserPlatform();
     const auctionPrices = [];
-    const players = new Map();
     const playersRequestMap = [];
     const playersId = new Set();
     const enhancerSetting = getValue("EnhancerSettings");
@@ -94,15 +75,11 @@ export const transferResultOverride = () => {
         }
         if (auctionElement && type === "player") {
           rootElement.find(".ut-item-player-status--loan").text(contract);
-          const { trackPayLoad, playerPayLoad } = formRequestPayLoad(
-            e,
-            platform
-          );
+          const { trackPayLoad } = formRequestPayLoad(e, platform);
           const bidPrice = enhancerSetting["idBidBargain"]
             ? currentBid || startingBid
             : null;
           if (trackPayLoad.price) auctionPrices.push(trackPayLoad);
-          players.set(definitionId, playerPayLoad);
           appendDuplicateTag(definitionId, rootElement);
           if (addFutBinPrice) {
             const existingValue = getValue(definitionId);
@@ -132,9 +109,8 @@ export const transferResultOverride = () => {
         this.listRows.length > 0 &&
         (this.noResultsView.dealloc(), (this.noResultsView = null));
 
-    if (auctionPrices.length) {
+    if (auctionPrices.length && auctionPrices.length < 12) {
       trackMarketPrices(auctionPrices);
-      trackPlayers(Array.from(players.values()));
     }
 
     if (playersId.size) {
