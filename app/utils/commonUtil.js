@@ -39,6 +39,9 @@ export const getRandWaitTime = (range) => {
   return 0;
 };
 
+export const getRandNum = (min, max) =>
+  Math.round(Math.random() * (max - min) + min);
+
 export const showLoader = () => {
   $(".ut-click-shield").addClass("showing");
   $(".loaderIcon ").css("display", "block");

@@ -1,5 +1,10 @@
+let eventMappers = new Set();
+
 export const generateButton = (id, label, callback, additionalClasses) => {
-  initializeListensers(id, callback);
+  if (!eventMappers.has(id)) {
+    initializeListensers(id, callback);
+    eventMappers.add(id);
+  }
   return `<button class="btn-standard ${additionalClasses}" id="${id}">
       <span class="button__text">${label}</span>
   </button>`;

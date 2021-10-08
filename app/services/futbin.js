@@ -1,6 +1,6 @@
 import { appendFutBinPrice } from "../function-overrides/common-override/appendFutBinPrice";
 import { networkCallWithRetry } from "../utils/commonUtil";
-import { setValue } from "./repository";
+import { getValue, setValue } from "./repository";
 
 export const fetchPricesFromFutBinBulk = (
   playersRequestMap,
@@ -13,7 +13,6 @@ export const fetchPricesFromFutBinBulk = (
   const refIds = playersIdArray.join(",");
   fetchPricesFromFutBin(playerId, refIds, 5).then((res) => {
     if (res.status === 200) {
-      console.log(playersIdArray);
       const futBinPrices = JSON.parse(res.responseText);
       for (let value of playersRequestMap) {
         let {
@@ -54,6 +53,48 @@ export const fetchPricesFromFutBin = (definitionId, refIds, retries) => {
     0.5,
     retries
   );
+};
+
+export const getFutbinPlayerUrl = (player) => {
+  return new Promise((resolve, reject) => {
+    const existingValue = getValue(`${player.definitionId}_url`);
+    if (existingValue) {
+      resolve(existingValue);
+      return;
+    }
+    const playerName =
+      `${player._staticData.firstName} ${player._staticData.lastName}`.replace(
+        " ",
+        "+"
+      );
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: `https://www.futbin.com/search?year=22&term=${playerName}`,
+      onload: (res) => {
+        if (res.status !== 200) {
+          return resolve();
+        }
+        const players = JSON.parse(res.response);
+
+        if (players.error) {
+          return resolve("");
+        }
+        let filteredPlayer = players.filter(
+          (p) => parseInt(p.rating) === parseInt(player.rating)
+        );
+        if (filteredPlayer.length > 1) {
+          filteredPlayer = filteredPlayer.filter(
+            (p) =>
+              p.rare_type === player.rareflag.toString() &&
+              p.club_image.endsWith(`/${player.teamId}.png`)
+          );
+        }
+        const url = `https://www.futbin.com/22/player/${filteredPlayer[0].id}`;
+        setValue(`${player.definitionId}_url`, url);
+        return resolve(url);
+      },
+    });
+  });
 };
 
 export const getSbcPlayersInfoFromFUTBin = async (squadId) => {

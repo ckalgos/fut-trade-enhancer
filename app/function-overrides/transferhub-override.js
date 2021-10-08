@@ -1,6 +1,5 @@
 import { setValue } from "../services/repository";
 import { getSquadPlayerIds } from "../services/club";
-import { initSearchOptionView } from "../view/SearchOptionsView";
 
 export const transferHubOverride = () => {
   const transferTile =
@@ -13,6 +12,4 @@ export const transferHubOverride = () => {
         setValue("SquadMemberIds", memberIds);
       });
     };
-
-  initSearchOptionView();
 };

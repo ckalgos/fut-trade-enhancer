@@ -12,6 +12,7 @@ import { futHomeOverride } from "./futhome-override";
 import { popupOverride } from "./popup-override";
 import { binPopUpOverride } from "./binpopup-override";
 import { packItemOverride } from "./packitem-override";
+import { sideBarNavOverride } from "./sidebarnav-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -27,5 +28,6 @@ export const initOverrides = () => {
   packItemOverride();
   popupOverride();
   binPopUpOverride();
+  sideBarNavOverride();
   overrideStyle();
 };

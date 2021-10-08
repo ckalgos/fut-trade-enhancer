@@ -3,13 +3,13 @@ import {
   getRandWaitTime,
   wait,
 } from "../utils/commonUtil";
-import { idFutBinPercent, idListFutBin } from "../app.constants";
+import { idListFutBin, idViewFutBin } from "../app.constants";
 import { getValue, setValue } from "../services/repository";
 import { listForPrice } from "../utils/sellUtil";
-import { fetchPricesFromFutBin } from "../services/futbin";
+import { fetchPricesFromFutBin, getFutbinPlayerUrl } from "../services/futbin";
 import { getUserPlatform } from "../services/user";
 import { generateButton } from "../utils/uiUtils/generateButton";
-import { showFUTBINPercentPopUp } from "../view/futBinView";
+import { sendUINotification } from "../utils/notificationUtil";
 
 export const playerViewPanelOverride = () => {
   const calcTaxPrice = (buyPrice) => {
@@ -36,13 +36,7 @@ export const playerViewPanelOverride = () => {
       return;
     }
     $(this._futbinListFor).css("display", "");
-    this.selectedItem = e;
-    if (!this._futbinListForInit) {
-      this._futbinListFor.addEventListener("click", () => {
-        listForFUTBINPopUp(this.selectedItem);
-      });
-      this._futbinListForInit = true;
-    }
+    setValue("selectedPlayer", e);
   };
 
   UTQuickListPanelView.prototype._generate = function _generate() {
@@ -55,7 +49,15 @@ export const playerViewPanelOverride = () => {
       this._btnToggle.getRootElement().classList.add("accordian");
       t.appendChild(this._btnToggle.getRootElement());
       this._futbinListFor = createElementFromHTML(
-        generateButton(idListFutBin, "List for FUTBIN", () => {}, "accordian")
+        generateButton(
+          idListFutBin,
+          "List for FUTBIN",
+          () => {
+            const selectedPlayer = getValue("selectedPlayer");
+            selectedPlayer && listForFUTBIN(selectedPlayer);
+          },
+          "accordian"
+        )
       );
       t.appendChild(this._futbinListFor);
       e.appendChild(t);
@@ -132,7 +134,30 @@ export const playerViewPanelOverride = () => {
       setTimeout(() => {
         const binControl = $(".ut-numeric-input-spinner-control").last();
         const binInput = binControl.find(".numericInput");
+        const panelDisplayStyle = $(".more").css("display");
         if ($(".more").length) {
+          if (!$(`#${idViewFutBin}`).length) {
+            $(
+              generateButton(
+                idViewFutBin,
+                "View on FUTBIN",
+                async () => {
+                  const selectedPlayer = getValue("selectedPlayer");
+                  const playerUrl = await getFutbinPlayerUrl(selectedPlayer);
+                  if (!playerUrl) {
+                    sendUINotification(
+                      "Unable to get futbin url",
+                      UINotificationType.NEGATIVE
+                    );
+                  }
+                  window.open(playerUrl, "_blank");
+                },
+                "accordian"
+              )
+            )
+              .css("display", panelDisplayStyle)
+              .insertAfter($(".more"));
+          }
           if ($(".panelActions").length && !$("#saleAfterTax").length) {
             $(
               `<div  class="buttonInfoLabel hasPriceBanding">
@@ -147,11 +172,9 @@ export const playerViewPanelOverride = () => {
       });
     };
 
-  const listForFUTBINPopUp = (player) => {
-    showFUTBINPercentPopUp(() => {
-      const futBinPercent = parseInt($(`#${idFutBinPercent}`).val());
-      listPlayerForFutBIN(player, futBinPercent);
-    });
+  const listForFUTBIN = (player) => {
+    const futBinPercent = getValue("EnhancerSettings")["idFutBinPercent"];
+    listPlayerForFutBIN(player, futBinPercent);
   };
 
   const listPlayerForFutBIN = async (player, futBinPercent) => {

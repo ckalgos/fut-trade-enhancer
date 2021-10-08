@@ -24,14 +24,14 @@ export const generateToggleInput = (
   id,
   info,
   isToggled,
-  additionalClasses = ""
+  additionalClasses = "settings-field"
 ) => {
   const key = Object.keys(id)[0];
   if (isToggled) {
     resetToDefault(key);
     setTimeout(() => {
       $(`#${id[key]}`).click();
-    }, 300);
+    });
   }
   if (!eventMappers.has(key)) {
     $(document).on("click touchend", `#${id[key]}`, (evt) => {

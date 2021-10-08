@@ -121,15 +121,14 @@ export const overrideStyle = () => {
       display: flex;
       justify-content: center;
       margin-top: 20px;
-    }
-    .enhancer-toggle {
-      width: 49% !important;
-    }
-    .phone .enhancer-toggle {
+    } 
+    .phone .settings-field  {
       width: 100% !important;
+      padding: 0px 10px;;
     }
-    .enhancer-toggle .ut-toggle-cell-view {
-      justify-content: center;
+    .settings-field .ut-toggle-cell-view {
+      justify-content: space-between;
+      margin: 0px 10px;
     }
     .hide {
       display: none;
@@ -170,7 +169,7 @@ export const overrideStyle = () => {
       animation: button-loading-spinner 1s ease infinite;
     }
     .ui-layout-right .enhancer-option-header,
-    .ui-layout-right .enhancer-toggle {
+    .ui-layout-right .settings-field {
       display: none;
     }
     
@@ -182,7 +181,66 @@ export const overrideStyle = () => {
       to {
         transform: rotate(1turn);
       }
-    }    
+    }
+    .enhancer-settings-wrapper {
+      display: flex; 
+      flex-wrap: wrap; 
+      margin-top: 20px;
+      box-shadow: 0 1rem 3em rgb(0 0 0 / 40%);
+      background-color: #2a323d;
+      max-width: 1200px;
+    }
+    .enhancer-settings-header {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+      width: 100%;
+    }
+    .enhancer-save-btn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+      margin: 15px;
+    }
+    .flex-half{
+      flex: 0.5;
+    }
+    .settings-field {
+      margin-top: 15px;
+      margin-bottom: 15px;
+      width: 50% !important;
+      padding: 10px;
+    }
+    .settings-field .info{
+      text-align: center;
+    }
+    input[type="number"]{
+      padding: 0 .5em;
+      border-radius: 0;
+      background-color: #262c38;
+      border: 1px solid #4ee6eb;
+      box-sizing: border-box;
+      color: #4ee6eb;
+      font-family: UltimateTeam,sans-serif;
+      font-size: 1em;
+      height: 2.8em;
+      opacity: 1;
+      width: 100%;
+    }
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    .phone .ut-store-reveal-modal-list-view--wallet {
+      flex: unset;
+    }
+    .price-totals {
+      border-top: 1px solid #4ee6eb;
+      display: none;
+      justify-content: flex-end;
+      height: 35px;
+      align-items: center;
+    }
     `;
   document.head.appendChild(style);
 };

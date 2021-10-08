@@ -1,3 +1,5 @@
+import { getValue } from "../../services/repository";
+
 export const appendFutBinPrice = (
   futbinLessPrice,
   buyNowPrice,
@@ -13,7 +15,10 @@ export const appendFutBinPrice = (
         </div>`);
   }
   if (futbinLessPrice) {
-    futbinLessPrice = futbinLessPrice.toString().replace(/[,.]/g, "") * 0.95;
+    const enhancerSetting = getValue("EnhancerSettings") || {};
+    futbinLessPrice =
+      futbinLessPrice.toString().replace(/[,.]/g, "") *
+      ((enhancerSetting["idBarginThreshold"] || 95) / 100);
     if (buyNowPrice) {
       futbinLessPrice > buyNowPrice && rootElement.addClass("futbinLessPrice");
     }

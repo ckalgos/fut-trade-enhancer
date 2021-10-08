@@ -1,4 +1,9 @@
-import { idFutBinPercent, idResetFutBin } from "../app.constants";
+import {
+  idBidTotal,
+  idBinTotal,
+  idFutBinTotal,
+  idResetFutBin,
+} from "../app.constants";
 import {
   fetchPricesFromFutBin,
   fetchPricesFromFutBinBulk,
@@ -9,7 +14,6 @@ import { createElementFromHTML } from "../utils/commonUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { listForPrice } from "../utils/sellUtil";
 import { generateButton } from "../utils/uiUtils/generateButton";
-import { showFUTBINPercentPopUp } from "../view/futBinView";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 
 export const transferListOverride = () => {
@@ -24,6 +28,18 @@ export const transferListOverride = () => {
       this._optionButton.getRootElement().classList.add("section-header-btn");
       this._optionButton.getRootElement().classList.add("mini");
       this._optionButton.getRootElement().classList.add("call-to-action");
+      this._total = $(
+        `<div class="ut-button-group">
+            <h3 class="ut-group-button cta price-totals ut-store-reveal-modal-list-view--wallet">
+            <span id=${idFutBinTotal} class="ut-store-reveal-modal-list-view--coins"></span>
+            <span id=${idBinTotal} class="ut-store-reveal-modal-list-view--coins"></span>
+            <span id=${idBidTotal} class="ut-store-reveal-modal-list-view--coins"></span>
+            </h3>
+          </div>`
+      );
+      setTimeout(() => {
+        this._total.insertAfter($(e));
+      });
       this._optionRelist = createElementFromHTML(
         generateButton(
           idResetFutBin,
@@ -46,6 +62,7 @@ export const transferListOverride = () => {
         !new Set([
           services.Localization.localize("infopanel.label.addplayer"),
           services.Localization.localize("tradepile.button.relistall"),
+          services.Localization.localize("infopanel.label.alltoclub"),
         ]).has(header)
       ) {
         this._optionRelist.classList.add("hide");
@@ -65,6 +82,21 @@ export const transferListOverride = () => {
   };
 
   const onrelistFutBin = function (sectionHeader) {
+    if (
+      sectionHeader ===
+      services.Localization.localize("infopanel.label.alltoclub")
+    ) {
+      services.Item.requestWatchedItems().observe(
+        this,
+        async function (t, response) {
+          let boughtItems = response.data.items.filter(function (item) {
+            return item.getAuctionData().isWon();
+          });
+          listCardForFutBIN(boughtItems);
+        }
+      );
+      return;
+    }
     services.Item.requestTransferItems().observe(
       this,
       async function (t, response) {
@@ -103,10 +135,8 @@ export const transferListOverride = () => {
       return;
     }
 
-    showFUTBINPercentPopUp(() => {
-      const futBinPercent = parseInt($(`#${idFutBinPercent}`).val());
-      listCardConfirm(players, futBinPercent);
-    });
+    const futBinPercent = getValue("EnhancerSettings")["idFutBinPercent"];
+    listCardConfirm(players, futBinPercent);
   };
 
   const listCardConfirm = async (players, futBinPercent) => {
@@ -155,8 +185,12 @@ export const transferListOverride = () => {
   UTSectionedItemList.prototype.render = function () {
     const t = this;
     const platform = getUserPlatform();
+    const selectElement = $(this.getRootElement());
     const playersRequestMap = [];
     const playersId = new Set();
+    let totalFutBIN = 0;
+    let totalBid = 0;
+    let totalBin = 0;
     this.listRows.length === 0
       ? this.showEmptyMessage()
       : (this.removeEmptyMessage(),
@@ -174,9 +208,14 @@ export const transferListOverride = () => {
             auctionElement.addClass("hideauction");
           }
           const bidPrice = currentBid || startingBid;
+          totalBid += bidPrice;
+          totalBin += buyNowPrice;
           if (auctionElement && type === "player") {
             const existingValue = getValue(definitionId);
             if (existingValue) {
+              totalFutBIN +=
+                parseInt(existingValue.price.toString().replace(/[,.]/g, "")) ||
+                0;
               appendFutBinPrice(
                 existingValue.price,
                 buyNowPrice,
@@ -198,13 +237,34 @@ export const transferListOverride = () => {
           t.__list.appendChild(e.getRootElement());
         }));
 
+    if (this.listRows.length) {
+      setTimeout(() => {
+        selectElement.find(".price-totals").css("display", "flex");
+        selectElement
+          .find(`#${idFutBinTotal}`)
+          .html(`FUTBIN Total ${totalFutBIN}`);
+        selectElement.find(`#${idBidTotal}`).html(`  BID Total ${totalBid}`);
+        selectElement.find(`#${idBinTotal}`).html(`  BIN Total ${totalBin}`);
+      });
+    } else {
+      setTimeout(() => {
+        selectElement.find(".price-totals").css("display", "none");
+      });
+    }
+
     if (playersId.size) {
       const playersIdArray = Array.from(playersId);
       while (playersIdArray.length) {
         fetchPricesFromFutBinBulk(
           playersRequestMap,
           playersIdArray.splice(0, 30),
-          platform
+          platform,
+          (value) => {
+            totalFutBIN += parseInt(value.toString().replace(/[,.]/g, ""));
+            selectElement
+              .find(`#${idFutBinTotal}`)
+              .html(`FUTBIN Total ${totalFutBIN}`);
+          }
         );
       }
     }
