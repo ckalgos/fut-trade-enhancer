@@ -1,23 +1,29 @@
-import { getRandWaitTime, wait } from "./commonUtil";
-import { getSellBidPrice, roundOffPrice } from "./priceUtil";
+import { getValue } from "../services/repository";
+import { convertToSeconds, getRandWaitTime, wait } from "./commonUtil";
+import { getBuyBidPrice, getSellBidPrice, roundOffPrice } from "./priceUtil";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
   sellPrice = parseInt(sellPrice.replace(/[,.]/g, ""));
   await getPriceLimits(player);
   if (sellPrice) {
     futBinPercent = futBinPercent || 100;
+    const duration = getValue("EnhancerSettings")["idFutBinDuration"] || "1H";
     let calculatedPrice = roundOffPrice((sellPrice * futBinPercent) / 100);
     if (player.hasPriceLimits()) {
       calculatedPrice = Math.min(
         player._itemPriceLimits.maximum,
         Math.max(player._itemPriceLimits.minimum, calculatedPrice)
       );
+
+      if (calculatedPrice === player._itemPriceLimits.minimum) {
+        calculatedPrice = getBuyBidPrice(calculatedPrice);
+      }
     }
     services.Item.list(
       player,
       getSellBidPrice(calculatedPrice),
       calculatedPrice,
-      3600
+      convertToSeconds(duration) || 3600
     );
     await wait(getRandWaitTime("3-8"));
   }

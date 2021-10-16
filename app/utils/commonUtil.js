@@ -39,6 +39,19 @@ export const getRandWaitTime = (range) => {
   return 0;
 };
 
+export const convertToSeconds = (val) => {
+  if (val) {
+    let valInterval = val[val.length - 1].toUpperCase();
+    let valInTime = parseInt(val.substring(0, val.length - 1));
+    let multipler = valInterval === "M" ? 60 : valInterval === "H" ? 3600 : 1;
+    if (valInTime) {
+      valInTime = valInTime * multipler;
+    }
+    return valInTime;
+  }
+  return 0;
+};
+
 export const getRandNum = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
 

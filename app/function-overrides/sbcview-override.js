@@ -39,6 +39,7 @@ export const sbcViewOverride = () => {
 
     const playerPositionIds = await getSbcPlayersInfoFromFUTBin(squadId);
     const squadPlayers = await getPlayersForSbc(playerPositionIds);
+    let squadTotal = 0;
 
     const { _squad, _challenge } = getAppMain()
       .getRootViewController()
@@ -76,7 +77,8 @@ export const sbcViewOverride = () => {
 
     for (const playerId in playerPositionIds) {
       const playerPosition = playerPositionIds[playerId];
-      adjustPlayerPostion(playerId, playerPosition);
+      squadTotal += parseInt(playerPosition.price, 10) || 0;
+      adjustPlayerPostion(playerId, playerPosition.position);
     }
 
     for (const playerId in playerPositionIds) {
@@ -89,5 +91,15 @@ export const sbcViewOverride = () => {
     services.SBC.saveChallenge(_challenge);
 
     hideLoader();
+
+    $(
+      `<div class="rating">
+        <span class="ut-squad-summary-label">FUTBIN Squad Price</span>
+        <div>
+          <span class="ratingValue currency-coins">${squadTotal.toLocaleString()}</span>
+        </div> 
+      </div>
+      `
+    ).insertAfter($(".chemistry"));
   });
 };

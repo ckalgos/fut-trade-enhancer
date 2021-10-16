@@ -7,7 +7,6 @@ import {
 } from "../utils/commonUtil";
 import { getConceptPlayers } from "../services/conceptplayer";
 import { MAX_CLUB_SEARCH } from "../app.constants";
-import { getUserPlatform } from "./user";
 
 export const getSquadPlayerIds = () => {
   return new Promise((resolve, reject) => {
@@ -81,7 +80,6 @@ const downloadClub = async () => {
   showLoader();
   let squadMembers = await getAllClubPlayers();
   squadMembers = squadMembers.sort((a, b) => b.rating - a.rating);
-  const platform = getUserPlatform();
 
   let csvContent = "";
   const headers =

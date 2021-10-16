@@ -79,7 +79,7 @@ export const futHomeOverride = () => {
         return;
       } else if (t.screen === "welcomehub") {
         window.open(
-          atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9pbnZpdGUvQUhxZENXUnc2OQ=="),
+          atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9pbnZpdGUvY2t0SFltcA=="),
           atob("X2JsYW5r")
         );
         return;

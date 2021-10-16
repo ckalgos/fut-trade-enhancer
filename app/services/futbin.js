@@ -1,6 +1,7 @@
 import { appendFutBinPrice } from "../function-overrides/common-override/appendFutBinPrice";
 import { networkCallWithRetry } from "../utils/commonUtil";
 import { getValue, setValue } from "./repository";
+import { getUserPlatform } from "./user";
 
 export const fetchPricesFromFutBinBulk = (
   playersRequestMap,
@@ -110,6 +111,9 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
 
         const playersDetail = $(res.response).find(".cardetails");
 
+        const platform = getUserPlatform();
+        const futBinPlatform =
+          platform === "ps" ? "Ps3" : platform === "xbox" ? "Xbl" : "Pc";
         const playerIds = {};
         playersDetail.each((_, player) => {
           if ($(player).hasClass("hide")) {
@@ -118,12 +122,11 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
           const playerDetail = $(player).find("a > div");
 
           if (playerDetail.length) {
-            const definitionId = parseInt(
-              playerDetail[0].dataset.resourceId,
-              10
-            );
-            const playerPos = playerDetail[0].dataset.formposOriginal;
-            playerIds[definitionId] = playerPos;
+            const { dataset } = playerDetail[0];
+            const definitionId = parseInt(dataset.resourceId, 10);
+            const playerPos = dataset.formposOriginal;
+            const price = dataset[`price${futBinPlatform}`];
+            playerIds[definitionId] = { position: playerPos, price };
           }
         });
         resolve(playerIds);

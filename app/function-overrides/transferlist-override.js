@@ -63,6 +63,7 @@ export const transferListOverride = () => {
           services.Localization.localize("infopanel.label.addplayer"),
           services.Localization.localize("tradepile.button.relistall"),
           services.Localization.localize("infopanel.label.alltoclub"),
+          services.Localization.localize("infopanel.label.storeAllInClub"),
         ]).has(header)
       ) {
         this._optionRelist.classList.add("hide");
@@ -83,18 +84,25 @@ export const transferListOverride = () => {
 
   const onrelistFutBin = function (sectionHeader) {
     if (
-      sectionHeader ===
-      services.Localization.localize("infopanel.label.alltoclub")
+      [
+        services.Localization.localize("infopanel.label.alltoclub"),
+        services.Localization.localize("infopanel.label.storeAllInClub"),
+      ].indexOf(sectionHeader) >= 0
     ) {
-      services.Item.requestWatchedItems().observe(
-        this,
-        async function (t, response) {
-          let boughtItems = response.data.items.filter(function (item) {
+      const isWatchList =
+        services.Localization.localize("infopanel.label.alltoclub") ===
+        sectionHeader;
+      services.Item[
+        isWatchList ? "requestWatchedItems" : "requestUnassignedItems"
+      ]().observe(this, async function (t, response) {
+        let boughtItems = response.data.items;
+        if (isWatchList) {
+          boughtItems.filter(function (item) {
             return item.getAuctionData().isWon();
           });
-          listCardForFutBIN(boughtItems);
         }
-      );
+        listCardForFutBIN(boughtItems);
+      });
       return;
     }
     services.Item.requestTransferItems().observe(
@@ -157,7 +165,7 @@ export const transferListOverride = () => {
       }
     }
     if (playerIds.size) {
-      const playersIdArray = Array.from(playersId);
+      const playersIdArray = Array.from(playerIds);
       const playerId = playersIdArray.shift();
       const refIds = playersIdArray.join(",");
       try {

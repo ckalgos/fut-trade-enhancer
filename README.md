@@ -107,7 +107,7 @@ If you are looking for help or any new feature request, join our discord group
 
 ## DeveloperGuide
 
-<a href="https://discord.gg/AHqdCWRw69">Join this discord channel</a>
+<a href="https://discord.gg/cktHYmp">Join this discord channel</a>
 
 <!-- CONTRIBUTING -->
 

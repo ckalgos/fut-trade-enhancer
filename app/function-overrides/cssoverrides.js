@@ -241,6 +241,10 @@ export const overrideStyle = () => {
       height: 35px;
       align-items: center;
     }
+    .phone .hideauction .futbinprice{
+      float: right; 
+      margin-right: 2rem;
+    }
     `;
   document.head.appendChild(style);
 };

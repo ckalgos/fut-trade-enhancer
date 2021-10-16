@@ -7,6 +7,7 @@ import {
   idFutBinPercent,
   idBarginThreshold,
   idMinRating,
+  idFutBinDuration,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -75,6 +76,15 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             { idMinRating },
             "Will only show players with rating as this value in searches",
             enhancerSetting["idMinRating"]
+          )}
+          ${generateTextInput(
+            "FUTBIN List Duration",
+            "1H",
+            { idFutBinDuration },
+            "List Duration when listing using Re-list FUTBIN",
+            enhancerSetting["idFutBinDuration"],
+            null,
+            "text"
           )}
           ${generateToggleInput(
             "Hide Bin Popup",
