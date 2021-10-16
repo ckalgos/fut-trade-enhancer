@@ -19,11 +19,13 @@ export const appendFutBinPrice = (
     futbinLessPrice =
       futbinLessPrice.toString().replace(/[,.]/g, "") *
       ((enhancerSetting["idBarginThreshold"] || 95) / 100);
-    if (buyNowPrice) {
-      futbinLessPrice > buyNowPrice && rootElement.addClass("futbinLessPrice");
-    }
-    if (bidPrice) {
-      futbinLessPrice > bidPrice && rootElement.addClass("futbinLessPrice");
+
+    if (buyNowPrice && futbinLessPrice > buyNowPrice) {
+      rootElement.addClass("futbinLessPrice");
+    } else if (bidPrice && futbinLessPrice > bidPrice) {
+      rootElement.addClass("futbinLessPrice");
+    } else if (enhancerSetting["idOnlyBargain"]) {
+      rootElement.addClass("hide");
     }
   }
 };

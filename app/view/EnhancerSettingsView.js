@@ -8,6 +8,7 @@ import {
   idBarginThreshold,
   idMinRating,
   idFutBinDuration,
+  idOnlyBargain,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -92,6 +93,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "Automatically confirms the Bin popup",
             "idHideBinPop" in enhancerSetting
               ? enhancerSetting["idHideBinPop"]
+              : false
+          )}
+          ${generateToggleInput(
+            "Show only Bargains",
+            { idOnlyBargain },
+            "Show only cards lesser than FUTBIN in searches",
+            "idOnlyBargain" in enhancerSetting
+              ? enhancerSetting["idOnlyBargain"]
               : false
           )}
           <div class="enhancer-save-btn">

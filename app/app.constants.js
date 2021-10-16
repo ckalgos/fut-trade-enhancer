@@ -19,3 +19,4 @@ export const idFutBinTotal = "elem_" + generateId(15);
 export const idBinTotal = "elem_" + generateId(15);
 export const idBidTotal = "elem_" + generateId(15);
 export const idFutBinDuration = "elem_" + generateId(15);
+export const idOnlyBargain = "elem_" + generateId(15);
