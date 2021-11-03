@@ -7,6 +7,8 @@ import {
 } from "../utils/commonUtil";
 import { getConceptPlayers } from "../services/conceptplayer";
 import { MAX_CLUB_SEARCH } from "../app.constants";
+import { addFutbinCachePrice } from "../utils/futbinUtil";
+import { getValue } from "./repository";
 
 export const getSquadPlayerIds = () => {
   return new Promise((resolve, reject) => {
@@ -81,9 +83,11 @@ const downloadClub = async () => {
   let squadMembers = await getAllClubPlayers();
   squadMembers = squadMembers.sort((a, b) => b.rating - a.rating);
 
+  await addFutbinCachePrice(squadMembers);
+
   let csvContent = "";
   const headers =
-    "Player Name,Rating,Rare,Position,Nation,Leagure,Club,Price Range,Bought For,Discard Value,Contract Left,IsUntradable,IsLoaned";
+    "Player Name,Rating,Rare,Position,Nation,League,Club,Price Range,FUTBIN Price,Bought For,Discard Value,Contract Left,IsUntradable,IsLoaned";
   csvContent += headers + "\r\n";
   for (const squadMember of squadMembers) {
     let rowRecord = "";
@@ -124,7 +128,13 @@ const downloadClub = async () => {
         squadMember._itemPriceLimits.maximum +
         ",";
     } else {
-      rowRecord += ",";
+      rowRecord += "--NA--,";
+    }
+    const existingValue = getValue(squadMember.definitionId);
+    if (existingValue && existingValue.price) {
+      rowRecord += `"${existingValue.price}"` + ",";
+    } else {
+      rowRecord += "--NA--,";
     }
     rowRecord += squadMember.lastSalePrice + ",";
     rowRecord += squadMember.discardValue + ",";

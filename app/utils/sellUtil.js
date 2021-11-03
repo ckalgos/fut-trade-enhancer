@@ -8,7 +8,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
   if (sellPrice) {
     futBinPercent = futBinPercent || 100;
     const duration = getValue("EnhancerSettings")["idFutBinDuration"] || "1H";
-    let calculatedPrice = roundOffPrice((sellPrice * futBinPercent) / 100);
+    let calculatedPrice = (sellPrice * futBinPercent) / 100;
     if (player.hasPriceLimits()) {
       calculatedPrice = Math.min(
         player._itemPriceLimits.maximum,
@@ -19,6 +19,7 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
         calculatedPrice = getBuyBidPrice(calculatedPrice);
       }
     }
+    calculatedPrice = roundOffPrice(calculatedPrice, 200);
     services.Item.list(
       player,
       getSellBidPrice(calculatedPrice),

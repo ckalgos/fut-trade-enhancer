@@ -4,13 +4,11 @@ import {
   idFutBinTotal,
   idResetFutBin,
 } from "../app.constants";
-import {
-  fetchPricesFromFutBin,
-  fetchPricesFromFutBinBulk,
-} from "../services/futbin";
-import { getValue, setValue } from "../services/repository";
+import { fetchPricesFromFutBinBulk } from "../services/futbin";
+import { getValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
 import { createElementFromHTML } from "../utils/commonUtil";
+import { addFutbinCachePrice } from "../utils/futbinUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { listForPrice } from "../utils/sellUtil";
 import { generateButton } from "../utils/uiUtils/generateButton";
@@ -97,7 +95,7 @@ export const transferListOverride = () => {
       ]().observe(this, async function (t, response) {
         let boughtItems = response.data.items;
         if (isWatchList) {
-          boughtItems.filter(function (item) {
+          boughtItems = boughtItems.filter(function (item) {
             return item.getAuctionData().isWon();
           });
         }
@@ -148,44 +146,20 @@ export const transferListOverride = () => {
   };
 
   const listCardConfirm = async (players, futBinPercent) => {
-    const platform = getUserPlatform();
     sendUINotification("Listing the players for FUTBIN price");
-    const playerIds = new Set();
-    const playersLookup = [];
-    for (let i = 0; i < players.length; i++) {
-      const player = players[i];
+
+    await addFutbinCachePrice(players);
+
+    for (const player of players) {
       const existingValue = getValue(player.definitionId);
-      if (existingValue) {
+      if (existingValue && existingValue.price) {
         await listForPrice(existingValue.price, player, futBinPercent);
       } else {
-        playerIds.add(player.definitionId);
-        playersLookup.push({
-          players,
-        });
+        sendUINotification(
+          `Error fetch fetching Price for ${player._staticData.name}`,
+          UINotificationType.NEGATIVE
+        );
       }
-    }
-    if (playerIds.size) {
-      const playersIdArray = Array.from(playerIds);
-      const playerId = playersIdArray.shift();
-      const refIds = playersIdArray.join(",");
-      try {
-        const futBinResponse = await fetchPricesFromFutBin(playerId, refIds, 3);
-        if (futBinResponse.status === 200) {
-          const futBinPrices = JSON.parse(futBinResponse.responseText);
-          for (let player of playersLookup) {
-            if (futBinPrices[player.definitionId]) {
-              const futbinLessPrice =
-                futBinPrices[definitionId].prices[platform].LCPrice;
-              const cacheValue = {
-                expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
-                price: futbinLessPrice,
-              };
-              setValue(player.definitionId, cacheValue);
-              await listForPrice(futbinLessPrice, player, futBinPercent);
-            }
-          }
-        }
-      } catch (err) {}
     }
     sendUINotification("Listing the players completed");
   };

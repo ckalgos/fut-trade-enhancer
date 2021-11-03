@@ -25,7 +25,7 @@ export const appendFutBinPrice = (
     } else if (bidPrice && futbinLessPrice > bidPrice) {
       rootElement.addClass("futbinLessPrice");
     } else if (enhancerSetting["idOnlyBargain"]) {
-      rootElement.addClass("hide");
+      rootElement.addClass("hideResult");
     }
   }
 };

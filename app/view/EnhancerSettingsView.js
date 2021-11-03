@@ -9,6 +9,7 @@ import {
   idMinRating,
   idFutBinDuration,
   idOnlyBargain,
+  idTransferFullPop,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -93,6 +94,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "Automatically confirms the Bin popup",
             "idHideBinPop" in enhancerSetting
               ? enhancerSetting["idHideBinPop"]
+              : false
+          )}
+          ${generateToggleInput(
+            "Hide Transfer full Popup",
+            { idTransferFullPop },
+            "Hides transfer full list popup",
+            "idTransferFullPop" in enhancerSetting
+              ? enhancerSetting["idTransferFullPop"]
               : false
           )}
           ${generateToggleInput(

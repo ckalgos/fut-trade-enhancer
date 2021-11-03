@@ -15,5 +15,5 @@ EnhancerSettingsController.prototype.viewDidAppear = function () {
 };
 
 EnhancerSettingsController.prototype.getNavigationTitle = function () {
-  return `Enhancer Settings`;
+  return `Enhancer`;
 };

@@ -22,6 +22,7 @@ export const downloadCsv = (csvContent, fileName) => {
   link.setAttribute("download", `${fileName}.csv`);
   document.body.appendChild(link);
   link.click();
+  document.body.removeChild(link);
 };
 
 export const wait = async (seconds = 1) => {

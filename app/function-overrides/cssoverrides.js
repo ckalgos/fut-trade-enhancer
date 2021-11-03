@@ -40,6 +40,10 @@ export const overrideStyle = () => {
       background-color: blue;
       animation: 4s infinite glow;
     }
+    .SearchResults.ui-layout-left .listFUTItem.hideResult,
+    .phone .SearchResults .listFUTItem.hideResult{
+     display :none;
+    }
     .SearchResults.ui-layout-left .listFUTItem.expired .rowContent, 
     .phone .SearchResults .listFUTItem.expired .rowContent,
     .SearchResults.ui-layout-left .listFUTItem.highest-bid .rowContent, 
@@ -140,7 +144,8 @@ export const overrideStyle = () => {
     .hideauction .futbinprice,
     .auction.hideauction,
     .show {
-      display: unset !important
+      display: unset !important;
+      float: right;
     }
     .relistFut {
       margin-right: 10px;
@@ -244,6 +249,19 @@ export const overrideStyle = () => {
     .phone .hideauction .futbinprice{
       float: right; 
       margin-right: 2rem;
+    }
+    .fut-bin-buy {
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+    .sbc-players-list {
+      width: 100%;
+      padding: 10px;
+      font-family: UltimateTeamCondensed, sans-serif;
+      font-size: 1.6em;
+      color: #e2dde2;
+      text-transform: uppercase;
+      background-color: #171826;
     }
     `;
   document.head.appendChild(style);
