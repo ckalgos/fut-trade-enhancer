@@ -44,12 +44,14 @@
 <!-- installation -->
 
 ## Installation
-
-    For Mobile Devices
-      * Install a browser which supports browser extensions (example kiwi-browser)
-
 - Then navigate to [chrome store](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo?hl=en-GB) to install Tamper monkey extension
 - Then navigate to [download page](https://github.com/chithakumar13/fut-trade-enhancer/releases/latest/download/fut-trade-enhancer.user.js) to install the script
+
+Using mobile? No problem, you can get the app for your os below
+
+| Android | iOS |
+|:-:|:-:|
+| [<img src="storeImg/google-play-badge.png" height="50">](https://play.google.com/store/apps/details?id=com.fut.market.alert) | [<img src="storeImg/appstore-badge.png" height="50">](https://apps.apple.com/us/app/fut-market-alert/id1590505179) |
 
 ## Prerequisites
 
