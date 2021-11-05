@@ -109,7 +109,7 @@ export const transferResultOverride = () => {
         this.listRows.length > 0 &&
         (this.noResultsView.dealloc(), (this.noResultsView = null));
 
-    if (auctionPrices.length && auctionPrices.length < 12) {
+    if (false) {
       trackMarketPrices(auctionPrices);
     }
 
