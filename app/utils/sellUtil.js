@@ -10,9 +10,11 @@ export const listForPrice = async (sellPrice, player, futBinPercent) => {
     const duration = getValue("EnhancerSettings")["idFutBinDuration"] || "1H";
     let calculatedPrice = (sellPrice * futBinPercent) / 100;
     if (player.hasPriceLimits()) {
-      calculatedPrice = Math.min(
-        player._itemPriceLimits.maximum,
-        Math.max(player._itemPriceLimits.minimum, calculatedPrice)
+      calculatedPrice = roundOffPrice(
+        Math.min(
+          player._itemPriceLimits.maximum,
+          Math.max(player._itemPriceLimits.minimum, calculatedPrice)
+        )
       );
 
       if (calculatedPrice === player._itemPriceLimits.minimum) {

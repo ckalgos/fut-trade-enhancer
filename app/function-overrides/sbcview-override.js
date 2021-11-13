@@ -116,8 +116,9 @@ const buyMissingPlayers = async (conceptPlayers, futBinPercent) => {
   for (const player of conceptPlayers) {
     const existingValue = getValue(player.definitionId);
     if (existingValue && existingValue.price) {
+      let parsedPrice = parseInt(existingValue.price.replace(/[,.]/g, ""));
       let calculatedPrice = roundOffPrice(
-        (existingValue.price * futBinPercent) / 100,
+        (parsedPrice * futBinPercent) / 100,
         200
       );
       await buyPlayer(player, calculatedPrice);
@@ -142,7 +143,7 @@ const buyPlayer = (player, buyPrice) => {
     while (numberOfAttempts-- > 0) {
       sendPinEvents("Transfer Market Search");
       searchCriteria.type = SearchType.PLAYER;
-      searchCriteria.maskedDefId = player.databaseId;
+      searchCriteria.defId = [player.definitionId];
       searchCriteria.category = SearchCategory.ANY;
       searchCriteria.minBid = roundOffPrice(
         getRandNum(0, getSellBidPrice(Math.min(buyPrice, 250)))

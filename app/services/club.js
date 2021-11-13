@@ -132,7 +132,7 @@ const downloadClub = async () => {
     }
     const existingValue = getValue(squadMember.definitionId);
     if (existingValue && existingValue.price) {
-      rowRecord += `"${existingValue.price}"` + ",";
+      rowRecord += existingValue.price.replace(/[,.]/g, "") + ",";
     } else {
       rowRecord += "--NA--,";
     }

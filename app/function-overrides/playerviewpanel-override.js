@@ -3,13 +3,14 @@ import {
   getRandWaitTime,
   wait,
 } from "../utils/commonUtil";
-import { idListFutBin, idViewFutBin } from "../app.constants";
+import { idListFutBin, idSearchMinBin, idViewFutBin } from "../app.constants";
 import { getValue, setValue } from "../services/repository";
 import { listForPrice } from "../utils/sellUtil";
 import { fetchPricesFromFutBin, getFutbinPlayerUrl } from "../services/futbin";
 import { getUserPlatform } from "../services/user";
 import { generateButton } from "../utils/uiUtils/generateButton";
 import { sendUINotification } from "../utils/notificationUtil";
+import { calculatePlayerMinBin } from "../services/minBinCalc";
 
 export const playerViewPanelOverride = () => {
   const calcTaxPrice = (buyPrice) => {
@@ -151,6 +152,32 @@ export const playerViewPanelOverride = () => {
                     );
                   }
                   window.open(playerUrl, "_blank");
+                },
+                "accordian"
+              )
+            )
+              .css("display", panelDisplayStyle)
+              .insertAfter($(".more"));
+            $(
+              generateButton(
+                idSearchMinBin,
+                "Calculate Min BIN",
+                async () => {
+                  const btnContxt = $(`#${idSearchMinBin}`);
+                  btnContxt.prop("disabled", true);
+                  btnContxt.text(`Calculate Min BIN`);
+                  const selectedPlayer = getValue("selectedPlayer");
+                  sendUINotification("Calculating Min BIN ....");
+                  const playerMin = await calculatePlayerMinBin(selectedPlayer);
+                  btnContxt.prop("disabled", false);
+                  if (!playerMin) {
+                    sendUINotification(
+                      "Unable to calculate min bin",
+                      UINotificationType.NEGATIVE
+                    );
+                    return;
+                  }
+                  btnContxt.text(`Average Min BIN - (${playerMin})`);
                 },
                 "accordian"
               )
