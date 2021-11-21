@@ -17,7 +17,7 @@ import {
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
-import { getValue } from "../services/repository";
+import { getValue, setValue } from "../services/repository";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 
 export const sbcViewOverride = () => {
@@ -25,6 +25,8 @@ export const sbcViewOverride = () => {
 
   UTSBCSquadDetailPanelView.prototype.render = function (...params) {
     squladDetailPanelView.call(this, ...params);
+    const sbcId = params.length ? params[0].id : "";
+    setValue("squadId", sbcId);
     setTimeout(() => {
       if (!$(".futBinFill").length) {
         $(".challenge-content").append(
@@ -33,9 +35,9 @@ export const sbcViewOverride = () => {
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
               ${generateButton(
                 idFillSBC,
-                " Auto Fill",
+                "Auto Fill",
                 async () => {
-                  await fillSquad();
+                  await fillSquad(getValue("squadId"));
                 },
                 "call-to-action"
               )}
@@ -51,6 +53,9 @@ export const sbcViewOverride = () => {
           `
           )
         );
+      }
+      if (getValue(sbcId)) {
+        appendSquadTotal(getValue(sbcId).value);
       }
     });
   };
@@ -213,7 +218,7 @@ const buyPlayer = (player, buyPrice) => {
   });
 };
 
-const fillSquad = async () => {
+const fillSquad = async (sbcId) => {
   const squadId = $("#squadId").val();
   if (!squadId) {
     sendUINotification("Squad Id is missing !!!", UINotificationType.NEGATIVE);
@@ -277,13 +282,25 @@ const fillSquad = async () => {
 
   hideLoader();
 
-  $(
-    `<div class="rating">
+  setValue(sbcId, {
+    expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+    value: squadTotal.toLocaleString(),
+  });
+  appendSquadTotal(squadTotal.toLocaleString());
+};
+
+const appendSquadTotal = (total) => {
+  if ($(".squadTotal").length) {
+    $(".squadTotal").text(total);
+  } else {
+    $(
+      `<div class="rating">
         <span class="ut-squad-summary-label">FUTBIN Squad Price</span>
         <div>
-          <span class="ratingValue currency-coins">${squadTotal.toLocaleString()}</span>
+          <span class="ratingValue squadTotal currency-coins">${total}</span>
         </div> 
       </div>
       `
-  ).insertAfter($(".chemistry"));
+    ).insertAfter($(".chemistry"));
+  }
 };

@@ -87,16 +87,19 @@ const downloadClub = async () => {
 
   let csvContent = "";
   const headers =
-    "Player Name,Rating,Rare,Position,Nation,League,Club,Price Range,FUTBIN Price,Bought For,Discard Value,Contract Left,IsUntradable,IsLoaned";
+    "Player Name,Rating,Quality,Rarity,Position,Nation,League,Club,Price Range,FUTBIN Price,Bought For,Discard Value,Contract Left,IsUntradable,IsLoaned";
   csvContent += headers + "\r\n";
   for (const squadMember of squadMembers) {
     let rowRecord = "";
     rowRecord += squadMember._staticData.name + ",";
     rowRecord += squadMember.rating + ",";
+    rowRecord += getCardQuality(squadMember) + ",";
     if (ItemRarity[squadMember.rareflag]) {
       rowRecord += !squadMember.rareflag
         ? "COMMON,"
         : ItemRarity[squadMember.rareflag] + ",";
+    } else if (squadMember.isSpecial()) {
+      rowRecord += "SPECIAL,";
     } else {
       rowRecord += ",";
     }
@@ -148,6 +151,17 @@ const downloadClub = async () => {
   downloadCsv(csvContent, club.name);
 
   hideLoader();
+};
+
+const getCardQuality = (card) => {
+  if (card.isGoldRating()) {
+    return "Gold";
+  } else if (card.isSilverRating()) {
+    return "Silver";
+  } else if (card.isBronzeRating()) {
+    return "Bronze";
+  }
+  return "";
 };
 
 addBtnListner("#downloadClub", async function () {

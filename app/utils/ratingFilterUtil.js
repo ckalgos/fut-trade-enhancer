@@ -4,23 +4,33 @@ import { deletePlayers, insertPlayers } from "./dbUtil";
 import { sendUINotification } from "./notificationUtil";
 
 export const savePlayersWithInRatingRange = async (rating) => {
-  const res = await $.getJSON(
-    `${fut_resourceRoot}${fut_resourceBase}${fut_guid}/${fut_year}/fut/items/web/players.json`
-  );
-
   const playerFilteredIds = [];
   setValue("PlayersRatingRange", []);
   await deletePlayers();
 
+  if (!rating) {
+    return;
+  }
+  const [minRating, maxRating] = rating.split("-").map((a) => a && parseInt(a));
+  const res = await $.getJSON(
+    `${fut_resourceRoot}${fut_resourceBase}${fut_guid}/${fut_year}/fut/items/web/players.json`
+  );
+
   res.LegendsPlayers.reduce(function (filtered, option) {
-    if (rating && option.r === rating) {
+    if (
+      (minRating && option.r >= rating) ||
+      (maxRating && option.r <= maxRating)
+    ) {
       filtered.push(option.id);
     }
     return filtered;
   }, playerFilteredIds);
 
   res.Players.reduce(function (filtered, option) {
-    if (rating && option.r === rating) {
+    if (
+      (minRating && option.r >= rating) ||
+      (maxRating && option.r <= maxRating)
+    ) {
       filtered.push(option.id);
     }
     return filtered;

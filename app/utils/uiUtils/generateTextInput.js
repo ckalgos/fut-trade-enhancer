@@ -14,7 +14,6 @@ export const generateTextInput = (
   id,
   info,
   value = null,
-  customCallBack = null,
   type = "number",
   additionalClasses = "settings-field"
 ) => {

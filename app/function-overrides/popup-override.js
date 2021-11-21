@@ -46,6 +46,9 @@ export const popupOverride = () => {
         case atob("UGF5cGFs"):
         case atob("WW91dHViZSBTdWJzY3JpcHRpb24="):
         case atob("UGF0cmVvbg=="):
+        case atob("RGlzY29yZCAoQ29tbXVuaXR5KQ=="):
+        case atob("VHdpdHRlciAoRmFzdCBSZXNwb25zZSk="):
+        case atob("R2l0aHVi"):
           return e;
       }
       return services.Localization.localize(t);

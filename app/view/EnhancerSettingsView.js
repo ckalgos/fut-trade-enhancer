@@ -77,7 +77,8 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "",
             { idMinRating },
             "Will only show players with rating as this value in searches",
-            enhancerSetting["idMinRating"]
+            enhancerSetting["idMinRating"],
+            "text"
           )}
           ${generateTextInput(
             "FUTBIN List Duration",
@@ -85,7 +86,6 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             { idFutBinDuration },
             "List Duration when listing using Re-list FUTBIN",
             enhancerSetting["idFutBinDuration"],
-            null,
             "text"
           )}
           ${generateToggleInput(
