@@ -4,7 +4,7 @@ import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 
 export const calculatePlayerMinBin = async (player) => {
   const searchCriteria = new UTSearchCriteriaDTO();
-  const searchModel = new viewmodels.BucketedItemSearch();
+  const searchModel = new UTBucketedItemSearchViewModel();
   searchCriteria.type = SearchType.PLAYER;
   searchCriteria.defId = [player.definitionId];
   searchCriteria.category = SearchCategory.ANY;

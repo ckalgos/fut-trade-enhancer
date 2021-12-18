@@ -2,7 +2,7 @@ import { wait } from "../utils/commonUtil";
 
 export const getConceptPlayers = function (playerId) {
   return new Promise((resolve, reject) => {
-    const searchCriteria = new viewmodels.BucketedItemSearch().searchCriteria;
+    const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;
     if (playerId) {
       searchCriteria.defId = [playerId];
     }

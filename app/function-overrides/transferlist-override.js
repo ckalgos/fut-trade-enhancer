@@ -164,7 +164,7 @@ export const transferListOverride = () => {
     sendUINotification("Listing the players completed");
   };
 
-  UTSectionedItemList.prototype.render = function () {
+  UTSectionedItemListView.prototype.render = function () {
     const t = this;
     const platform = getUserPlatform();
     const selectElement = $(this.getRootElement());

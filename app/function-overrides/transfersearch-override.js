@@ -6,7 +6,7 @@ export const transferSearchOverride = () => {
   const transferSearch = services.Item.searchTransferMarket;
 
   const updateSearchCriteria = (searchCriteria, page) => {
-    if (page === 1) {
+    if (page === 1 && searchCriteria.type === "player") {
       const ratingsRangePlayers = getValue("PlayersRatingRange") || [];
       if (ratingsRangePlayers.length) {
         const { nation, league, club } = searchCriteria;
@@ -24,6 +24,8 @@ export const transferSearchOverride = () => {
             filteredPlayers[getRandNum(0, filteredPlayers.length - 1)];
         }
       }
+    } else if (page == 1) {
+      searchCriteria.maskedDefId = 0;
     }
   };
 

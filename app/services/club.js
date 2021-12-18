@@ -24,7 +24,7 @@ export const getSquadPlayerIds = () => {
 
 export const getAllClubPlayers = function (filterLoaned, playerId) {
   return new Promise((resolve, reject) => {
-    const searchCriteria = new viewmodels.BucketedItemSearch().searchCriteria;
+    const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;
     if (playerId) {
       searchCriteria.defId = [playerId];
     }

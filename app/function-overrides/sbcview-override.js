@@ -143,7 +143,7 @@ const buyPlayer = (player, buyPrice) => {
   let numberOfAttempts = 3;
   let buySuccess = false;
   const searchCriteria = new UTSearchCriteriaDTO();
-  const searchModel = new viewmodels.BucketedItemSearch();
+  const searchModel = new UTBucketedItemSearchViewModel();
   return new Promise(async (resolve) => {
     while (numberOfAttempts-- > 0) {
       sendPinEvents("Transfer Market Search");

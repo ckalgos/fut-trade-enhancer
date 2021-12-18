@@ -11,15 +11,17 @@ export const savePlayersWithInRatingRange = async (rating) => {
   if (!rating) {
     return;
   }
-  const [minRating, maxRating] = rating.split("-").map((a) => a && parseInt(a));
+  let [minRating, maxRating] = rating.split("-").map((a) => a && parseInt(a));
   const res = await $.getJSON(
     `${fut_resourceRoot}${fut_resourceBase}${fut_guid}/${fut_year}/fut/items/web/players.json`
   );
 
+  maxRating = maxRating || minRating;
+
   res.LegendsPlayers.reduce(function (filtered, option) {
     if (
-      (minRating && option.r >= rating) ||
-      (maxRating && option.r <= maxRating)
+      (!minRating || option.r >= minRating) &&
+      (!maxRating || option.r <= maxRating)
     ) {
       filtered.push(option.id);
     }
@@ -28,8 +30,8 @@ export const savePlayersWithInRatingRange = async (rating) => {
 
   res.Players.reduce(function (filtered, option) {
     if (
-      (minRating && option.r >= rating) ||
-      (maxRating && option.r <= maxRating)
+      (!minRating || option.r >= minRating) &&
+      (!maxRating || option.r <= maxRating)
     ) {
       filtered.push(option.id);
     }

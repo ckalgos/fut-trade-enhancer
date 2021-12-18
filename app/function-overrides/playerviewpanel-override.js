@@ -24,7 +24,7 @@ export const playerViewPanelOverride = () => {
   const buyPriceChanged = UTQuickListPanelView.prototype.onBuyPriceChanged;
 
   const quickPanelRenderView =
-    controllers.views.QuickListPanel.prototype._renderView;
+    UTQuickListPanelViewController.prototype.renderView;
 
   UTQuickListPanelView.prototype.onBuyPriceChanged = function (e, t, i) {
     buyPriceChanged.call(this, e, t, i);
@@ -123,10 +123,10 @@ export const playerViewPanelOverride = () => {
     }
   };
 
-  controllers.views.QuickListPanel.prototype._renderView = function () {
+  UTQuickListPanelViewController.prototype.renderView = function () {
     quickPanelRenderView.call(this);
     let e = this.getView();
-    e.initFutBinEvent(this._item);
+    e.initFutBinEvent(this.item);
   };
 
   controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData =
