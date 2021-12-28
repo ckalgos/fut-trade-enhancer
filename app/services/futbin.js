@@ -120,13 +120,16 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
             return;
           }
           const playerDetail = $(player).find("a > div");
-
+          const position = player.parentElement.dataset.formpos
+          const cardid = player.parentElement.dataset.cardid
+          // console.log({position})
           if (playerDetail.length) {
             const { dataset } = playerDetail[0];
             const definitionId = parseInt(dataset.resourceId, 10);
-            const playerPos = dataset.formposOriginal;
+            // const playerPos = dataset.formposOriginal;
+            // console.log({playerPos})
             const price = dataset[`price${futBinPlatform}`];
-            playerIds[definitionId] = { position: playerPos, price };
+            playerIds[definitionId] = { position, price, cardid };
           }
         });
         resolve(playerIds);
