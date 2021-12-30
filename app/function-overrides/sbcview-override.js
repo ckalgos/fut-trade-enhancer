@@ -1,24 +1,26 @@
+import { Formations } from "../../formations.json";
+import {
+  idBuySBCPlayers,
+  idFillSBC,
+  idSBCBuyFutBinPercent,
+  idSBCPlayersToBuy
+} from "../app.constants";
+import { getPlayersForSbc } from "../services/club";
+import { getSbcPlayersInfoFromFUTBin } from "../services/futbin";
+import { getValue, setValue } from "../services/repository";
+import { getUserPlatform } from "../services/user";
 import {
   getRandNum,
   getRandWaitTime,
   hideLoader,
   showLoader,
-  wait,
+  wait
 } from "../utils/commonUtil";
-import { getSbcPlayersInfoFromFUTBin } from "../services/futbin";
-import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
-import { getPlayersForSbc } from "../services/club";
-import { generateButton } from "../utils/uiUtils/generateButton";
-import {
-  idBuySBCPlayers,
-  idFillSBC,
-  idSBCBuyFutBinPercent,
-  idSBCPlayersToBuy,
-} from "../app.constants";
-import { showPopUp } from "./popup-override";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
-import { getValue, setValue } from "../services/repository";
+import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
+import { generateButton } from "../utils/uiUtils/generateButton";
+import { showPopUp } from "./popup-override";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
@@ -41,7 +43,7 @@ export const sbcViewOverride = () => {
                 },
                 "call-to-action"
               )}
-            </div>            
+            </div>
             ${generateButton(
               idBuySBCPlayers,
               "Buy Missing Players",
@@ -87,7 +89,7 @@ const buyPlayersPopUp = () => {
       ${playerNames.map(
         (value) => `<option value='${value}'>${value}</option>`
       )}
-   </select> 
+   </select>
    <br />
    <br />
    FUTBIN Buy Percent
@@ -218,6 +220,22 @@ const buyPlayer = (player, buyPrice) => {
   });
 };
 
+const getFormationType = (id) => {
+    return new Promise((resolve, reject) => {
+      GM_xmlhttpRequest({
+        method: "GET",
+        url: `https://futbin.org/futbin/api/getSquadByID?squadId=${id}&platform=${getUserPlatform().toUpperCase()}`,
+        onload: (res) => {
+          if (res.status === 200) {
+            resolve(JSON.parse(res.response).squad_data.Formation);
+          } else {
+            reject(res);
+          }
+        },
+      });
+    });
+}
+
 const fillSquad = async (sbcId) => {
   const squadId = $("#squadId").val();
   if (!squadId) {
@@ -250,12 +268,13 @@ const fillSquad = async (sbcId) => {
   }, {});
 
   const playersToAdd = [];
-
-  const adjustPlayerPostion = (playerId, playerPosition) => {
+  const formationName = await getFormationType(squadId)
+  const adjustPlayerPostion = (playerId, playerPosition, futbinPositionId) => {
     if (positionIndexes[playerPosition]) {
       if (positionIndexes[playerPosition].length) {
         const positions = positionIndexes[playerPosition];
-        playersToAdd[parseInt(positions[0], 10)] = squadPlayers[playerId];
+        const FutPosition = Formations[formationName][futbinPositionId]
+        playersToAdd[FutPosition.fut] = squadPlayers[playerId];
         positions.splice(0, 1);
       }
       if (!positionIndexes[playerPosition].length) {
@@ -268,7 +287,7 @@ const fillSquad = async (sbcId) => {
   for (const playerId in playerPositionIds) {
     const playerPosition = playerPositionIds[playerId];
     squadTotal += parseInt(playerPosition.price, 10) || 0;
-    adjustPlayerPostion(playerId, playerPosition.position);
+    adjustPlayerPostion(playerId, playerPosition.position, parseInt(playerPositionIds[playerId].cardid, 10));
   }
 
   for (const playerId in playerPositionIds) {
@@ -298,7 +317,7 @@ const appendSquadTotal = (total) => {
         <span class="ut-squad-summary-label">FUTBIN Squad Price</span>
         <div>
           <span class="ratingValue squadTotal currency-coins">${total}</span>
-        </div> 
+        </div>
       </div>
       `
     ).insertAfter($(".chemistry"));

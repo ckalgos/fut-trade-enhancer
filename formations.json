@@ -1,0 +1,57 @@
+{
+  "Formations": {
+    "5221": {
+      "11": {"fut": "0", "position": "GK"},
+      "10": {"fut": "1", "position": "RWB"},
+      "7": {"fut": "2", "position": "CB"},
+      "9": {"fut": "3", "position": "CB"},
+      "8": {"fut": "4", "position": "CB"},
+      "6": {"fut": "5", "position": "LWB"},
+      "5": {"fut": "6", "position": "CM"},
+      "4": {"fut": "7", "position": "CM"},
+      "3": {"fut": "8", "position": "RW"},
+      "2": {"fut": "9", "position": "ST"},
+      "1": {"fut": "10", "position": "LW"}
+    },
+    "3412": {
+      "11": {"fut": "0", "position": "GK"},
+      "10": {"fut": "1", "position": "CB"},
+      "9": {"fut": "2", "position": "CB"},
+      "8": {"fut": "3", "position": "CB"},
+      "6": {"fut": "4", "position": "CM"},
+      "5": {"fut": "5", "position": "CM"},
+      "7": {"fut": "6", "position": "RM"},
+      "2": {"fut": "7", "position": "CAM"},
+      "4": {"fut": "8", "position": "LM"},
+      "3": {"fut": "9", "position": "ST"},
+      "1": {"fut": "10", "position": "ST"}
+    },
+    "433": {
+      "11": {"fut": "0", "position": "GK"},
+      "10": {"fut": "1", "position": "RB"},
+      "9": {"fut": "2", "position": "CB"},
+      "8": {"fut": "3", "position": "CB"},
+      "7": {"fut": "4", "position": "LB"},
+      "6": {"fut": "5", "position": "CM"},
+      "5": {"fut": "6", "position": "CM"},
+      "4": {"fut": "7", "position": "CM"},
+      "3": {"fut": "8", "position": "RW"},
+      "2": {"fut": "9", "position": "ST"},
+      "1": {"fut": "10", "position": "LW"}
+    },
+
+    "442": {
+      "11": {"fut": "0", "position": "GK"},
+      "10": {"fut": "1", "position": "RB"},
+      "9": {"fut": "2", "position": "CB"},
+      "8": {"fut": "3", "position": "CB"},
+      "7": {"fut": "4", "position": "LB"},
+      "6": {"fut": "5", "position": "RM"},
+      "5": {"fut": "6", "position": "CM"},
+      "4": {"fut": "7", "position": "CM"},
+      "3": {"fut": "8", "position": "LM"},
+      "2": {"fut": "9", "position": "ST"},
+      "1": {"fut": "10", "position": "ST"}
+    }
+  }
+}

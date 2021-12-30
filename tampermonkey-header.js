@@ -10,7 +10,7 @@ module.exports = {
       "https://www.ea.com/fifa/ultimate-team/web-app/*",
     ],
     grant: ["GM_xmlhttpRequest", "GM_download"],
-    connect: ["ea.com", "ea2.com", "futbin.com", "amazonaws.com"],
+    connect: ["ea.com", "ea2.com", "futbin.com", "futbin.org", "amazonaws.com"],
     updateURL:
       "https://github.com/chithakumar13/fut-trade-enhancer/releases/latest/download/fut-trade-enhancer.user.js",
     downloadURL:
