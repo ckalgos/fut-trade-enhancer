@@ -26,3 +26,7 @@ export const idFillSBC = "elem_" + generateId(15);
 export const idSBCPlayersToBuy = "elem_" + generateId(15);
 export const idSBCBuyFutBinPercent = "elem_" + generateId(15);
 export const idSearchMinBin = "elem_" + generateId(15);
+export const idPackPlayersAction = "elem_" + generateId(15);
+export const idPackNonPlayersAction = "elem_" + generateId(15);
+export const idPackDuplicatesAction = "elem_" + generateId(15);
+export const idPacksCount = "elem_" + generateId(15);

@@ -13,6 +13,7 @@ import { popupOverride } from "./popup-override";
 import { binPopUpOverride } from "./binpopup-override";
 import { packItemOverride } from "./packitem-override";
 import { sideBarNavOverride } from "./sidebarnav-override";
+import { storeOverride } from "./store-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -29,5 +30,6 @@ export const initOverrides = () => {
   popupOverride();
   binPopUpOverride();
   sideBarNavOverride();
+  storeOverride();
   overrideStyle();
 };

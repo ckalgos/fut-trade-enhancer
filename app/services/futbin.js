@@ -109,13 +109,15 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
           return resolve(null);
         }
 
-        const playersDetail = $(res.response).find(".cardetails");
+        const playersDetail = $(res.response).find(".card.cardnum");
 
         const platform = getUserPlatform();
         const futBinPlatform =
           platform === "ps" ? "Ps3" : platform === "xbox" ? "Xbl" : "Pc";
-        const playerIds = {};
-        playersDetail.each((_, player) => {
+        const playerIds = [];
+        playersDetail.each((_, playerWrapper) => {
+          const { dataset: cardDataSet } = playerWrapper;
+          const player = $(playerWrapper).find(".cardetails");
           if ($(player).hasClass("hide")) {
             return;
           }
@@ -124,9 +126,15 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
           if (playerDetail.length) {
             const { dataset } = playerDetail[0];
             const definitionId = parseInt(dataset.resourceId, 10);
+            const positionId = parseInt(cardDataSet.cardid, 10);
             const playerPos = dataset.formposOriginal;
             const price = dataset[`price${futBinPlatform}`];
-            playerIds[definitionId] = { position: playerPos, price };
+            playerIds.push({
+              definitionId,
+              position: playerPos,
+              price,
+              positionId,
+            });
           }
         });
         resolve(playerIds);

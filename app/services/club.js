@@ -22,6 +22,19 @@ export const getSquadPlayerIds = () => {
   });
 };
 
+export const getSquadPlayerLookup = () => {
+  return new Promise((resolve, reject) => {
+    const squadPlayersLookup = new Map();
+    getAllClubPlayers(true).then((squadMembers) => {
+      squadMembers.forEach((member) => {
+        if (member.loans < 0)
+          squadPlayersLookup.set(member.definitionId, member);
+      });
+      resolve(squadPlayersLookup);
+    });
+  });
+};
+
 export const getAllClubPlayers = function (filterLoaned, playerId) {
   return new Promise((resolve, reject) => {
     const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;

@@ -263,6 +263,10 @@ export const overrideStyle = () => {
       text-transform: uppercase;
       background-color: #171826;
     }
+    .packOpen {
+      margin-left: 0.5rem;
+      flex-basis: 50% !important;
+    }
     `;
   document.head.appendChild(style);
 };

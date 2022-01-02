@@ -7,7 +7,7 @@ import {
 } from "../utils/commonUtil";
 import { getSbcPlayersInfoFromFUTBin } from "../services/futbin";
 import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
-import { getPlayersForSbc } from "../services/club";
+import { getSquadPlayerLookup } from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
 import {
   idBuySBCPlayers,
@@ -22,6 +22,20 @@ import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
+
+  UTSBCService.prototype.loadChallengeData = function (r) {
+    var s = this,
+      a = new EAObservable();
+    return (
+      this.sbcDAO
+        .loadChallenge(r.id, r.isInProgress())
+        .observe(this, function (t, e) {
+          t.unobserve(s);
+          a.notify(e);
+        }),
+      a
+    );
+  };
 
   UTSBCSquadDetailPanelView.prototype.render = function (...params) {
     squladDetailPanelView.call(this, ...params);
@@ -68,7 +82,7 @@ const buyPlayersPopUp = () => {
     .getCurrentViewController()
     .getCurrentController()._leftController;
 
-  const sbcPlayers = _squad.getPlayers();
+  const sbcPlayers = _squad.getFieldPlayers();
   const conceptPlayers = sbcPlayers.filter(({ _item }) => _item.concept);
 
   if (!conceptPlayers.length) {
@@ -227,8 +241,24 @@ const fillSquad = async (sbcId) => {
 
   showLoader();
 
-  const playerPositionIds = await getSbcPlayersInfoFromFUTBin(squadId);
-  const squadPlayers = await getPlayersForSbc(playerPositionIds);
+  const squadPlayersLookupPromise = getSquadPlayerLookup();
+  const futBinSquadPlayersInfoPromise = getSbcPlayersInfoFromFUTBin(squadId);
+  const [squadPlayersLookup, futBinSquadPlayersInfo] = await Promise.all([
+    squadPlayersLookupPromise,
+    futBinSquadPlayersInfoPromise,
+  ]);
+  const squadPlayers = futBinSquadPlayersInfo
+    .sort((a, b) => b.positionId - a.positionId)
+    .map((currItem) => {
+      const key = currItem.definitionId;
+      const clubPlayerInfo = squadPlayersLookup.get(key);
+      const playerEntity = new UTItemEntity();
+      playerEntity.id = clubPlayerInfo ? clubPlayerInfo.id : key;
+      playerEntity.definitionId = key;
+      playerEntity.concept = !clubPlayerInfo;
+      playerEntity.stackCount = 1;
+      return playerEntity;
+    });
   let squadTotal = 0;
 
   const { _squad, _challenge } = getAppMain()
@@ -237,56 +267,28 @@ const fillSquad = async (sbcId) => {
     .getCurrentViewController()
     .getCurrentController()._leftController;
 
-  const sbcSlots = _squad.getSBCSlots();
+  _squad.setPlayers(squadPlayers, true);
 
-  const positionIndexes = sbcSlots.reduce((acc, curr) => {
-    if (!curr.position) return acc;
+  services.SBC.saveChallenge(_challenge).observe(
+    this,
+    async function (sender, data) {
+      services.SBC.loadChallengeData(_challenge).observe(
+        this,
+        async function (sender, { response: { squad } }) {
+          hideLoader();
 
-    if (!acc[curr.position.typeName]) {
-      acc[curr.position.typeName] = [];
+          setValue(sbcId, {
+            expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+            value: squadTotal.toLocaleString(),
+          });
+          appendSquadTotal(squadTotal.toLocaleString());
+          const players = squad._players.map((player) => player._item);
+          _squad.setPlayers(players, true);
+          _challenge.onDataChange.notify({ squad });
+        }
+      );
     }
-    acc[curr.position.typeName].push(curr.index);
-    return acc;
-  }, {});
-
-  const playersToAdd = [];
-
-  const adjustPlayerPostion = (playerId, playerPosition) => {
-    if (positionIndexes[playerPosition]) {
-      if (positionIndexes[playerPosition].length) {
-        const positions = positionIndexes[playerPosition];
-        playersToAdd[parseInt(positions[0], 10)] = squadPlayers[playerId];
-        positions.splice(0, 1);
-      }
-      if (!positionIndexes[playerPosition].length) {
-        delete positionIndexes[playerPosition];
-      }
-      delete playerPositionIds[playerId];
-    }
-  };
-
-  for (const playerId in playerPositionIds) {
-    const playerPosition = playerPositionIds[playerId];
-    squadTotal += parseInt(playerPosition.price, 10) || 0;
-    adjustPlayerPostion(playerId, playerPosition.position);
-  }
-
-  for (const playerId in playerPositionIds) {
-    const playerPosition = Object.keys(positionIndexes)[0];
-    adjustPlayerPostion(playerId, playerPosition);
-  }
-
-  _squad.setPlayers(playersToAdd, true);
-
-  services.SBC.saveChallenge(_challenge);
-
-  hideLoader();
-
-  setValue(sbcId, {
-    expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
-    value: squadTotal.toLocaleString(),
-  });
-  appendSquadTotal(squadTotal.toLocaleString());
+  );
 };
 
 const appendSquadTotal = (total) => {
