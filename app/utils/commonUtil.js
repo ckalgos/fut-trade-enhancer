@@ -53,8 +53,23 @@ export const convertToSeconds = (val) => {
   return 0;
 };
 
+export const getRandNumberInRange = (range) => {
+  const rangeVal = getRangeValue(range);
+  if (rangeVal.length >= 2) {
+    return getRandNum(rangeVal[0], rangeVal[1]);
+  }
+  return rangeVal[0] || 0;
+};
+
 export const getRandNum = (min, max) =>
   Math.round(Math.random() * (max - min) + min);
+
+export const getRangeValue = (range) => {
+  if (range) {
+    return (range + "").split("-").map((a) => parseInt(a));
+  }
+  return [];
+};
 
 export const showLoader = () => {
   $(".ut-click-shield").addClass("showing");
