@@ -1,12 +1,12 @@
 import { getValue } from "../services/repository";
-import { convertToSeconds, getRandWaitTime, wait } from "./commonUtil";
+import { convertToSeconds, getRandWaitTime, wait, getRandNumberInRange } from "./commonUtil";
 import { getBuyBidPrice, getSellBidPrice, roundOffPrice } from "./priceUtil";
 
 export const listForPrice = async (sellPrice, player, futBinPercent) => {
   sellPrice = parseInt(sellPrice.replace(/[,.]/g, ""));
   await getPriceLimits(player);
   if (sellPrice) {
-    futBinPercent = futBinPercent || 100;
+    futBinPercent = getRandNumberInRange(futBinPercent) || 100;
     const duration = getValue("EnhancerSettings")["idFutBinDuration"] || "1H";
     let calculatedPrice = (sellPrice * futBinPercent) / 100;
     if (player.hasPriceLimits()) {

@@ -67,10 +67,13 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           )}         
           ${generateTextInput(
             "FUTBIN Sale Percent",
-            95,
+            "95-100",
             { idFutBinPercent },
             "Sale Price percent for Relist FUTBIN",
-            enhancerSetting["idFutBinPercent"]
+            enhancerSetting["idFutBinPercent"],
+            "text",
+            "settings-field",
+            "\\d+-\\d+$"
           )}
           ${generateTextInput(
             "Rating",
