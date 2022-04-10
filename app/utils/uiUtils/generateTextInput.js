@@ -15,7 +15,8 @@ export const generateTextInput = (
   info,
   value = null,
   type = "number",
-  additionalClasses = "settings-field"
+  additionalClasses = "settings-field",
+  pattern = ".*",
 ) => {
   const key = Object.keys(id)[0];
   updateCache(key, value || placeholder, type);
@@ -36,7 +37,7 @@ export const generateTextInput = (
        </div>
        <div class="buttonInfo">
            <div class="inputBox">
-               <input type="${type}" class="numericInput" id='${id[key]}' placeholder=${placeholder}>
+               <input pattern="${pattern}" type="${type}" class="numericInput" id='${id[key]}' placeholder=${placeholder}>
            </div>
        </div>
     </div>`;
