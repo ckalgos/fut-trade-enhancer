@@ -14,6 +14,7 @@ import { binPopUpOverride } from "./binpopup-override";
 import { packItemOverride } from "./packitem-override";
 import { sideBarNavOverride } from "./sidebarnav-override";
 import { storeOverride } from "./store-override";
+import { playerSlotOverride } from "./playerslot-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -31,5 +32,6 @@ export const initOverrides = () => {
   binPopUpOverride();
   sideBarNavOverride();
   storeOverride();
+  playerSlotOverride();
   overrideStyle();
 };

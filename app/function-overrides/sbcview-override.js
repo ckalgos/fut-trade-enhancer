@@ -68,9 +68,6 @@ export const sbcViewOverride = () => {
           )
         );
       }
-      if (getValue(sbcId)) {
-        appendSquadTotal(getValue(sbcId).value);
-      }
     });
   };
 };
@@ -247,20 +244,22 @@ const fillSquad = async (sbcId) => {
     squadPlayersLookupPromise,
     futBinSquadPlayersInfoPromise,
   ]);
-  const squadPlayers = futBinSquadPlayersInfo
-    .sort((a, b) => b.positionId - a.positionId)
-    .map((currItem) => {
-      const key = currItem.definitionId;
-      const clubPlayerInfo = squadPlayersLookup.get(key);
-      const playerEntity = new UTItemEntity();
-      playerEntity.id = clubPlayerInfo ? clubPlayerInfo.id : key;
-      playerEntity.definitionId = key;
-      playerEntity.concept = !clubPlayerInfo;
-      playerEntity.stackCount = 1;
-      return playerEntity;
-    });
-  let squadTotal = 0;
 
+  if (!futBinSquadPlayersInfo) {
+    sendUINotification("Invalid Squad Id !!!", UINotificationType.NEGATIVE);
+    return hideLoader();
+  }
+
+  const squadPlayers = futBinSquadPlayersInfo.map((currItem) => {
+    const key = currItem.definitionId;
+    const clubPlayerInfo = squadPlayersLookup.get(key);
+    const playerEntity = new UTItemEntity();
+    playerEntity.id = clubPlayerInfo ? clubPlayerInfo.id : key;
+    playerEntity.definitionId = key;
+    playerEntity.concept = !clubPlayerInfo;
+    playerEntity.stackCount = 1;
+    return playerEntity;
+  });
   const { _squad, _challenge } = getAppMain()
     .getRootViewController()
     .getPresentedViewController()
@@ -276,12 +275,6 @@ const fillSquad = async (sbcId) => {
         this,
         async function (sender, { response: { squad } }) {
           hideLoader();
-
-          setValue(sbcId, {
-            expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
-            value: squadTotal.toLocaleString(),
-          });
-          appendSquadTotal(squadTotal.toLocaleString());
           const players = squad._players.map((player) => player._item);
           _squad.setPlayers(players, true);
           _challenge.onDataChange.notify({ squad });
@@ -289,20 +282,4 @@ const fillSquad = async (sbcId) => {
       );
     }
   );
-};
-
-const appendSquadTotal = (total) => {
-  if ($(".squadTotal").length) {
-    $(".squadTotal").text(total);
-  } else {
-    $(
-      `<div class="rating">
-        <span class="ut-squad-summary-label">FUTBIN Squad Price</span>
-        <div>
-          <span class="ratingValue squadTotal currency-coins">${total}</span>
-        </div> 
-      </div>
-      `
-    ).insertAfter($(".chemistry"));
-  }
 };

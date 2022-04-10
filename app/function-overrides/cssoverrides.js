@@ -267,6 +267,9 @@ export const overrideStyle = () => {
       margin-left: 0.5rem;
       flex-basis: 50% !important;
     }
+    .flex-display {
+      display: flex;
+    }
     `;
   document.head.appendChild(style);
 };

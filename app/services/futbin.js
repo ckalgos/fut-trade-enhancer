@@ -33,7 +33,9 @@ export const fetchPricesFromFutBinBulk = (
           expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
           price: futbinLessPrice,
         };
-        priceValCb && futbinLessPrice && priceValCb(futbinLessPrice);
+        priceValCb &&
+          futbinLessPrice &&
+          priceValCb(futbinLessPrice, definitionId);
         setValue(definitionId, cacheValue);
         auctionElement &&
           appendFutBinPrice(
@@ -99,7 +101,10 @@ export const getFutbinPlayerUrl = (player) => {
 };
 
 export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
-  const futBinUrl = `https://www.futbin.com/22/squad/${squadId}/sbc`;
+  const platform = getUserPlatform();
+  const futBinPlatform =
+    platform === "ps" ? "PS" : platform === "xbox" ? "XB" : "PC";
+  const futBinUrl = `https://futbin.org/futbin/api/getSquadByID?squadId=${squadId}&platform=${futBinPlatform}`;
   return new Promise((resolve) => {
     GM_xmlhttpRequest({
       method: "GET",
@@ -109,35 +114,20 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
           return resolve(null);
         }
 
-        const playersDetail = $(res.response).find(".card.cardnum");
-
-        const platform = getUserPlatform();
-        const futBinPlatform =
-          platform === "ps" ? "Ps3" : platform === "xbox" ? "Xbl" : "Pc";
+        const { squad_data } = JSON.parse(res.response);
         const playerIds = [];
-        playersDetail.each((_, playerWrapper) => {
-          const { dataset: cardDataSet } = playerWrapper;
-          const player = $(playerWrapper).find(".cardetails");
-          if ($(player).hasClass("hide")) {
-            return;
-          }
-          const playerDetail = $(player).find("a > div");
-
-          if (playerDetail.length) {
-            const { dataset } = playerDetail[0];
-            const definitionId = parseInt(dataset.resourceId, 10);
-            const positionId = parseInt(cardDataSet.cardid, 10);
-            const playerPos = dataset.formposOriginal;
-            const price = dataset[`price${futBinPlatform}`];
-            playerIds.push({
-              definitionId,
-              position: playerPos,
-              price,
-              positionId,
-            });
-          }
-        });
-        resolve(playerIds);
+        for (let index = 1; index <= 11; index++) {
+          const playerData = squad_data[`cardlid${index}`];
+          const definitionId = parseInt(playerData.playerid, 10);
+          const position = playerData.cardPosition;
+          const price = playerData.price;
+          playerIds.push({
+            definitionId,
+            position,
+            price,
+          });
+        }
+        resolve(playerIds.reverse());
       },
     });
   });
