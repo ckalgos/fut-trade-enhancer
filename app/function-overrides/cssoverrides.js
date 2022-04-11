@@ -267,8 +267,10 @@ export const overrideStyle = () => {
       margin-left: 0.5rem;
       flex-basis: 50% !important;
     }
-    .flex-display {
+    .squad-fut-bin {
       display: flex;
+      justify-content: center;
+      align-items: center;
     }
     `;
   document.head.appendChild(style);

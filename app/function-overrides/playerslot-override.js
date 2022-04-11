@@ -5,7 +5,7 @@ import { getUserPlatform } from "../services/user";
 function addFutBinPriceToSlot(rootElement, price) {
   rootElement.prepend(`
     <div style="text-align: center;">
-      <span class="currency-coins value flex-display">${price || "---"}</span>
+      <span class="currency-coins value squad-fut-bin">${price || "---"}</span>
     </div>`);
 }
 
@@ -24,7 +24,7 @@ export const playerSlotOverride = () => {
       const definitionId = item._item.definitionId;
       const existingValue = getValue(definitionId);
       const rootElement = $(slot.getRootElement());
-      if (existingValue) {
+      if (existingValue && existingValue.price) {
         total += parseInt(existingValue.price.replace(/[,.]/g, ""));
         addFutBinPriceToSlot(rootElement, existingValue.price);
       } else {
