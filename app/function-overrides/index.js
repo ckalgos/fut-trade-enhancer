@@ -15,6 +15,7 @@ import { packItemOverride } from "./packitem-override";
 import { sideBarNavOverride } from "./sidebarnav-override";
 import { storeOverride } from "./store-override";
 import { playerSlotOverride } from "./playerslot-override";
+import { searchFilterViewOverride } from "./searchfilterview-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -33,5 +34,6 @@ export const initOverrides = () => {
   sideBarNavOverride();
   storeOverride();
   playerSlotOverride();
+  searchFilterViewOverride();
   overrideStyle();
 };

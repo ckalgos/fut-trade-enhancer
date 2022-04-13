@@ -14,6 +14,10 @@ export const playerSlotOverride = () => {
 
   UTSquadPitchView.prototype.setSlots = async function (...args) {
     playerSlot.call(this, ...args);
+    const enhancerSetting = getValue("EnhancerSettings") || {};
+    if (!enhancerSetting["idShowSquadPrice"]) {
+      return;
+    }
     const platform = getUserPlatform();
     const slots = this.getSlotViews();
     let total = 0;

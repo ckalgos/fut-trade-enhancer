@@ -251,6 +251,9 @@ const fillSquad = async (sbcId) => {
   }
 
   const squadPlayers = futBinSquadPlayersInfo.map((currItem) => {
+    if (!currItem) {
+      return null;
+    }
     const key = currItem.definitionId;
     const clubPlayerInfo = squadPlayersLookup.get(key);
     const playerEntity = new UTItemEntity();

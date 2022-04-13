@@ -10,6 +10,7 @@ import {
   idFutBinDuration,
   idOnlyBargain,
   idTransferFullPop,
+  idShowSquadPrice,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -113,6 +114,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "Show only cards lesser than FUTBIN in searches",
             "idOnlyBargain" in enhancerSetting
               ? enhancerSetting["idOnlyBargain"]
+              : false
+          )}
+          ${generateToggleInput(
+            "Show Squad Price",
+            { idShowSquadPrice },
+            "Show FUTBIN Price on Squad/SBC",
+            "idShowSquadPrice" in enhancerSetting
+              ? enhancerSetting["idShowSquadPrice"]
               : false
           )}
           <div class="enhancer-save-btn">

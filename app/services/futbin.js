@@ -118,7 +118,11 @@ export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
         const playerIds = [];
         for (let index = 1; index <= 11; index++) {
           const playerData = squad_data[`cardlid${index}`];
-          if (!playerData) continue;
+          if (!playerData) {
+            playerIds.push(null);
+            continue;
+          }
+
           const definitionId = parseInt(
             playerData.Player_Resource || playerData.playerid,
             10
