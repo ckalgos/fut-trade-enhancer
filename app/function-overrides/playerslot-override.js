@@ -4,7 +4,7 @@ import { getUserPlatform } from "../services/user";
 
 function addFutBinPriceToSlot(rootElement, price) {
   rootElement.prepend(`
-    <div style="text-align: center;">
+    <div style="position: absolute;top: -10px;width: 100%;">
       <span class="currency-coins value squad-fut-bin">${price || "---"}</span>
     </div>`);
 }

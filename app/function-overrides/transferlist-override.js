@@ -4,7 +4,10 @@ import {
   idFutBinTotal,
   idResetFutBin,
 } from "../app.constants";
-import { fetchPricesFromFutBinBulk } from "../services/futbin";
+import {
+  fetchConsumablesPricesFromFutBin,
+  fetchPricesFromFutBinBulk,
+} from "../services/futbin";
 import { getValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
 import { createElementFromHTML } from "../utils/commonUtil";
@@ -173,6 +176,7 @@ export const transferListOverride = () => {
     let totalFutBIN = 0;
     let totalBid = 0;
     let totalBin = 0;
+    let consumablesRequestMap = new Map();
     this.listRows.length === 0
       ? this.showEmptyMessage()
       : (this.removeEmptyMessage(),
@@ -182,6 +186,7 @@ export const transferListOverride = () => {
           const {
             definitionId,
             _auction: { buyNowPrice, currentBid, startingBid },
+            _staticData: { name: typeName },
             type,
           } = e.getData();
           const auctionElement = rootElement.find(".auction");
@@ -192,7 +197,7 @@ export const transferListOverride = () => {
           const bidPrice = currentBid || startingBid;
           totalBid += bidPrice;
           totalBin += buyNowPrice;
-          if (auctionElement && type === "player") {
+          if (auctionElement && (type === "player" || type === "training")) {
             const existingValue = getValue(definitionId);
             if (existingValue) {
               totalFutBIN +=
@@ -205,7 +210,7 @@ export const transferListOverride = () => {
                 auctionElement,
                 rootElement
               );
-            } else {
+            } else if (type === "player") {
               playersRequestMap.push({
                 definitionId,
                 buyNowPrice,
@@ -214,6 +219,21 @@ export const transferListOverride = () => {
                 rootElement,
               });
               playersId.add(definitionId);
+            } else if (
+              typeName === "Position" ||
+              typeName === "Chemistry Style"
+            ) {
+              if (!consumablesRequestMap.has(typeName)) {
+                consumablesRequestMap.set(typeName, []);
+              }
+              consumablesRequestMap.get(typeName).push({
+                definitionId,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement,
+                name: e.__name.textContent.replace(" >> ", "->"),
+              });
             }
           }
           t.__list.appendChild(e.getRootElement());
@@ -249,6 +269,21 @@ export const transferListOverride = () => {
           }
         );
       }
+    }
+
+    if (consumablesRequestMap.size) {
+      consumablesRequestMap.forEach((requestMap, consumableType) => {
+        fetchConsumablesPricesFromFutBin(
+          requestMap,
+          consumableType,
+          (value) => {
+            totalFutBIN += parseInt(value.toString().replace(/[,.]/g, ""));
+            selectElement
+              .find(`#${idFutBinTotal}`)
+              .html(`FUTBIN Total ${totalFutBIN}`);
+          }
+        );
+      });
     }
   };
 };

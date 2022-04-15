@@ -58,6 +58,54 @@ export const fetchPricesFromFutBin = (definitionId, refIds, retries) => {
   );
 };
 
+export const fetchConsumablesPricesFromFutBin = async (
+  consumablesRequestMap,
+  category,
+  priceValCb
+) => {
+  const res = await networkCallWithRetry(
+    fetchConsumablesPrices.bind(null, category.split(" ")[0]),
+    0.5,
+    5
+  );
+
+  if (res.status !== 200) {
+    return;
+  }
+  const consumablesPrices = JSON.parse(res.responseText);
+  const consumablesPriceLookUp = consumablesPrices.data.reduce((acc, curr) => {
+    acc.set(curr.SubType.toUpperCase(), curr.LCPrice);
+    return acc;
+  }, new Map());
+  for (let value of consumablesRequestMap) {
+    let {
+      name,
+      definitionId,
+      buyNowPrice,
+      bidPrice,
+      auctionElement,
+      rootElement,
+    } = value;
+
+    let futbinLessPrice = consumablesPriceLookUp.get(name);
+    priceValCb && futbinLessPrice && priceValCb(futbinLessPrice);
+    const cacheValue = {
+      expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
+      price: futbinLessPrice,
+    };
+
+    setValue(definitionId, cacheValue);
+    auctionElement &&
+      appendFutBinPrice(
+        futbinLessPrice,
+        buyNowPrice,
+        bidPrice,
+        auctionElement,
+        rootElement
+      );
+  }
+};
+
 export const getFutbinPlayerUrl = (player) => {
   return new Promise((resolve, reject) => {
     const existingValue = getValue(`${player.definitionId}_url`);
@@ -146,6 +194,25 @@ const fetchPrices = (definitionId, refIds) => {
     GM_xmlhttpRequest({
       method: "GET",
       url: `https://www.futbin.com/22/playerPrices?player=${definitionId}&rids=${refIds}`,
+      onload: (res) => {
+        if (res.status === 200) {
+          resolve(res);
+        } else {
+          reject(res);
+        }
+      },
+    });
+  });
+};
+
+const fetchConsumablesPrices = (category) => {
+  const platform = getUserPlatform();
+  const futBinPlatform =
+    platform === "ps" ? "PS" : platform === "xbox" ? "XB" : "PC";
+  return new Promise((resolve, reject) => {
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: `https://www.futbin.org/futbin/api/fetchConsumables?category=${category}&platformtype=${futBinPlatform}`,
       onload: (res) => {
         if (res.status === 200) {
           resolve(res);

@@ -1,6 +1,9 @@
 import { getValue } from "../services/repository";
 import { getUserPlatform } from "../services/user";
-import { fetchPricesFromFutBinBulk } from "../services/futbin";
+import {
+  fetchConsumablesPricesFromFutBin,
+  fetchPricesFromFutBinBulk,
+} from "../services/futbin";
 import { appendFutBinPrice } from "./common-override/appendFutBinPrice";
 
 const appendDuplicateTag = (definitionId, rootElement) => {
@@ -24,8 +27,10 @@ export const transferResultOverride = () => {
     const n = this;
     const platform = getUserPlatform();
     const playersRequestMap = [];
+    const consumablesRequestMap = [];
     const playersId = new Set();
     const enhancerSetting = getValue("EnhancerSettings");
+    let consumableType = "";
     void 0 === o && (o = 0),
       this.listRows.forEach(function (e) {
         let t;
@@ -38,6 +43,7 @@ export const transferResultOverride = () => {
           contract,
           definitionId,
           _auction: { buyNowPrice, currentBid, startingBid },
+          _staticData: { name: typeName },
         } = e.getData();
         const auctionElement = rootElement.find(".auction");
         let addFutBinPrice = enhancerSetting["idFutBinPrice"];
@@ -46,7 +52,7 @@ export const transferResultOverride = () => {
           auctionElement.addClass("hideauction");
           addFutBinPrice = true;
         }
-        if (auctionElement && type === "player") {
+        if (auctionElement && (type === "player" || type === "training")) {
           rootElement.find(".ut-item-player-status--loan").text(contract);
           const bidPrice = enhancerSetting["idBidBargain"]
             ? currentBid || startingBid
@@ -62,7 +68,7 @@ export const transferResultOverride = () => {
                 auctionElement,
                 rootElement
               );
-            } else {
+            } else if (type === "player") {
               playersRequestMap.push({
                 definitionId,
                 buyNowPrice,
@@ -71,6 +77,19 @@ export const transferResultOverride = () => {
                 rootElement,
               });
               playersId.add(definitionId);
+            } else if (
+              typeName === "Position" ||
+              typeName === "Chemistry Style"
+            ) {
+              consumableType = typeName;
+              consumablesRequestMap.push({
+                definitionId,
+                buyNowPrice,
+                bidPrice,
+                auctionElement,
+                rootElement,
+                name: e.__name.textContent.replace(" >> ", "->"),
+              });
             }
           }
         }
@@ -89,6 +108,10 @@ export const transferResultOverride = () => {
           platform
         );
       }
+    }
+
+    if (consumablesRequestMap.length) {
+      fetchConsumablesPricesFromFutBin(consumablesRequestMap, consumableType);
     }
   };
 };
