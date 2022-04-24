@@ -272,6 +272,12 @@ export const overrideStyle = () => {
       justify-content: center;
       align-items: center;
     }
+    .sbcSolutions {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
     `;
   document.head.appendChild(style);
 };

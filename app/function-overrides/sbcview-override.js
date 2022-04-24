@@ -5,7 +5,10 @@ import {
   showLoader,
   wait,
 } from "../utils/commonUtil";
-import { getSbcPlayersInfoFromFUTBin } from "../services/futbin";
+import {
+  getAllSBCSForChallenge,
+  getSbcPlayersInfoFromFUTBin,
+} from "../services/futbin";
 import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
 import { getSquadPlayerLookup } from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
@@ -14,6 +17,7 @@ import {
   idFillSBC,
   idSBCBuyFutBinPercent,
   idSBCPlayersToBuy,
+  idSBCFUTBINSolution,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
@@ -22,6 +26,19 @@ import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
+
+  $(document).on(
+    {
+      change: function () {
+        const squadId = $(`#${idSBCFUTBINSolution} option`)
+          .filter(":selected")
+          .val();
+        $("#squadId").val(squadId);
+        fillSquad(squadId);
+      },
+    },
+    `#${idSBCFUTBINSolution}`
+  );
 
   UTSBCService.prototype.loadChallengeData = function (r) {
     var s = this,
@@ -41,17 +58,19 @@ export const sbcViewOverride = () => {
     squladDetailPanelView.call(this, ...params);
     const sbcId = params.length ? params[0].id : "";
     setValue("squadId", sbcId);
+    fetchAndAppendCommunitySbcs(sbcId);
     setTimeout(() => {
       if (!$(".futBinFill").length) {
         $(".challenge-content").append(
           $(
-            `<div class="futBinFill" >
+            `<div class="sbcSolutions"></div>
+            <div class="futBinFill">
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
               ${generateButton(
                 idFillSBC,
                 "Auto Fill",
                 async () => {
-                  await fillSquad(getValue("squadId"));
+                  await validateAndFillSquad();
                 },
                 "call-to-action"
               )}
@@ -70,6 +89,20 @@ export const sbcViewOverride = () => {
       }
     });
   };
+};
+
+const fetchAndAppendCommunitySbcs = async (challengeId) => {
+  const squads = await getAllSBCSForChallenge(challengeId);
+  $(`#${idSBCFUTBINSolution}`).remove();
+  $(".sbcSolutions").append(
+    `<select id="${idSBCFUTBINSolution}" class="sbc-players-list" style="border : 1px solid; width: 90%;">
+      <option selected="true" disabled value='-1'>---FUTBIN SBC SOLUTIONS---</option>
+      ${squads.map(
+        (value) =>
+          `<option class="currency-coins" value='${value.id}'>${value.id}(Price: ${value.ps_price})</option>`
+      )}
+   </select>`
+  );
 };
 
 const buyPlayersPopUp = () => {
@@ -229,13 +262,17 @@ const buyPlayer = (player, buyPrice) => {
   });
 };
 
-const fillSquad = async (sbcId) => {
+const validateAndFillSquad = async () => {
   const squadId = $("#squadId").val();
   if (!squadId) {
     sendUINotification("Squad Id is missing !!!", UINotificationType.NEGATIVE);
     return;
   }
 
+  await fillSquad(squadId);
+};
+
+const fillSquad = async (squadId) => {
   showLoader();
 
   const squadPlayersLookupPromise = getSquadPlayerLookup();
@@ -263,6 +300,7 @@ const fillSquad = async (sbcId) => {
     playerEntity.stackCount = 1;
     return playerEntity;
   });
+
   const { _squad, _challenge } = getAppMain()
     .getRootViewController()
     .getPresentedViewController()
@@ -274,6 +312,14 @@ const fillSquad = async (sbcId) => {
   services.SBC.saveChallenge(_challenge).observe(
     this,
     async function (sender, data) {
+      if (!data.success) {
+        sendUINotification(
+          "Saving Squad Failed!!!",
+          UINotificationType.NEGATIVE
+        );
+        _squad.removeAllItems();
+        return hideLoader();
+      }
       services.SBC.loadChallengeData(_challenge).observe(
         this,
         async function (sender, { response: { squad } }) {

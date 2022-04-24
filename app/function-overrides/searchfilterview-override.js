@@ -57,7 +57,10 @@ export const searchFilterViewOverride = () => {
       );
       const filter = this.filters[this.filters.length - 1];
       this.getRootElement().appendChild(filter.getRootElement());
-    } else {
+    } else if (
+      t.searchCriteria.defId.length &&
+      contractDefIds.has(t.searchCriteria.defId[0])
+    ) {
       t.searchCriteria.defId = [];
     }
   };

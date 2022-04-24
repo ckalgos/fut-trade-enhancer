@@ -148,6 +148,24 @@ export const getFutbinPlayerUrl = (player) => {
   });
 };
 
+export const getAllSBCSForChallenge = async (challengeId) => {
+  const futBinUrl = `https://futbin.org/futbin/api/getStcSquads?challenge=${challengeId}`;
+  return new Promise((resolve) => {
+    GM_xmlhttpRequest({
+      method: "GET",
+      url: futBinUrl,
+      onload: (res) => {
+        if (res.status !== 200) {
+          return resolve(null);
+        }
+
+        const { squads } = JSON.parse(res.response);
+        resolve(squads);
+      },
+    });
+  });
+};
+
 export const getSbcPlayersInfoFromFUTBin = async (squadId) => {
   const platform = getUserPlatform();
   const futBinPlatform =
