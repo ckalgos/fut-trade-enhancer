@@ -18,6 +18,7 @@ import {
   idSBCBuyFutBinPercent,
   idSBCPlayersToBuy,
   idSBCFUTBINSolution,
+  idAddDuplicates,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
@@ -61,9 +62,20 @@ export const sbcViewOverride = () => {
     fetchAndAppendCommunitySbcs(sbcId);
     setTimeout(() => {
       if (!$(".futBinFill").length) {
+        let duplicateButton = generateButton(
+          idAddDuplicates,
+          "Add Duplicate Players",
+          async () => {
+            console.log('running button');
+            await addDuplicatePlayers();
+          },
+          "call-to-action"
+        );
+
         $(".challenge-content").append(
           $(
-            `<div class="sbcSolutions"></div>
+            `${duplicateButton}
+            <div class="sbcSolutions"></div>
             <div class="futBinFill">
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
               ${generateButton(
@@ -104,6 +116,43 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
    </select>`
   );
 };
+
+const addDuplicatePlayers = async () => {
+  showLoader();
+  const squadPlayersLookupPromise = await getSquadPlayerLookup();
+
+  return new Promise((resolve) => {
+    services.Item.requestUnassignedItems().observe(
+      this,
+      async function (sender, { data: { items } }) {
+        const duplicates = items.filter(item => item.isPlayer() && item.isDuplicate());
+
+        const squadPlayers = duplicates.map((item) => {
+          const key = item.definitionId;
+          const clubPlayerInfo = squadPlayersLookupPromise.get(key);
+
+          const playerEntity = new UTItemEntity();
+          playerEntity.id = clubPlayerInfo.id;
+          playerEntity.definitionId = key;
+          playerEntity.stackCount = 1;
+          playerEntity.concept = false;
+          return playerEntity;
+        });
+
+        const { _squad, _challenge } = getAppMain()
+        .getRootViewController()
+        .getPresentedViewController()
+        .getCurrentViewController()
+        .getCurrentController()._leftController;
+    
+        _squad.setPlayers(squadPlayers, true);
+
+        hideLoader();
+        resolve({ success: true }); 
+      }
+    );
+  });
+}
 
 const buyPlayersPopUp = () => {
   const { _squad } = getAppMain()

@@ -32,3 +32,4 @@ export const idPackDuplicatesAction = "elem_" + generateId(15);
 export const idPacksCount = "elem_" + generateId(15);
 export const idShowSquadPrice = "elem_" + generateId(15);
 export const idSBCFUTBINSolution = "elem_" + generateId(15);
+export const idAddDuplicates = "elem_" + generateId(15);
