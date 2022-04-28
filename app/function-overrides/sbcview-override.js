@@ -60,21 +60,12 @@ export const sbcViewOverride = () => {
     const sbcId = params.length ? params[0].id : "";
     setValue("squadId", sbcId);
     fetchAndAppendCommunitySbcs(sbcId);
-    setTimeout(() => {
+  
+    setTimeout(async () => {
       if (!$(".futBinFill").length) {
-        let duplicateButton = generateButton(
-          idAddDuplicates,
-          "Add Duplicate Players",
-          async () => {
-            console.log('running button');
-            await addDuplicatePlayers();
-          },
-          "call-to-action"
-        );
-
         $(".challenge-content").append(
           $(
-            `${duplicateButton}
+            `<div class="duplicateButton"></div>
             <div class="sbcSolutions"></div>
             <div class="futBinFill">
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
@@ -98,6 +89,7 @@ export const sbcViewOverride = () => {
           `
           )
         );
+        await addDuplicatePlayersButton();
       }
     });
   };
@@ -116,6 +108,30 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
    </select>`
   );
 };
+
+const addDuplicatePlayersButton = async () => {
+  return new Promise((resolve) => {
+    services.Item.requestUnassignedItems().observe(
+      this,
+      async function (sender, { data: { items } }) {
+        if (items.find(item => item.isPlayer() && item.isDuplicate())) {
+          $(".duplicateButton").append(
+            generateButton(
+              idAddDuplicates,
+              "Add Duplicate Players",
+              async () => {
+                await addDuplicatePlayers();
+              },
+              "call-to-action",
+              "margin: .5rem auto;width: calc(100% - 1rem);",
+            )
+          );
+        }
+      }
+    );
+  });
+}
+
 
 const addDuplicatePlayers = async () => {
   showLoader();
@@ -147,8 +163,29 @@ const addDuplicatePlayers = async () => {
     
         _squad.setPlayers(squadPlayers, true);
 
-        hideLoader();
-        resolve({ success: true }); 
+        services.SBC.saveChallenge(_challenge).observe(
+          this,
+          async function (sender, data) {
+            if (!data.success) {
+              sendUINotification(
+                "Saving Squad Failed!!!",
+                UINotificationType.NEGATIVE
+              );
+              _squad.removeAllItems();
+              resolve({ success: true }); 
+              return hideLoader();
+            }
+            services.SBC.loadChallengeData(_challenge).observe(
+              this,
+              async function (sender, { response: { squad } }) {
+                hideLoader();
+                const players = squad._players.map((player) => player._item);
+                _squad.setPlayers(players, true);
+                _challenge.onDataChange.notify({ squad });
+              }
+            );
+          }
+        );
       }
     );
   });
