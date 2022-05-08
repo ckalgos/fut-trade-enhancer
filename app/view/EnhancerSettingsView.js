@@ -11,6 +11,8 @@ import {
   idOnlyBargain,
   idTransferFullPop,
   idShowSquadPrice,
+  idHideCalculateMinBin,
+  idHideViewOnFUTBIN
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
