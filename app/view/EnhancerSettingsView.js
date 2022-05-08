@@ -124,6 +124,22 @@ EnhancerSettingsView.prototype._generate = function _generate() {
               ? enhancerSetting["idShowSquadPrice"]
               : false
           )}
+          ${generateToggleInput(
+            "Hide Calculate Min Bin Button",
+            { idHideCalculateMinBin },
+            "Hide the Calculate Min Bin Button on Player side Panel",
+            "idHideCalculateMinBin" in enhancerSetting
+              ? enhancerSetting["idHideCalculateMinBin"]
+              : false
+          )}
+          ${generateToggleInput(
+            "Hide View on FUTBIN Button",
+            { idHideViewOnFUTBIN },
+            "Hide the View on FUTBIN Button on Player side Panel",
+            "idHideViewOnFUTBIN" in enhancerSetting
+              ? enhancerSetting["idHideViewOnFUTBIN"]
+              : false
+          )}
           <div class="enhancer-save-btn">
             ${generateButton(
               idSaveSettingsBtn,
