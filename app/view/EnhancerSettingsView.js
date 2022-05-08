@@ -11,8 +11,8 @@ import {
   idOnlyBargain,
   idTransferFullPop,
   idShowSquadPrice,
-  idHideCalculateMinBin,
-  idHideViewOnFUTBIN
+  idHideSearchMinBin,
+  idHideViewFUTBIN
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -128,18 +128,18 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           )}
           ${generateToggleInput(
             "Hide Calculate Min Bin Button",
-            { idHideCalculateMinBin },
+            { idHideSearchMinBin },
             "Hide the Calculate Min Bin Button on Player side Panel",
-            "idHideCalculateMinBin" in enhancerSetting
-              ? enhancerSetting["idHideCalculateMinBin"]
+            "idHideSearchMinBin" in enhancerSetting
+              ? enhancerSetting["idHideSearchMinBin"]
               : false
           )}
           ${generateToggleInput(
             "Hide View on FUTBIN Button",
-            { idHideViewOnFUTBIN },
+            { idHideViewFUTBIN },
             "Hide the View on FUTBIN Button on Player side Panel",
-            "idHideViewOnFUTBIN" in enhancerSetting
-              ? enhancerSetting["idHideViewOnFUTBIN"]
+            "idHideViewFUTBIN" in enhancerSetting
+              ? enhancerSetting["idHideViewFUTBIN"]
               : false
           )}
           <div class="enhancer-save-btn">

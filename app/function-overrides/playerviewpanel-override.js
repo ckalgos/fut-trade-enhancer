@@ -138,7 +138,7 @@ export const playerViewPanelOverride = () => {
         const panelDisplayStyle = $(".more").css("display");
         if ($(".more").length) {
           if (!$(`#${idViewFutBin}`).length) {
-            if (!getValue("EnhancerSettings")["idHideViewOnFUTBIN"]) {
+            if (!getValue("EnhancerSettings")["idHideViewFUTBIN"]) {
               $(
                 generateButton(
                   idViewFutBin,
@@ -160,7 +160,7 @@ export const playerViewPanelOverride = () => {
                 .css("display", panelDisplayStyle)
                 .insertAfter($(".more"));
             }
-            if (!getValue("EnhancerSettings")["idHideCalculateMinBin"]) {
+            if (!getValue("EnhancerSettings")["idHideSearchMinBin"]) {
               $(
                 generateButton(
                   idSearchMinBin,
