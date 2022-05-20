@@ -18,6 +18,7 @@ import {
   idSBCBuyFutBinPercent,
   idSBCPlayersToBuy,
   idSBCFUTBINSolution,
+  idAddDuplicates,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { addFutbinCachePrice } from "../utils/futbinUtil";
@@ -59,11 +60,13 @@ export const sbcViewOverride = () => {
     const sbcId = params.length ? params[0].id : "";
     setValue("squadId", sbcId);
     fetchAndAppendCommunitySbcs(sbcId);
-    setTimeout(() => {
+  
+    setTimeout(async () => {
       if (!$(".futBinFill").length) {
         $(".challenge-content").append(
           $(
-            `<div class="sbcSolutions"></div>
+            `<div class="duplicateButton"></div>
+            <div class="sbcSolutions"></div>
             <div class="futBinFill">
               <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
               ${generateButton(
@@ -86,6 +89,7 @@ export const sbcViewOverride = () => {
           `
           )
         );
+        await addDuplicatePlayersButton();
       }
     });
   };
@@ -104,6 +108,88 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
    </select>`
   );
 };
+
+const addDuplicatePlayersButton = async () => {
+  return new Promise((resolve) => {
+    services.Item.requestUnassignedItems().observe(
+      this,
+      async function (sender, { data: { items } }) {
+        if (items.find(item => item.isPlayer() && item.isDuplicate())) {
+          $(".duplicateButton").append(
+            generateButton(
+              idAddDuplicates,
+              "Add Duplicate Players",
+              async () => {
+                await addDuplicatePlayers();
+              },
+              "call-to-action",
+              "margin: .5rem auto;width: calc(100% - 1rem);",
+            )
+          );
+        }
+      }
+    );
+  });
+}
+
+
+const addDuplicatePlayers = async () => {
+  showLoader();
+  const squadPlayersLookupPromise = await getSquadPlayerLookup();
+
+  return new Promise((resolve) => {
+    services.Item.requestUnassignedItems().observe(
+      this,
+      async function (sender, { data: { items } }) {
+        const duplicates = items.filter(item => item.isPlayer() && item.isDuplicate());
+
+        const squadPlayers = duplicates.map((item) => {
+          const key = item.definitionId;
+          const clubPlayerInfo = squadPlayersLookupPromise.get(key);
+
+          const playerEntity = new UTItemEntity();
+          playerEntity.id = clubPlayerInfo.id;
+          playerEntity.definitionId = key;
+          playerEntity.stackCount = 1;
+          playerEntity.concept = false;
+          return playerEntity;
+        });
+
+        const { _squad, _challenge } = getAppMain()
+        .getRootViewController()
+        .getPresentedViewController()
+        .getCurrentViewController()
+        .getCurrentController()._leftController;
+    
+        _squad.setPlayers(squadPlayers, true);
+
+        services.SBC.saveChallenge(_challenge).observe(
+          this,
+          async function (sender, data) {
+            if (!data.success) {
+              sendUINotification(
+                "Saving Squad Failed!!!",
+                UINotificationType.NEGATIVE
+              );
+              _squad.removeAllItems();
+              resolve({ success: true }); 
+              return hideLoader();
+            }
+            services.SBC.loadChallengeData(_challenge).observe(
+              this,
+              async function (sender, { response: { squad } }) {
+                hideLoader();
+                const players = squad._players.map((player) => player._item);
+                _squad.setPlayers(players, true);
+                _challenge.onDataChange.notify({ squad });
+              }
+            );
+          }
+        );
+      }
+    );
+  });
+}
 
 const buyPlayersPopUp = () => {
   const { _squad } = getAppMain()
