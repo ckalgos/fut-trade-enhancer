@@ -15,6 +15,12 @@ export const addBtnListner = (selector, callback) => {
 };
 
 export const downloadCsv = (csvContent, fileName) => {
+  isPhone()
+    ? downloadCsvPhone(csvContent, fileName)
+    : downloadCsvWeb(csvContent, fileName);
+};
+
+const downloadCsvWeb = (csvContent, fileName) => {
   const encodedUri =
     "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURIComponent(csvContent);
   const link = document.createElement("a");
@@ -23,6 +29,15 @@ export const downloadCsv = (csvContent, fileName) => {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+};
+
+const downloadCsvPhone = (csvContent, fileName) => {
+  window.ReactNativeWebView.postMessage(
+    JSON.stringify({
+      type: "downloadFile",
+      payload: { data: csvContent, fileName },
+    })
+  );
 };
 
 export const wait = async (seconds = 1) => {
