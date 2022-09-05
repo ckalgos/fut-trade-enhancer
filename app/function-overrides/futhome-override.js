@@ -26,6 +26,14 @@ const getScriptMessages = () => {
     imageLogos,
     atob("c3VwcG9ydGh1Yg==")
   );
+
+  const message3 = formMessage(
+    atob("V2FudCB0byB1c2UgQXV0b2J1eWVyIG9uIHRoZSBnbz8="),
+    atob("Q2xpY2sgdGhlIGluc3RhbGwgdGhlIG1vYmlsZSBhcHA="),
+    imageLogos,
+    atob("bmF0aXZlSHVi")
+  );
+  !isPhone() && messages.push(new UTArubaMessageEntity(message3, persona));
   messages.push(new UTArubaMessageEntity(message1, persona));
   messages.push(new UTArubaMessageEntity(message2, persona));
   return messages;
@@ -63,6 +71,31 @@ const clickOption = () => {
   );
 };
 
+const clickNativeOption = () => {
+  showPopUp(
+    [{ labelEnum: atob("QW5kcm9pZA==") }, { labelEnum: atob("aW9z") }],
+    atob("RG9uYXRpb24gb3B0aW9u"),
+    atob(
+      "QmVsb3cgYXJlIHRoZSBsaXN0IG9mIHdheXMgdG8gY29udHJpYnV0ZSB0byB0aGUgcHJvamVjdCwgY2xpY2sgb24gYW55IG9mIHRoZSBiZWxvdyBvcHRpb25zIHRvIHNob3cgeW91ciBzdXBwb3J0"
+    ),
+    (t) => {
+      if (t === atob("QW5kcm9pZA==")) {
+        window.open(
+          atob(
+            "aHR0cHM6Ly9wbGF5Lmdvb2dsZS5jb20vc3RvcmUvYXBwcy9kZXRhaWxzP2lkPWNvbS5mdXQubWFya2V0LmFsZXJ0"
+          ),
+          atob("X2JsYW5r")
+        );
+      } else if (t === atob("aW9z")) {
+        window.open(
+          atob("aHR0cHM6Ly9hcHBzLmFwcGxlLmNvbS9tbC9hcHAvaWQxNTkwNTA1MTc5"),
+          atob("X2JsYW5r")
+        );
+      }
+    }
+  );
+};
+
 export const futHomeOverride = () => {
   const homeHubInit = UTHomeHubView.prototype.init;
   const generate = UTHomeHubView.prototype._generate;
@@ -76,10 +109,13 @@ export const futHomeOverride = () => {
   MessageTileView.prototype._tapDetected = function (e) {
     if (this._isTouchTargetValid(e.target)) {
       var t = this._data[this._tnsCarousel.getCurrentSlide()];
-      if (t.screen === "supporthub") {
+      if (t.screen === atob("c3VwcG9ydGh1Yg==")) {
         clickOption();
         return;
-      } else if (t.screen === "welcomehub") {
+      } else if (t.screen === atob("bmF0aXZlSHVi")) {
+        clickNativeOption();
+        return;
+      } else if (t.screen === atob("d2VsY29tZWh1Yg==")) {
         window.open(
           atob("aHR0cHM6Ly9kaXNjb3JkLmNvbS9pbnZpdGUvY2t0SFltcA=="),
           atob("X2JsYW5r")

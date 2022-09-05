@@ -1,9 +1,13 @@
 import { getValue } from "../services/repository";
 import { convertToSeconds, getRandWaitTime, wait } from "./commonUtil";
-import { sendUINotification } from "./notificationUtil";
 import { getBuyBidPrice, getSellBidPrice, roundOffPrice } from "./priceUtil";
 
-export const listForPrice = async (sellPrice, player, ignoreRoundOff) => {
+export const listForPrice = async (
+  sellPrice,
+  player,
+  ignoreRoundOff,
+  startPrice
+) => {
   await getPriceLimits(player);
   if (sellPrice) {
     const duration = getValue("EnhancerSettings")["idFutBinDuration"] || "1H";
@@ -22,7 +26,7 @@ export const listForPrice = async (sellPrice, player, ignoreRoundOff) => {
     sellPrice = roundOffPrice(sellPrice, 200);
     services.Item.list(
       player,
-      getSellBidPrice(sellPrice),
+      startPrice || getSellBidPrice(sellPrice),
       sellPrice,
       convertToSeconds(duration) || 3600
     );

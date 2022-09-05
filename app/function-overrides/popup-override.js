@@ -21,9 +21,11 @@ export const popupOverride = () => {
           atob("UGF5cGFs"),
           atob("WW91dHViZSBTdWJzY3JpcHRpb24="),
           atob("UGF0cmVvbg=="),
-          atob("RGlzY29yZCAoQ29tbXVuaXR5KQ=="),
-          atob("VHdpdHRlciAoRmFzdCBSZXNwb25zZSk="),
+          atob("RGlzY29yZA=="),
+          atob("VHdpdHRlcg=="),
           atob("R2l0aHVi"),
+          atob("QW5kcm9pZA=="),
+          atob("aW9z"),
         ].includes(message)
       ) {
         return message;

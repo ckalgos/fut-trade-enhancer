@@ -1,4 +1,4 @@
-import { idFixedPrice } from "../app.constants";
+import { idFixedBINPrice, idFixedStartPrice } from "../app.constants";
 import { showPopUp } from "../function-overrides/popup-override";
 import { fetchPrices } from "../services/futbin";
 import { getValue } from "../services/repository";
@@ -13,36 +13,48 @@ export const relistForFixedPrice = function (sectionHeader) {
       { labelEnum: enums.UIDialogOptions.CANCEL },
     ],
     "List for fixed price",
-    `<input id=${idFixedPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder="Price" />
+    `<input id=${idFixedStartPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder="Start Price" />
+    <br/>
+    <input id=${idFixedBINPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder="BIN Price" />
     <br/>
     <br/>
     <label>Card's will be ignored, if the price range doesn't fall in the provided price.</label>
     `,
     (text) => {
-      const price = parseInt($(`#${idFixedPrice}`).val());
+      const price = parseInt($(`#${idFixedBINPrice}`).val());
+      const startPrice = parseInt($(`#${idFixedStartPrice}`).val());
       if (text === 2 && (isNaN(price) || !price)) {
-        sendUINotification(`Price not given`, UINotificationType.NEGATIVE);
+        sendUINotification(`BIN price not given`, UINotificationType.NEGATIVE);
         return;
       }
-      text === 2 && relistCards(sectionHeader, price);
+
+      if (startPrice && startPrice > price) {
+        sendUINotification(
+          `BIN price is lesser than start price`,
+          UINotificationType.NEGATIVE
+        );
+        return;
+      }
+
+      text === 2 && relistCards(sectionHeader, price, startPrice);
     }
   );
 };
 
-export const relistCards = function (sectionHeader, price) {
+export const relistCards = function (sectionHeader, price, startPrice) {
   if (
     [
       services.Localization.localize("infopanel.label.alltoclub"),
       services.Localization.localize("infopanel.label.storeAllInClub"),
     ].indexOf(sectionHeader) >= 0
   ) {
-    handleWatchListOrUnAssignedItems(sectionHeader, price);
+    handleWatchListOrUnAssignedItems(sectionHeader, price, startPrice);
     return;
   }
-  handleTransferListItems(sectionHeader, price);
+  handleTransferListItems(sectionHeader, price, startPrice);
 };
 
-const handleWatchListOrUnAssignedItems = (sectionHeader, price) => {
+const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
   const isWatchList =
     services.Localization.localize("infopanel.label.alltoclub") ===
     sectionHeader;
@@ -55,11 +67,11 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price) => {
         return item.getAuctionData().isWon();
       });
     }
-    listCards(boughtItems, price);
+    listCards(boughtItems, price, startPrice);
   });
 };
 
-const handleTransferListItems = (sectionHeader, price) => {
+const handleTransferListItems = (sectionHeader, price, startPrice) => {
   services.Item.requestTransferItems().observe(
     this,
     async function (t, response) {
@@ -72,7 +84,7 @@ const handleTransferListItems = (sectionHeader, price) => {
           return t.isExpired() || (t.isValid() && t.isInactive());
         });
 
-        listCards(unSoldItems, price);
+        listCards(unSoldItems, price, startPrice);
       } else if (
         sectionHeader ===
         services.Localization.localize("infopanel.label.addplayer")
@@ -80,13 +92,13 @@ const handleTransferListItems = (sectionHeader, price) => {
         const availableItems = response.data.items.filter(function (item) {
           return !item.getAuctionData().isValid();
         });
-        listCards(availableItems, price);
+        listCards(availableItems, price, startPrice);
       }
     }
   );
 };
 
-export const listCards = async (cards, price) => {
+export const listCards = async (cards, price, startPrice) => {
   if (!cards.length) {
     sendUINotification(
       "No players found to be listed",
@@ -97,7 +109,7 @@ export const listCards = async (cards, price) => {
   showLoader();
   if (price) {
     sendUINotification(`Listing cards for ${price}`);
-    await listCardsForFixedPrice(cards, price);
+    await listCardsForFixedPrice(cards, price, startPrice);
   } else {
     sendUINotification("Listing cards for FUTBIN price");
     await listCardsForFutBIN(cards);
@@ -106,9 +118,9 @@ export const listCards = async (cards, price) => {
   sendUINotification("Listing the cards completed");
 };
 
-const listCardsForFixedPrice = async (cards, price) => {
+const listCardsForFixedPrice = async (cards, price, startPrice) => {
   for (const card of cards) {
-    await listCard(price, card, true);
+    await listCard(price, card, true, startPrice);
   }
 };
 
@@ -128,11 +140,12 @@ const listCardsForFutBIN = async (cards) => {
   }
 };
 
-const listCard = async (price, card, isFixedPrice) => {
+const listCard = async (price, card, isFixedPrice, startPrice) => {
   const [isListed, lisitedPrice] = await listForPrice(
     price,
     card,
-    isFixedPrice
+    isFixedPrice,
+    startPrice
   );
   if (!isListed) {
     return sendUINotification(
