@@ -9,6 +9,7 @@ import { MAX_CLUB_SEARCH } from "../app.constants";
 import { getValue } from "./repository";
 import { fetchPrices } from "./futbin";
 import { t } from "../services/translate";
+import { sendUINotification } from "../utils/notificationUtil";
 
 export const getSquadPlayerIds = () => {
   return new Promise((resolve, reject) => {
@@ -34,8 +35,34 @@ export const getSquadPlayerLookup = () => {
   });
 };
 
+export const getNonActiveSquadPlayers = async function (isTradable) {
+  return new Promise(async (resolve) => {
+    const searchModel = new UTBucketedItemSearchViewModel();
+    const currentSquadIds = await getActiveSquadIds(searchModel);
+    if (!currentSquadIds) {
+      sendUINotification(
+        t("activeSquadMemberErr"),
+        UINotificationType.NEGATIVE
+      );
+      return resolve();
+    }
+    const searchCriteria = searchModel.searchCriteria;
+    searchCriteria.excludeDefIds = currentSquadIds;
+    if (isTradable) {
+      searchCriteria._untradeables = "false";
+    }
+    searchCriteria.count = MAX_CLUB_SEARCH;
+    getClubSquad(searchCriteria).observe(
+      this,
+      async function (sender, response) {
+        resolve(response.data.items);
+      }
+    );
+  });
+};
+
 export const getAllClubPlayers = function (filterLoaned, playerId) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;
     if (playerId) {
       searchCriteria.defId = [playerId];
@@ -70,7 +97,21 @@ const getClubSquad = (searchCriteria) => {
   return services.Item.searchClub(searchCriteria);
 };
 
-const downloadClub = async () => {
+const getActiveSquadIds = (searchModel) => {
+  return new Promise((resolve) => {
+    searchModel
+      .requestActiveSquadDefIds()
+      .observe(this, async function (sender, response) {
+        if (response.data && response.success) {
+          resolve(response.data.defIds);
+        } else {
+          resolve();
+        }
+      });
+  });
+};
+
+export const downloadClub = async () => {
   showLoader();
   let squadMembers = await getAllClubPlayers();
   squadMembers = squadMembers.sort((a, b) => b.rating - a.rating);
@@ -157,5 +198,5 @@ const getCardQuality = (card) => {
 };
 
 addBtnListner("#downloadClub", async function () {
-  await downloadClub();
+  await getNonActiveSquadPlayers();
 });

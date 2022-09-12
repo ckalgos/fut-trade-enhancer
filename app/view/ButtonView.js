@@ -1,7 +1,7 @@
 export const createButton = function (text, callBack, customClass) {
   const stdButton = new UTStandardButtonControl();
   stdButton.init();
-  stdButton.addTarget(stdButton, callBack, EventType.TAP);
+  stdButton.addTarget(stdButton, callBack.bind(stdButton), EventType.TAP);
   stdButton.setText(text);
 
   if (customClass) {

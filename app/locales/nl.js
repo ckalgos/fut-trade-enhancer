@@ -94,4 +94,14 @@ export const nlLocales = {
   viewFutBin: "Bekijken op FUTBIN",
   futBinUrlErr: "Kan futbin-url niet ophalen",
   list: "Lijst",
+  calcMinBin: "Bereken Min BIN",
+  calculatingMinBin: "Min BIN berekenen ...",
+  calcMinBinErr: "Kan min bin niet berekenen",
+  calcAverage: "Gemiddeld Min BIN",
+  showCalcMinBin: "Toon Bereken Min BIN",
+  showCalcMinBinInfo:
+    "Schakel het in om de optie Bereken Min BIN weer te geven op het spelerspaneel",
+  clubToTransferListInfo:
+    "Bot zal proberen om tot 90 verhandelbare niet-actieve squadronleden naar de transferlijst te sturen",
+  activeSquadMemberErr: "Kan geen actieve squadronspelers krijgen",
 };

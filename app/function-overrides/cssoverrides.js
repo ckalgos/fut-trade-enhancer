@@ -83,7 +83,8 @@ export const overrideStyle = () => {
       background-color: #7e42f5;
       border-color: transparent;
       color: #29ffc9;
-      margin-right: 10px
+      margin-right: 10px;      
+      margin-left: 10px;
     }
     .ut-list-header-action {
       display: flex
@@ -292,6 +293,22 @@ export const overrideStyle = () => {
     .relist {
       margin-left: 10px;
     }
+    .phone .clubAction {
+      font-family: UltimateTeam-Icons,sans-serif;
+      padding: 0 0.5rem 0 1rem;
+      font-size: 0;
+    }
+    .phone .downloadClub::before {
+      font-size: 1.3rem;
+      content: '\\E001'
+    }
+    .phone .transferpile::before {
+      font-size: 1.3rem;
+      content: '\\E073'
+    }
+    small {
+      white-space: break-spaces;
+    }  
     `;
   document.head.appendChild(style);
 };

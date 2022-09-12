@@ -97,4 +97,14 @@ export const deLocales = {
   viewFutBin: "Auf FUTBIN anzeigen",
   futBinUrlErr: "Futbin-URL kann nicht abgerufen werden",
   list: "Aufführen",
+  calcMinBin: "Min. BIN berechnen",
+  calculatingMinBin: "Min BIN wird berechnet ....",
+  calcMinBinErr: "Minimum-Bin kann nicht berechnet werden",
+  calcAverage: "Durchschnittlicher Min BIN",
+  showCalcMinBin: "Min. BIN berechnen anzeigen",
+  showCalcMinBinInfo:
+    "Schalten Sie es ein, um die Option 'Min. BIN berechnen' im Player-Panel anzuzeigen",
+  clubToTransferListInfo:
+    "Der Bot wird versuchen, bis zu 90 handelbare, nicht aktive Squad-Mitglieder auf die Transferliste zu schicken",
+  activeSquadMemberErr: "Aktive Squad-Spieler konnten nicht abgerufen werden",
 };

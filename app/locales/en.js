@@ -10,7 +10,7 @@ export const enLocales = {
   sbcBuyMessage: "Bot will try to buy the following players",
   futBinBuyPercent: "FUTBIN Buy Percent",
   futBinSalePercent: "FUTBIN Sale Percent",
-  tryingToBuySbc: "Trying to buy the message players",
+  tryingToBuySbc: "Trying to buy the missing players",
   futBinPriceErr: "Error fetching futbin Price for",
   buyCompleted: "Buying players completed",
   noCardFound: "No card found for",
@@ -92,4 +92,14 @@ export const enLocales = {
   viewFutBin: "View on FUTBIN",
   futBinUrlErr: "Unable to get futbin url",
   list: "List",
+  calcMinBin: "Calculate Min BIN",
+  calculatingMinBin: "Calculating Min BIN ....",
+  calcMinBinErr: "Unable to calculate min bin",
+  calcAverage: "Average Min BIN",
+  showCalcMinBin: "Show Calculate Min BIN",
+  showCalcMinBinInfo:
+    "Toggle it on to show Calculate Min BIN option on player panel",
+  clubToTransferListInfo:
+    "Bot will try to send upto 90 tradeable non active squad members to Transfer list",
+  activeSquadMemberErr: "Unable to get active squad players",
 };

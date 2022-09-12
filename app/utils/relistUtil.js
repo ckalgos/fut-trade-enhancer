@@ -69,7 +69,7 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
         return item.getAuctionData().isWon();
       });
     }
-    listCards(boughtItems, price, startPrice);
+    listCards(boughtItems, price, startPrice, false);
   });
 };
 
@@ -86,7 +86,7 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
           return t.isExpired() || (t.isValid() && t.isInactive());
         });
 
-        listCards(unSoldItems, price, startPrice);
+        listCards(unSoldItems, price, startPrice, true);
       } else if (
         sectionHeader ===
         services.Localization.localize("infopanel.label.addplayer")
@@ -94,13 +94,14 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
         const availableItems = response.data.items.filter(function (item) {
           return !item.getAuctionData().isValid();
         });
-        listCards(availableItems, price, startPrice);
+        listCards(availableItems, price, startPrice, true);
       }
     }
   );
 };
 
-export const listCards = async (cards, price, startPrice) => {
+export const listCards = async (cards, price, startPrice, isRelist) => {
+  cards = cards.filter((card) => !card.untradeable);
   if (!cards.length) {
     sendUINotification(t("noCardsToList"), UINotificationType.NEGATIVE);
     return;
@@ -108,25 +109,33 @@ export const listCards = async (cards, price, startPrice) => {
   showLoader();
   if (price) {
     sendUINotification(`${t("listingCards")} ${price}`);
-    await listCardsForFixedPrice(cards, price, startPrice);
+    await listCardsForFixedPrice(cards, price, startPrice, isRelist);
   } else {
     sendUINotification(t("listingCardsFutBin"));
-    await listCardsForFutBIN(cards);
+    await listCardsForFutBIN(cards, isRelist);
   }
   hideLoader();
   sendUINotification(t("listingCardsCompleted"));
 };
 
-const listCardsForFixedPrice = async (cards, price, startPrice) => {
+const listCardsForFixedPrice = async (cards, price, startPrice, isRelist) => {
   for (const card of cards) {
+    if (!isRelist && repositories.Item.isPileFull(ItemPile.TRANSFER)) {
+      sendUINotification(t("transferListFull"), UINotificationType.NEGATIVE);
+      break;
+    }
     await listCard(price, card, true, startPrice);
   }
 };
 
-const listCardsForFutBIN = async (cards) => {
+const listCardsForFutBIN = async (cards, isRelist) => {
   await fetchPrices(cards);
 
   for (const card of cards) {
+    if (!isRelist && repositories.Item.isPileFull(ItemPile.TRANSFER)) {
+      sendUINotification(t("transferListFull"), UINotificationType.NEGATIVE);
+      break;
+    }
     const existingValue = getValue(card.definitionId);
     if (existingValue && existingValue.price) {
       await listCard(computeSalePrice(existingValue.price), card);

@@ -99,4 +99,14 @@ export const esLocales = {
   viewFutBin: "Ver en FUTBIN",
   futBinUrlErr: "No se pudo obtener la URL de futbin",
   list: "Lista",
+  calcMinBin: "Calcular BIN mínimo",
+  calculatingMinBin: "Calculando Min BIN...",
+  calcMinBinErr: "No se puede calcular el contenedor mínimo",
+  calcAverage: "BIN mínimo promedio",
+  showCalcMinBin: "Mostrar Calcular BIN mínimo",
+  showCalcMinBinInfo:
+    "Actívelo para mostrar la opción Calcular BIN mínimo en el panel del reproductor",
+  clubToTransferListInfo:
+    "El bot intentará enviar hasta 90 miembros del equipo no activos intercambiables a la lista de transferencias",
+  activeSquadMemberErr: "No se pueden obtener jugadores activos del equipo",
 };

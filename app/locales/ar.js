@@ -93,4 +93,13 @@ export const arLocales = {
   viewFutBin: "عرض على FUTBIN",
   futBinUrlErr: "تعذر الحصول على عنوان url الخاص بـ futbin",
   list: "قائمة",
+  calcMinBin: "حساب Min BIN",
+  calculatingMinBin: "حساب Min BIN ....",
+  calcMinBinErr: "تعذر حساب min bin",
+  calcAverage: "متوسط الحد الأدنى لـ BIN",
+  showCalcMinBin: "Show Calculate Min BIN",
+  showCalcMinBinInfo: "قم بتبديلها لإظهار خيار حساب Min BIN على لوحة المشغل",
+  clubToTransferListInfo:
+    "سيحاول الروبوت إرسال ما يصل إلى 90 عضوًا غير نشط من الفريق قابلين للتداول إلى قائمة الانتقالات",
+  activeSquadMemberErr: "غير قادر على الحصول على لاعبي الفريق النشطين",
 };
