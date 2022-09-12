@@ -120,10 +120,6 @@ export const listCards = async (cards, price, startPrice, isRelist) => {
 
 const listCardsForFixedPrice = async (cards, price, startPrice, isRelist) => {
   for (const card of cards) {
-    if (!isRelist && repositories.Item.isPileFull(ItemPile.TRANSFER)) {
-      sendUINotification(t("transferListFull"), UINotificationType.NEGATIVE);
-      break;
-    }
     await listCard(price, card, true, startPrice);
   }
 };
@@ -132,10 +128,6 @@ const listCardsForFutBIN = async (cards, isRelist) => {
   await fetchPrices(cards);
 
   for (const card of cards) {
-    if (!isRelist && repositories.Item.isPileFull(ItemPile.TRANSFER)) {
-      sendUINotification(t("transferListFull"), UINotificationType.NEGATIVE);
-      break;
-    }
     const existingValue = getValue(card.definitionId);
     if (existingValue && existingValue.price) {
       await listCard(computeSalePrice(existingValue.price), card);
