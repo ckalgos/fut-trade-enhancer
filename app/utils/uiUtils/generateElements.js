@@ -3,10 +3,11 @@ import { getValue } from "../../services/repository";
 import { createButton } from "../../view/ButtonView";
 import { sendUINotification } from "../notificationUtil";
 import { listCards } from "../reListUtil";
+import { t } from "../../services/translate";
 
 export const generateListForFutBinBtn = () => {
   return createButton(
-    "List for FUTBIN",
+    t("listFutBin"),
     () => {
       const selectedPlayer = getValue("selectedPlayer");
       selectedPlayer && listCards([selectedPlayer]);
@@ -17,15 +18,12 @@ export const generateListForFutBinBtn = () => {
 
 export const generateViewOnFutBinBtn = () => {
   return createButton(
-    "View on FUTBIN",
+    t("viewFutBin"),
     async () => {
       const selectedPlayer = getValue("selectedPlayer");
       const playerUrl = await getFutbinPlayerUrl(selectedPlayer);
       if (!playerUrl) {
-        sendUINotification(
-          "Unable to get futbin url",
-          UINotificationType.NEGATIVE
-        );
+        sendUINotification(t("futBinUrlErr"), UINotificationType.NEGATIVE);
       }
       window.open(playerUrl, "_blank");
     },
@@ -35,7 +33,7 @@ export const generateViewOnFutBinBtn = () => {
 
 export const generateSectionRelistBtn = (callBack, dataSource) => {
   return createButton(
-    `List ${dataSource}`,
+    `${t("list")} ${dataSource}`,
     callBack,
     "relist call-to-action mini"
   );

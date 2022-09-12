@@ -6,38 +6,51 @@ import {
 } from "../app.constants";
 import { hideLoader, showLoader, wait } from "./commonUtil";
 import { sendPinEvents, sendUINotification } from "./notificationUtil";
+import { t } from "../services/translate";
 
 export const validateFormAndOpenPack = async (pack) => {
   const popUpValues = getPopUpValues();
   await buyRequiredNoOfPacks(pack, popUpValues);
 };
 
-const defaultOptions = [
-  {
-    value: "moveClub",
-    label: "Move To Club",
-  },
-  {
-    value: "moveTransfers",
-    label: "Move To TransferList",
-  },
-  {
-    value: "quickSell",
-    label: "Quick Sell",
-  },
-];
+let handlerForEachType;
 
-const handlerForEachType = [
-  { id: idPackPlayersAction, label: "Players", actions: defaultOptions },
-  { id: idPackNonPlayersAction, label: "Non Players", actions: defaultOptions },
-  {
-    id: idPackDuplicatesAction,
-    label: "Duplicates",
-    actions: defaultOptions.slice(1),
-  },
-];
+const setUpType = () => {
+  if (handlerForEachType) {
+    return;
+  }
+  const defaultOptions = [
+    {
+      value: "moveClub",
+      label: t("moveToClub"),
+    },
+    {
+      value: "moveTransfers",
+      label: t("moveToTransferList"),
+    },
+    {
+      value: "quickSell",
+      label: t("quickSell"),
+    },
+  ];
+  handlerForEachType = [
+    { id: idPackPlayersAction, label: t("players"), actions: defaultOptions },
+    {
+      id: idPackNonPlayersAction,
+      label: t("nonPlayers"),
+      actions: defaultOptions,
+    },
+    {
+      id: idPackDuplicatesAction,
+      label: t("duplicates"),
+      actions: defaultOptions.slice(1),
+    },
+  ];
+};
 
-export const purchasePopUpMessage = `
+export const purchasePopUpMessage = () => {
+  setUpType();
+  return `
 ${handlerForEachType
   .map(({ id, label, actions }) => {
     return `
@@ -55,10 +68,11 @@ ${label}
   .join("")}
  <br />
  <br />
- Number of packs
- <input placeholder="3" id=${idPacksCount} type="number" class="ut-text-input-control fut-bin-buy" placeholder="Packs to Buy" />
+ ${t("noOfPacks")}
+ <input placeholder="3" id=${idPacksCount} type="number" class="ut-text-input-control fut-bin-buy" />
  <br /> <br />
  `;
+};
 
 const getPopUpValues = () => {
   const noOfPacks = parseInt($(`#${idPacksCount}`).val()) || 3;
@@ -79,13 +93,13 @@ const buyRequiredNoOfPacks = async (pack, popUpValues) => {
     const response = await buyPack(pack, popUpValues);
     if (!response.success) {
       return sendUINotification(
-        response.message || "Error occured when opening packs",
+        response.message || t("packOpeningErr"),
         UINotificationType.NEGATIVE
       );
     }
     await wait(3);
     popUpValues.noOfPacks--;
-    sendUINotification(`${popUpValues.noOfPacks} pack(s) remaining`);
+    sendUINotification(`${popUpValues.noOfPacks} ${t("packsRemaining")}`);
   }
   hideLoader();
 };
@@ -94,7 +108,7 @@ const handleNonDuplicatePlayers = (items, action) => {
   const nonDuplicatePlayersItems = items.filter(
     (item) => !item.isDuplicate() && item.isPlayer()
   );
-  sendUINotification("Handling non duplicate players");
+  sendUINotification(t("handlingNonDuplicatePlayers"));
   return handleItems(nonDuplicatePlayersItems, action);
 };
 
@@ -102,13 +116,13 @@ const handleNonDuplicateNonPlayers = (items, action) => {
   const nonDuplicateNonPlayersItems = items.filter(
     (item) => !item.isDuplicate() && !item.isPlayer()
   );
-  sendUINotification("Handling non duplicate non players");
+  sendUINotification(t("handlingNonDuplicateNonPlayers"));
   return handleItems(nonDuplicateNonPlayersItems, action);
 };
 
 const handleDuplicates = (items, action) => {
   const duplicateItems = items.filter((item) => item.isDuplicate());
-  sendUINotification("Handling duplicate items");
+  sendUINotification(t("handlingDuplicates"));
   return handleItems(duplicateItems, action);
 };
 
@@ -116,7 +130,7 @@ const handleMiscItems = (items) => {
   return new Promise(async (resolve) => {
     const miscItems = items.filter((item) => item.isMiscItem());
     if (miscItems.length) {
-      sendUINotification("Handling free credits/ packs");
+      sendUINotification(t("handlingCredits"));
       await Promise.all(
         miscItems.map(async (credit) => {
           services.Item.redeem(credit);
@@ -137,7 +151,7 @@ const handleItems = (items, action) => {
     }
     if (action === "moveTransfers") {
       if (repositories.Item.isPileFull(ItemPile.TRANSFER)) {
-        return resolve("Transfer List if Full");
+        return resolve(t("transferListFull"));
       }
       services.Item.move(items, ItemPile.TRANSFER).observe(
         this,

@@ -1,5 +1,5 @@
-import { idViewFutBin } from "../app.constants";
 import { setValue } from "../services/repository";
+import { t } from "../services/translate";
 
 import {
   generateListForFutBinBtn,
@@ -9,7 +9,7 @@ import {
 export const playerViewPanelOverride = () => {
   const calcTaxPrice = (buyPrice) => {
     const priceAfterTax = (buyPrice * 0.95).toLocaleString();
-    $("#saleAfterTax").html(`Price: ${priceAfterTax}`);
+    $("#saleAfterTax").html(`${t("price")} ${priceAfterTax}`);
   };
 
   const panelViewFunc =
@@ -50,14 +50,14 @@ export const playerViewPanelOverride = () => {
   };
 
   controllers.items.ItemDetails.prototype._getPanelViewInstanceFromData =
-    function (e, t) {
-      panelViewFunc.call(this, e, t);
+    function (...args) {
+      panelViewFunc.call(this, ...args);
       setTimeout(() => {
         const binControl = $(".ut-numeric-input-spinner-control").last();
         const binInput = binControl.find(".numericInput");
         const panelDisplayStyle = $(".more").css("display");
         if ($(".more").length) {
-          if (!$('button:contains("View on FUTBIN")').length) {
+          if (!$(`button:contains(${t("viewFutBin")})`).length) {
             $(generateViewOnFutBinBtn().__root)
               .css("display", panelDisplayStyle)
               .insertAfter($(".more"));
@@ -65,8 +65,10 @@ export const playerViewPanelOverride = () => {
           if ($(".panelActions").length && !$("#saleAfterTax").length) {
             $(
               `<div  class="buttonInfoLabel hasPriceBanding">
-                  <span class="spinnerLabel">After Tax:</span>
-                  <span id="saleAfterTax" class="currency-coins bandingLabel">Price: 10,000</span>
+                  <span class="spinnerLabel">${t("afterTax")}</span>
+                  <span id="saleAfterTax" class="currency-coins bandingLabel">${t(
+                    "price"
+                  )} 10,000</span>
               </div>`
             ).insertAfter(binControl);
           }

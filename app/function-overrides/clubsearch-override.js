@@ -1,3 +1,5 @@
+import { t } from "../services/translate";
+
 export const clubSearchOverride = () => {
   const clubPageEntered =
     UTClubSearchResultsViewController.prototype.viewDidAppear;
@@ -9,7 +11,9 @@ export const clubSearchOverride = () => {
       const headerAction = $(pageView.__root).find(".ut-list-header-action");
       if (!$("#downloadClub").length) {
         $(headerAction).prepend(
-          '<button id="downloadClub" class="btn-standard mini downloadClub">Download as CSV</button>'
+          `<button id="downloadClub" class="btn-standard mini downloadClub">${t(
+            "downloadAsCsv"
+          )}</button>`
         );
       }
     }, 500);

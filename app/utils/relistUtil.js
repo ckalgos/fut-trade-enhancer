@@ -5,6 +5,7 @@ import { getValue } from "../services/repository";
 import { getRandNumberInRange, hideLoader, showLoader } from "./commonUtil";
 import { sendUINotification } from "./notificationUtil";
 import { listForPrice } from "./sellUtil";
+import { t } from "../services/translate";
 
 export const relistForFixedPrice = function (sectionHeader) {
   showPopUp(
@@ -12,27 +13,28 @@ export const relistForFixedPrice = function (sectionHeader) {
       { labelEnum: enums.UIDialogOptions.OK },
       { labelEnum: enums.UIDialogOptions.CANCEL },
     ],
-    "List for fixed price",
-    `<input id=${idFixedStartPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder="Start Price" />
+    t("listFixed"),
+    `<input id=${idFixedStartPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder=${t(
+      "startPrice"
+    )} />
     <br/>
-    <input id=${idFixedBINPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder="BIN Price" />
+    <input id=${idFixedBINPrice} type="number" class="ut-text-input-control fut-bin-buy" placeholder=${t(
+      "binPrice"
+    )} />
     <br/>
     <br/>
-    <label>Card's will be ignored, if the price range doesn't fall in the provided price.</label>
+    <label>${t("cardsIgnoreInfo")}</label>
     `,
     (text) => {
       const price = parseInt($(`#${idFixedBINPrice}`).val());
       const startPrice = parseInt($(`#${idFixedStartPrice}`).val());
       if (text === 2 && (isNaN(price) || !price)) {
-        sendUINotification(`BIN price not given`, UINotificationType.NEGATIVE);
+        sendUINotification(t("binNotGiven"), UINotificationType.NEGATIVE);
         return;
       }
 
       if (startPrice && startPrice > price) {
-        sendUINotification(
-          `BIN price is lesser than start price`,
-          UINotificationType.NEGATIVE
-        );
+        sendUINotification(t("binLesser"), UINotificationType.NEGATIVE);
         return;
       }
 
@@ -100,22 +102,19 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
 
 export const listCards = async (cards, price, startPrice) => {
   if (!cards.length) {
-    sendUINotification(
-      "No players found to be listed",
-      UINotificationType.NEGATIVE
-    );
+    sendUINotification(t("noCardsToList"), UINotificationType.NEGATIVE);
     return;
   }
   showLoader();
   if (price) {
-    sendUINotification(`Listing cards for ${price}`);
+    sendUINotification(`${t("listingCards")} ${price}`);
     await listCardsForFixedPrice(cards, price, startPrice);
   } else {
-    sendUINotification("Listing cards for FUTBIN price");
+    sendUINotification(t("listingCardsFutBin"));
     await listCardsForFutBIN(cards);
   }
   hideLoader();
-  sendUINotification("Listing the cards completed");
+  sendUINotification(t("listingCardsCompleted"));
 };
 
 const listCardsForFixedPrice = async (cards, price, startPrice) => {
@@ -133,7 +132,7 @@ const listCardsForFutBIN = async (cards) => {
       await listCard(computeSalePrice(existingValue.price), card);
     } else {
       sendUINotification(
-        `Price missing for ${card._staticData.name}`,
+        `${t("priceMissing")} ${card._staticData.name}`,
         UINotificationType.NEGATIVE
       );
     }
@@ -149,11 +148,13 @@ const listCard = async (price, card, isFixedPrice, startPrice) => {
   );
   if (!isListed) {
     return sendUINotification(
-      "Given price is not in card's price range",
+      t("priceNotInRange"),
       UINotificationType.NEGATIVE
     );
   }
-  sendUINotification(`Listed ${card._staticData.name} for ${lisitedPrice}`);
+  sendUINotification(
+    `${t("listed")} ${card._staticData.name} - ${lisitedPrice}`
+  );
 };
 
 const computeSalePrice = (cardPrice) => {

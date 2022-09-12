@@ -4,12 +4,13 @@ import {
 } from "../utils/openPacksUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { showPopUp } from "./popup-override";
+import { t } from "../services/translate";
 
 export const storeOverride = () => {
   const setupBuyCoinsButton =
     UTStorePackDetailsView.prototype.setupBuyCoinsButton;
 
-  const autoOpenPacks = function (e, t, i) {
+  const autoOpenPacks = function () {
     let isHandled = false;
     services.Store.getPacks().observe(this, function (sender, data) {
       if (isHandled) return;
@@ -18,10 +19,7 @@ export const storeOverride = () => {
         (item) => item.id === this.articleId
       );
       if (!pack) {
-        sendUINotification(
-          "Unable to find the pack",
-          UINotificationType.NEGATIVE
-        );
+        sendUINotification(t("packMissing"), UINotificationType.NEGATIVE);
         return;
       }
 
@@ -30,8 +28,8 @@ export const storeOverride = () => {
           { labelEnum: enums.UIDialogOptions.OK },
           { labelEnum: enums.UIDialogOptions.CANCEL },
         ],
-        "Auto Open Packs",
-        purchasePopUpMessage,
+        t("autoOpenPacks"),
+        purchasePopUpMessage(),
         (text) => {
           text === 2 && validateFormAndOpenPack(pack);
         }
@@ -43,8 +41,8 @@ export const storeOverride = () => {
     this._btnOpenPacks && this.removeActionButton(this._btnOpenPacks);
     this._btnOpenPacks = new UTCurrencyButtonControl();
     this._btnOpenPacks.init();
-    this._btnOpenPacks.setText("Open pack");
-    this._btnOpenPacks.setSubText("Automatically");
+    this._btnOpenPacks.setText(t("openPack"));
+    this._btnOpenPacks.setSubText(t("automatically"));
     this._btnOpenPacks.addClass("call-to-action packOpen");
     this._btnOpenPacks.addTarget(this, autoOpenPacks, EventType.TAP);
     this.appendActionButton(this._btnOpenPacks);

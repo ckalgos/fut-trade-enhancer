@@ -1,4 +1,5 @@
 import { EnhancerSettingsView } from "./EnhancerSettingsView";
+import { t } from "../services/translate";
 
 export const EnhancerSettingsController = function (t) {
   UTViewController.call(this);
@@ -15,5 +16,5 @@ EnhancerSettingsController.prototype.viewDidAppear = function () {
 };
 
 EnhancerSettingsController.prototype.getNavigationTitle = function () {
-  return `Enhancer`;
+  return t("enhancer");
 };

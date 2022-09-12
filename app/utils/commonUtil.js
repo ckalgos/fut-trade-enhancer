@@ -68,6 +68,14 @@ export const convertToSeconds = (val) => {
   return 0;
 };
 
+export const utoa = (data) => {
+  return btoa(unescape(encodeURIComponent(data)));
+};
+
+export const atou = (b64) => {
+  return decodeURIComponent(escape(atob(b64)));
+};
+
 export const getRandNumberInRange = (range) => {
   const rangeVal = getRangeValue(range);
   if (rangeVal.length >= 2) {

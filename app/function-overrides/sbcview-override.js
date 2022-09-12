@@ -23,6 +23,7 @@ import {
 import { showPopUp } from "./popup-override";
 import { getValue, setValue } from "../services/repository";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
+import { t } from "../services/translate";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
@@ -66,10 +67,12 @@ export const sbcViewOverride = () => {
           $(
             `<div class="sbcSolutions"></div>
             <div class="futBinFill">
-              <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder="FutBin Id" />
+              <input id="squadId" type="text" class="ut-text-input-control futBinId" placeholder=${t(
+                "futBinId"
+              )} />
               ${generateButton(
                 idFillSBC,
-                "Auto Fill",
+                t("autoFill"),
                 async () => {
                   await validateAndFillSquad();
                 },
@@ -78,7 +81,7 @@ export const sbcViewOverride = () => {
             </div>            
             ${generateButton(
               idBuySBCPlayers,
-              "Buy Missing Players",
+              t("buyMissingPlayers"),
               () => {
                 buyPlayersPopUp();
               },
@@ -97,10 +100,14 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
   $(`#${idSBCFUTBINSolution}`).remove();
   $(".sbcSolutions").append(
     `<select id="${idSBCFUTBINSolution}" class="sbc-players-list" style="border : 1px solid; width: 90%;">
-      <option selected="true" disabled value='-1'>---FUTBIN SBC SOLUTIONS---</option>
+      <option selected="true" disabled value='-1'>${t(
+        "futBinSBCSolutions"
+      )}</option>
       ${squads.map(
         (value) =>
-          `<option class="currency-coins" value='${value.id}'>${value.id}(Price: ${value.ps_price})</option>`
+          `<option class="currency-coins" value='${value.id}'>${value.id}(${t(
+            "price"
+          )} ${value.ps_price})</option>`
       )}
    </select>`
   );
@@ -130,16 +137,13 @@ const buyPlayersPopUp = () => {
   const conceptPlayers = sbcPlayers.filter(({ _item }) => _item.concept);
 
   if (!conceptPlayers.length) {
-    sendUINotification(
-      "No concept players found !!!",
-      UINotificationType.NEGATIVE
-    );
+    sendUINotification(t("noConceptPlayers"), UINotificationType.NEGATIVE);
     return;
   }
 
   const playerNames = conceptPlayers.map(({ _item }) => _item._staticData.name);
 
-  let filterMessage = `Bot will try to buy the following players <br /> <br />
+  let filterMessage = `${t("sbcBuyMessage")} <br /> <br />
   <select  multiple="multiple" class="sbc-players-list" id="${idSBCPlayersToBuy}"
       style="overflow-y : scroll">
       ${playerNames.map(
@@ -149,8 +153,8 @@ const buyPlayersPopUp = () => {
    </select> 
    <br />
    <br />
-   FUTBIN Buy Percent
-   <input placeholder="100" id=${idSBCBuyFutBinPercent} type="number" class="ut-text-input-control fut-bin-buy" placeholder="FUTBIN Sale Percent" />
+   ${t("futBinBuyPercent")}
+   <input placeholder="100" id=${idSBCBuyFutBinPercent} type="number" class="ut-text-input-control fut-bin-buy"  />
    <br /> <br />
    `;
 
@@ -159,7 +163,7 @@ const buyPlayersPopUp = () => {
       { labelEnum: enums.UIDialogOptions.OK },
       { labelEnum: enums.UIDialogOptions.CANCEL },
     ],
-    "Buy Missing Players",
+    t("buyMissingPlayers"),
     filterMessage,
     (text) => {
       const futBinPercent =
@@ -175,7 +179,7 @@ const buyPlayersPopUp = () => {
 
 const buyMissingPlayers = async (conceptPlayers, futBinPercent) => {
   showLoader();
-  sendUINotification("Trying to buy the message players");
+  sendUINotification(t("tryingToBuySbc"));
   await fetchPrices(conceptPlayers);
   for (const player of conceptPlayers) {
     const existingValue = getValue(player.definitionId);
@@ -190,12 +194,12 @@ const buyMissingPlayers = async (conceptPlayers, futBinPercent) => {
       await wait(getRandWaitTime("3-5"));
     } else {
       sendUINotification(
-        `Error fetching futbin Price for ${player._staticData.name}`,
+        `${t("futBinPriceErr")} ${player._staticData.name}`,
         UINotificationType.NEGATIVE
       );
     }
   }
-  sendUINotification("Operation completed");
+  sendUINotification(t("buyCompleted"));
   hideLoader();
 };
 
@@ -228,7 +232,7 @@ const buyPlayer = (player, buyPrice) => {
             sendPinEvents("Transfer Market Results - List View");
             if (!response.data.items.length) {
               sendUINotification(
-                `No card found for ${player._staticData.name}`,
+                `${t("noCardFound")} ${player._staticData.name}`,
                 UINotificationType.NEGATIVE
               );
               return;
@@ -243,7 +247,7 @@ const buyPlayer = (player, buyPrice) => {
             ).observe(this, async function (sender, data) {
               if (data.success) {
                 sendUINotification(
-                  `Buy success for ${player._staticData.name}`
+                  `${t("buySuccess")} ${player._staticData.name}`
                 );
                 numberOfAttempts = 0;
                 buySuccess = true;
@@ -252,16 +256,16 @@ const buyPlayer = (player, buyPrice) => {
                 let status =
                   ((data.error && data.error.code) || data.status) + "";
                 sendUINotification(
-                  `Buy failed for ${player._staticData.name} -- reattempting ${
-                    status == 461 ? "(Others won)" : ""
-                  }`,
+                  `${t("buyFailed")} ${player._staticData.name} -- ${t(
+                    "reattempting"
+                  )} ${status == 461 ? `(${t("othersWon")})` : ""}`,
                   UINotificationType.NEGATIVE
                 );
               }
             });
           } else {
             sendUINotification(
-              `Search failed for ${player._staticData.name}`,
+              `${t("searchFailed")} ${player._staticData.name}`,
               UINotificationType.NEGATIVE
             );
           }
@@ -271,7 +275,7 @@ const buyPlayer = (player, buyPrice) => {
     }
     if (!buySuccess) {
       sendUINotification(
-        `Buy failed for ${player._staticData.name}`,
+        `${t("buyFailed")} ${player._staticData.name}`,
         UINotificationType.NEGATIVE
       );
     }
@@ -282,7 +286,7 @@ const buyPlayer = (player, buyPrice) => {
 const validateAndFillSquad = async () => {
   const squadId = $("#squadId").val();
   if (!squadId) {
-    sendUINotification("Squad Id is missing !!!", UINotificationType.NEGATIVE);
+    sendUINotification(t("squadIdMissing"), UINotificationType.NEGATIVE);
     return;
   }
 
@@ -300,7 +304,7 @@ const fillSquad = async (squadId) => {
   ]);
 
   if (!futBinSquadPlayersInfo) {
-    sendUINotification("Invalid Squad Id !!!", UINotificationType.NEGATIVE);
+    sendUINotification(t("invalidSquadId"), UINotificationType.NEGATIVE);
     return hideLoader();
   }
 
@@ -326,10 +330,7 @@ const fillSquad = async (squadId) => {
     this,
     async function (sender, data) {
       if (!data.success) {
-        sendUINotification(
-          "Saving Squad Failed!!!",
-          UINotificationType.NEGATIVE
-        );
+        sendUINotification(t("savingSquadFailed"), UINotificationType.NEGATIVE);
         _squad.removeAllItems();
         return hideLoader();
       }

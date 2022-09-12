@@ -21,6 +21,7 @@ import { generateTextInput } from "../utils/uiUtils/generateTextInput";
 import { hideLoader, showLoader } from "../utils/commonUtil";
 import { savePlayersWithInRatingRange } from "../utils/ratingFilterUtil";
 import { setMaxUnassignedCount } from "../utils/pileUtil";
+import { t } from "../services/translate";
 
 export const EnhancerSettingsView = function (t) {
   UTView.call(this);
@@ -46,88 +47,88 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           <h1 class="secondary">Enhancer Settings</h1>
           </div>
           ${generateToggleInput(
-            "Show FutBin Price",
+            t("showFutBinPrice"),
             { idFutBinPrice },
-            "Shows Futbin Price and marks Bargains in searches",
+            t("showFutBinPriceInfo"),
             "idFutBinPrice" in enhancerSetting
               ? enhancerSetting["idFutBinPrice"]
               : true
           )}
           ${generateToggleInput(
-            "Mark Bid Bargains",
+            t("markBidBargins"),
             { idBidBargain },
-            "Highlights Bargains based on current bid",
+            t("markBidBarginsInfo"),
             "idBidBargain" in enhancerSetting
               ? enhancerSetting["idBidBargain"]
               : false
           )}
           ${generateTextInput(
-            "Bargains Threshold Percent",
+            t("barginThresholdPercent"),
             95,
             { idBarginThreshold },
-            "Highlight items if price below or equal to this percent of FUTBIN price",
+            t("barginThresholdPercentInfo"),
             enhancerSetting["idBarginThreshold"]
           )}         
           ${generateTextInput(
-            "FUTBIN Sale Percent",
+            t("futBinSalePercent"),
             "95-100",
             { idFutBinPercent },
-            "Sale Price percent for Relist FUTBIN",
+            t("futBinSalePercentInfo"),
             enhancerSetting["idFutBinPercent"],
             "text",
             "settings-field",
             "\\d+-\\d+$"
           )}
           ${generateTextInput(
-            "Rating",
+            t("rating"),
             "",
             { idMinRating },
-            "Will only show players with rating as this value in searches",
+            t("ratingInfo"),
             enhancerSetting["idMinRating"],
             "text"
           )}
           ${generateTextInput(
-            "FUTBIN List Duration",
+            t("futBinListDuration"),
             "1H",
             { idFutBinDuration },
-            "List Duration when listing using Re-list FUTBIN",
+            t("futBinListDurationInfo"),
             enhancerSetting["idFutBinDuration"],
             "text"
           )}          
           ${generateTextInput(
-            "Max number of unassigned items",
+            t("maxUnassignedItems"),
             5,
             { idUnassignedPileSize },
-            "Increase the value, to BIN on items with more items on Unassigned Pile",
+            t("maxUnassignedItemsInfo"),
             enhancerSetting["idUnassignedPileSize"]
           )}  
           ${generateTextInput(
-            "Max number of watchlist items",
+            t("maxWatchListItems"),
             50,
             { idWatchListPileSize },
-            "Increase the value, to BID on items with more items on Unassigned Pile",
+            t("maxWatchListItemsInfo"),
             enhancerSetting["idWatchListPileSize"]
           )}  
           ${generateToggleInput(
-            "Hide Bin Popup",
+            t("hideBinPopUp"),
             { idHideBinPop },
-            "Automatically confirms the Bin popup",
+            t("hideBinPopUpInfo"),
             "idHideBinPop" in enhancerSetting
               ? enhancerSetting["idHideBinPop"]
               : false
           )}
           ${generateToggleInput(
-            "Hide Transfer full Popup",
+            t("hideTransferFull"),
             { idTransferFullPop },
-            "Hides transfer full list popup",
+            t("hideTransferFullInfo"),
             "idTransferFullPop" in enhancerSetting
               ? enhancerSetting["idTransferFullPop"]
               : false
           )}
           ${generateToggleInput(
-            "Show Squad Price",
+            t("showSquadPrice"),
             { idShowSquadPrice },
-            "Show FUTBIN Price on Squad/SBC",
+            t("showSquadPriceInfo"),
             "idShowSquadPrice" in enhancerSetting
               ? enhancerSetting["idShowSquadPrice"]
               : true
@@ -135,7 +136,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           <div class="enhancer-save-btn">
             ${generateButton(
               idSaveSettingsBtn,
-              "Save",
+              t("save"),
               async () => {
                 showLoader();
                 await insertSettings(
@@ -150,7 +151,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
                 }
                 setMaxUnassignedCount();
                 hideLoader();
-                sendUINotification("Saved settings successfully");
+                sendUINotification(t("saveSuccess"));
               },
               "call-to-action flex-half"
             )}

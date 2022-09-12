@@ -1,4 +1,5 @@
 import { idSectionPrices } from "../../app.constants";
+import { t } from "../../services/translate";
 import { generateSectionRelistBtn } from "./generateElements";
 
 export const appendPrice = (dataSource, auctionElement, price) => {
@@ -14,7 +15,9 @@ export const appendPrice = (dataSource, auctionElement, price) => {
 
 export const appendPackPrice = (packValue) => {
   $(".ut-store-reveal-modal-list-view--wallet").append(
-    `<span class="ut-store-reveal-modal-list-view--coins">Pack Value ${packValue}</span>`
+    `<span class="ut-store-reveal-modal-list-view--coins">${t(
+      "packValue"
+    )} ${packValue}</span>`
   );
 };
 
@@ -24,7 +27,9 @@ export const appendSquadTotal = (dataSource, total) => {
   } else {
     $(
       `<div class="rating">
-          <span class="ut-squad-summary-label">${dataSource} Squad Price</span>
+          <span class="ut-squad-summary-label">${dataSource} ${t(
+        "squadPrice"
+      )}</span>
           <div>
             <span class="ratingValue squadTotal currency-coins">${total}</span>
           </div> 
@@ -51,8 +56,12 @@ export const appendSectionTotalPrices = (
   rootElement.find(`#${idSectionPrices}`).remove();
   const sectionPrices = $(`<div id=${idSectionPrices} class="ut-button-group">
     <h3 class="ut-group-button cta price-totals ut-store-reveal-modal-list-view--wallet">
-    <span  class="ut-store-reveal-modal-list-view--coins">Bid Total ${totalBid}</span>
-    <span class="ut-store-reveal-modal-list-view--coins">Bin Total ${totalBin}</span>
+    <span  class="ut-store-reveal-modal-list-view--coins">${t(
+      "bidTotal"
+    )} ${totalBid}</span>
+    <span class="ut-store-reveal-modal-list-view--coins">${t(
+      "binTotal"
+    )} ${totalBin}</span>
     <span class="ut-store-reveal-modal-list-view--coins">${dataSource} ${totalExternalPrice} </span>
     </h3>
   </div>`);
@@ -71,7 +80,9 @@ export const appendRelistExternal = (
     rootElement.append(
       generateSectionRelistBtn(externalCallBack, dataSource).__root
     );
-    rootElement.append(generateSectionRelistBtn(fixedCallBack, "Fixed").__root);
+    rootElement.append(
+      generateSectionRelistBtn(fixedCallBack, t("fixed")).__root
+    );
   }
 };
 

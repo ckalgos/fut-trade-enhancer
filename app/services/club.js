@@ -8,6 +8,7 @@ import {
 import { MAX_CLUB_SEARCH } from "../app.constants";
 import { getValue } from "./repository";
 import { fetchPrices } from "./futbin";
+import { t } from "../services/translate";
 
 export const getSquadPlayerIds = () => {
   return new Promise((resolve, reject) => {
@@ -77,8 +78,7 @@ const downloadClub = async () => {
   await fetchPrices(squadMembers);
 
   let csvContent = "";
-  const headers =
-    "Player Name,Rating,Quality,Rarity,Position,Nation,League,Club,Price Range,FUTBIN Price,Bought For,Discard Value,Contract Left,IsUntradable,IsLoaned";
+  const headers = t("csvFileHeader");
   csvContent += headers + "\r\n";
   for (const squadMember of squadMembers) {
     let rowRecord = "";
@@ -87,10 +87,11 @@ const downloadClub = async () => {
     rowRecord += getCardQuality(squadMember) + ",";
     if (ItemRarity[squadMember.rareflag]) {
       rowRecord += !squadMember.rareflag
-        ? "COMMON,"
+        ? `${services.Localization.localize("item.raretype0")},`
         : ItemRarity[squadMember.rareflag] + ",";
     } else if (squadMember.isSpecial()) {
-      rowRecord += "SPECIAL,";
+      rowRecord +=
+        services.Localization.localize("search.cardLevels.cardLevel4") + ",";
     } else {
       rowRecord += ",";
     }
@@ -116,9 +117,9 @@ const downloadClub = async () => {
       ) + ",";
     if (squadMember._itemPriceLimits) {
       rowRecord +=
-        "Min: " +
+        `${services.Localization.localize("abbr.minimum")}` +
         squadMember._itemPriceLimits.minimum +
-        " Max: " +
+        ` ${services.Localization.localize("abbr.maximum")}` +
         squadMember._itemPriceLimits.maximum +
         ",";
     } else {
@@ -146,11 +147,11 @@ const downloadClub = async () => {
 
 const getCardQuality = (card) => {
   if (card.isGoldRating()) {
-    return "Gold";
+    return services.Localization.localize("search.cardLevels.cardLevel3");
   } else if (card.isSilverRating()) {
-    return "Silver";
+    return services.Localization.localize("search.cardLevels.cardLevel2");
   } else if (card.isBronzeRating()) {
-    return "Bronze";
+    return services.Localization.localize("search.cardLevels.cardLevel1");
   }
   return "";
 };
