@@ -63,7 +63,7 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
   services.Item[
     isWatchList ? "requestWatchedItems" : "requestUnassignedItems"
   ]().observe(this, async function (t, response) {
-    let boughtItems = response.data.items;
+    let boughtItems = response.response.items;
     if (isWatchList) {
       boughtItems = boughtItems.filter(function (item) {
         return item.getAuctionData().isWon();
@@ -81,7 +81,7 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
         sectionHeader ===
         services.Localization.localize("tradepile.button.relistall")
       ) {
-        let unSoldItems = response.data.items.filter(function (item) {
+        let unSoldItems = response.response.items.filter(function (item) {
           var t = item.getAuctionData();
           return t.isExpired() || (t.isValid() && t.isInactive());
         });
@@ -91,7 +91,7 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
         sectionHeader ===
         services.Localization.localize("infopanel.label.addplayer")
       ) {
-        const availableItems = response.data.items.filter(function (item) {
+        const availableItems = response.response.items.filter(function (item) {
           return !item.getAuctionData().isValid();
         });
         listCards(availableItems, price, startPrice, true);

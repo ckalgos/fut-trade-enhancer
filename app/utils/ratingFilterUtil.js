@@ -43,7 +43,7 @@ export const savePlayersWithInRatingRange = async (rating) => {
     services.Item.requestItemByDefId(playerFilteredIds[i]).observe(
       this,
       async function (sender, response) {
-        let item = response.data.item;
+        let item = response.response.item;
         const playerPayLoad = {
           id: playerFilteredIds[i],
           nationid: item.nationId,

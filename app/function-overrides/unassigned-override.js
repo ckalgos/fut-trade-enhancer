@@ -14,7 +14,7 @@ export const unassignedOverride = () => {
   ) {
     observer.unobserve(this);
     if (response.success) {
-      let unassigned = response.data.items.length;
+      let unassigned = response.response.items.length;
       if (unassigned === 50) {
         unassigned = getValue("unassigned");
       }

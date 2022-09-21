@@ -1,10 +1,4 @@
-import {
-  addBtnListner,
-  downloadCsv,
-  wait,
-  hideLoader,
-  showLoader,
-} from "../utils/commonUtil";
+import { downloadCsv, wait, hideLoader, showLoader } from "../utils/commonUtil";
 import { MAX_CLUB_SEARCH } from "../app.constants";
 import { getValue } from "./repository";
 import { fetchPrices } from "./futbin";
@@ -55,7 +49,7 @@ export const getNonActiveSquadPlayers = async function (isTradable) {
     getClubSquad(searchCriteria).observe(
       this,
       async function (sender, response) {
-        resolve(response.data.items);
+        resolve(response.response.items);
       }
     );
   });
@@ -75,11 +69,11 @@ export const getAllClubPlayers = function (filterLoaned, playerId) {
         this,
         async function (sender, response) {
           gatheredSquad = [
-            ...response.data.items.filter(
+            ...response.response.items.filter(
               (item) => !filterLoaned || item.loans < 0
             ),
           ];
-          if (response.status !== 400 && !response.data.retrievedAll) {
+          if (response.status !== 400 && !response.response.retrievedAll) {
             searchCriteria.offset += searchCriteria.count;
             await wait(1);
             getAllSquadMembers();
@@ -94,7 +88,7 @@ export const getAllClubPlayers = function (filterLoaned, playerId) {
 };
 
 const getClubSquad = (searchCriteria) => {
-  return services.Item.searchClub(searchCriteria);
+  return services.Club.search(searchCriteria);
 };
 
 const getActiveSquadIds = (searchModel) => {
@@ -196,7 +190,3 @@ const getCardQuality = (card) => {
   }
   return "";
 };
-
-addBtnListner("#downloadClub", async function () {
-  await getNonActiveSquadPlayers();
-});
