@@ -107,4 +107,6 @@ export const deLocales = {
   clubToTransferListInfo:
     "Der Bot wird versuchen, bis zu 90 handelbare, nicht aktive Squad-Mitglieder auf die Transferliste zu schicken",
   activeSquadMemberErr: "Aktive Squad-Spieler konnten nicht abgerufen werden",
+  increaseActiveList: "Limit für aktive Einträge umgehen",
+  increaseActiveListInfo: "Erhöht die Anzahl aktiver Einträge auf 100",
 };

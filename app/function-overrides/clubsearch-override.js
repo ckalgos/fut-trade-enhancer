@@ -49,7 +49,7 @@ export const clubSearchOverride = () => {
         { labelEnum: enums.UIDialogOptions.OK },
         { labelEnum: enums.UIDialogOptions.CANCEL },
       ],
-      t("autoOpenPacks"),
+      services.Localization.localize("infopanel.label.sendTradePile"),
       t("clubToTransferListInfo"),
       (text) => {
         text === 2 && sendClubPlayersToTradePile();

@@ -229,6 +229,10 @@ export const overrideStyle = () => {
     .phone .settings-field .buttonInfo{ 
       width:85%
     }
+    .numericInput:invalid {
+      color: red;
+      border: 1px solid;
+    }
     input[type="number"]{
       padding: 0 .5em;
       border-radius: 0;

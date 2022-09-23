@@ -190,7 +190,7 @@ const buyPack = (pack, popUpValues) => {
         sendPinEvents("Unassigned Items - List View");
         services.Item.requestUnassignedItems().observe(
           this,
-          async function (sender, { data: { items } }) {
+          async function (sender, { response: { items } }) {
             let response = "";
             response += await handleNonDuplicatePlayers(
               items,

@@ -102,4 +102,6 @@ export const enLocales = {
   clubToTransferListInfo:
     "Bot will try to send upto 90 tradeable non active squad members to Transfer list",
   activeSquadMemberErr: "Unable to get active squad players",
+  increaseActiveList: "Bypass Active Listing Limit",
+  increaseActiveListInfo: "Increases Number of Active Listing to 100",
 };

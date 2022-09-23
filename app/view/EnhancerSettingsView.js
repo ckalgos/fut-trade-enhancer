@@ -13,6 +13,7 @@ import {
   idShowSquadPrice,
   idWatchListPileSize,
   idShowCalcMinBin,
+  idIncreaseActiveListing,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -140,6 +141,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             t("showCalcMinBinInfo"),
             "idShowCalcMinBin" in enhancerSetting
               ? enhancerSetting["idShowCalcMinBin"]
+              : false
+          )}
+          ${generateToggleInput(
+            t("increaseActiveList"),
+            { idIncreaseActiveListing },
+            t("increaseActiveListInfo"),
+            "idIncreaseActiveListing" in enhancerSetting
+              ? enhancerSetting["idIncreaseActiveListing"]
               : false
           )}
           <div class="enhancer-save-btn">

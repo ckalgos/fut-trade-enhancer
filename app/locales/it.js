@@ -106,4 +106,6 @@ export const itLocales = {
   clubToTransferListInfo:
     "Il bot proverà a inviare fino a 90 membri della squadra non attivi scambiabili all'elenco dei trasferimenti",
   activeSquadMemberErr: "Impossibile ottenere giocatori di squadra attivi",
+  increaseActiveList: "Bypassa il limite di inserzione attiva",
+  increaseActiveListInfo: "Aumenta il numero di annunci attivi a 100",
 };

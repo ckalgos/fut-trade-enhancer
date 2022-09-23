@@ -16,6 +16,7 @@ import { playerSlotOverride } from "./playerslot-override";
 import { searchFilterViewOverride } from "./searchfilterview-override";
 import { paginatedResultOverride } from "./paginatedresult-override";
 import { itemPileOverride } from "./itempile-override";
+import { quickListOpenOverride } from "./quicklistopen-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -35,5 +36,6 @@ export const initOverrides = () => {
   searchFilterViewOverride();
   paginatedResultOverride();
   itemPileOverride();
+  quickListOpenOverride();
   overrideStyle();
 };
