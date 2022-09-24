@@ -17,6 +17,7 @@ import { searchFilterViewOverride } from "./searchfilterview-override";
 import { paginatedResultOverride } from "./paginatedresult-override";
 import { itemPileOverride } from "./itempile-override";
 import { quickListOpenOverride } from "./quicklistopen-override";
+import { fixAllPlayersChemistryPointsInSbcOverride } from "./fix-requirement-all-players-chemistry-point-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -38,4 +39,5 @@ export const initOverrides = () => {
   itemPileOverride();
   quickListOpenOverride();
   overrideStyle();
+  fixAllPlayersChemistryPointsInSbcOverride();
 };
