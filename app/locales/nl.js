@@ -106,4 +106,6 @@ export const nlLocales = {
   activeSquadMemberErr: "Kan geen actieve squadronspelers krijgen",
   increaseActiveList: "Actieve lijstlimiet overslaan",
   increaseActiveListInfo: "Verhoogt het aantal actieve vermeldingen tot 100",
+  fixSbc: "Sbcs repareren",
+  fixSbcInfo: "Repareert onoplosbare Sbc's",
 };

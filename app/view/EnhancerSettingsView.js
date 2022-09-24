@@ -14,6 +14,7 @@ import {
   idWatchListPileSize,
   idShowCalcMinBin,
   idIncreaseActiveListing,
+  idFixSbcs,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -149,6 +150,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             t("increaseActiveListInfo"),
             "idIncreaseActiveListing" in enhancerSetting
               ? enhancerSetting["idIncreaseActiveListing"]
+              : false
+          )}
+          ${generateToggleInput(
+            t("fixSbc"),
+            { idFixSbcs },
+            t("fixSbcInfo"),
+            "idFixSbcs" in enhancerSetting
+              ? enhancerSetting["idFixSbcs"]
               : false
           )}
           <div class="enhancer-save-btn">

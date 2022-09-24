@@ -111,4 +111,6 @@ export const frLocales = {
   activeSquadMemberErr: "Impossible d'obtenir des joueurs d'équipe actifs",
   increaseActiveList: " Contourner la limite d'inscriptions actives",
   increaseActiveListInfo: "Augmente le nombre d'annonces actives à 100",
+  fixSbc: "Réparer les Sbc",
+  fixSbcInfo: "Corrige les Sbc insolubles",
 };

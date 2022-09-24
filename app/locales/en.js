@@ -104,4 +104,6 @@ export const enLocales = {
   activeSquadMemberErr: "Unable to get active squad players",
   increaseActiveList: "Bypass Active Listing Limit",
   increaseActiveListInfo: "Increases Number of Active Listing to 100",
+  fixSbc: "Fix Sbcs",
+  fixSbcInfo: "Fixes unsolvable Sbcs",
 };

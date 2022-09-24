@@ -17,6 +17,7 @@ import { searchFilterViewOverride } from "./searchfilterview-override";
 import { paginatedResultOverride } from "./paginatedresult-override";
 import { itemPileOverride } from "./itempile-override";
 import { quickListOpenOverride } from "./quicklistopen-override";
+import { sbcFixOverride } from "./sbcfix-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -37,5 +38,6 @@ export const initOverrides = () => {
   paginatedResultOverride();
   itemPileOverride();
   quickListOpenOverride();
+  sbcFixOverride();
   overrideStyle();
 };

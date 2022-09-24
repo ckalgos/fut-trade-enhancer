@@ -108,4 +108,6 @@ export const itLocales = {
   activeSquadMemberErr: "Impossibile ottenere giocatori di squadra attivi",
   increaseActiveList: "Bypassa il limite di inserzione attiva",
   increaseActiveListInfo: "Aumenta il numero di annunci attivi a 100",
+  fixSbc: "Correggi Sbcs",
+  fixSbcInfo: "Risolve Sbcs irrisolvibili",
 };
