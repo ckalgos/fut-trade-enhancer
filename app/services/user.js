@@ -12,3 +12,11 @@ export const getUserPlatform = () => {
   setValue("userPlatform", "ps");
   return "ps";
 };
+
+export const updateUserCredits = () => {
+  return new Promise((resolve) => {
+    services.User.requestCurrencies().observe(this, function (sender, data) {
+      resolve();
+    });
+  });
+};

@@ -7,6 +7,7 @@ import {
 import { hideLoader, showLoader, wait } from "./commonUtil";
 import { sendPinEvents, sendUINotification } from "./notificationUtil";
 import { t } from "../services/translate";
+import { updateUserCredits } from "../services/user";
 
 export const validateFormAndOpenPack = async (pack) => {
   const popUpValues = getPopUpValues();
@@ -171,14 +172,6 @@ const handleItems = (items, action) => {
         resolve("");
       });
     }
-  });
-};
-
-const updateUserCredits = () => {
-  return new Promise((resolve) => {
-    services.User.requestCurrencies().observe(this, function (sender, data) {
-      resolve();
-    });
   });
 };
 

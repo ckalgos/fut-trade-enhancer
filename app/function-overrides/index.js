@@ -18,6 +18,7 @@ import { paginatedResultOverride } from "./paginatedresult-override";
 import { itemPileOverride } from "./itempile-override";
 import { quickListOpenOverride } from "./quicklistopen-override";
 import { sbcFixOverride } from "./sbcfix-override";
+import { currencyTapOverride } from "./currencytap-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -39,5 +40,6 @@ export const initOverrides = () => {
   itemPileOverride();
   quickListOpenOverride();
   sbcFixOverride();
+  currencyTapOverride();
   overrideStyle();
 };

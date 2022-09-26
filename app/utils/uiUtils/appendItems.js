@@ -53,7 +53,7 @@ export const appendSectionTotalPrices = (
   dataSource,
   { totalBid, totalBin, totalExternalPrice }
 ) => {
-  rootElement.find(`#${idSectionPrices}`).remove();
+  rootElement.parent().find(`#${idSectionPrices}`).remove();
   const sectionPrices = $(`<div id=${idSectionPrices} class="ut-button-group">
     <h3 class="ut-group-button cta price-totals ut-store-reveal-modal-list-view--wallet">
     <span  class="ut-store-reveal-modal-list-view--coins">${t(

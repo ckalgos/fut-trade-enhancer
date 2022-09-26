@@ -312,7 +312,30 @@ export const overrideStyle = () => {
     }
     small {
       white-space: break-spaces;
-    }  
+    }
+    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins {
+      cursor: pointer;
+      position: relative;
+    }
+    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins::before {
+      font-family: UltimateTeam-Icons,sans-serif;
+      font-style: normal;
+      font-variant: normal;
+      font-weight: 400;
+      text-decoration: none;
+      text-transform: none;
+      background-color: #f8eede;
+      color: #243962;
+      display: block;
+      font-size: .5rem;
+      line-height: .5rem;
+      padding: 0.2rem;
+      order: 1;
+    }
+    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins:before {
+      margin-left: 3px;
+      content: "\\E06A";
+    }
     `;
   document.head.appendChild(style);
 };
