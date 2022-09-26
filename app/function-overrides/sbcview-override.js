@@ -190,7 +190,6 @@ const buyMissingPlayers = async (conceptPlayers, futBinPercent) => {
         200
       );
       await buyPlayer(player, calculatedPrice);
-      console.log(getRandWaitTime("3-5"));
       await wait(getRandWaitTime("3-5"));
     } else {
       sendUINotification(
