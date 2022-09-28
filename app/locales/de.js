@@ -111,4 +111,7 @@ export const deLocales = {
   increaseActiveListInfo: "Erhöht die Anzahl aktiver Einträge auf 100",
   fixSbc: "SBCs reparieren",
   fixSbcInfo: "Behebt unlösbare Sbcs",
+  disablePackAnimation: "Pack-Animation deaktivieren",
+  disablePackAnimationInfo:
+    "Deaktiviert die Animation während des Pack-Öffnens",
 };

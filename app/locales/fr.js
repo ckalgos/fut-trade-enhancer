@@ -113,4 +113,6 @@ export const frLocales = {
   increaseActiveListInfo: "Augmente le nombre d'annonces actives à 100",
   fixSbc: "Réparer les Sbc",
   fixSbcInfo: "Corrige les Sbc insolubles",
+  disablePackAnimation: "Désactiver l'animation de pack",
+  disablePackAnimationInfo: "Désactive l'animation lors de l'ouverture du pack",
 };

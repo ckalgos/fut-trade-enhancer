@@ -108,4 +108,7 @@ export const nlLocales = {
   increaseActiveListInfo: "Verhoogt het aantal actieve vermeldingen tot 100",
   fixSbc: "Sbcs repareren",
   fixSbcInfo: "Repareert onoplosbare Sbc's",
+  disablePackAnimation: "Pakanimatie uitschakelen",
+  disablePackAnimationInfo:
+    "Schakel animatie uit tijdens het openen van het pakket",
 };

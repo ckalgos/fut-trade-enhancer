@@ -19,6 +19,7 @@ import { itemPileOverride } from "./itempile-override";
 import { quickListOpenOverride } from "./quicklistopen-override";
 import { sbcFixOverride } from "./sbcfix-override";
 import { currencyTapOverride } from "./currencytap-override";
+import { packAnimationOverride } from "./packanimation-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -42,4 +43,5 @@ export const initOverrides = () => {
   sbcFixOverride();
   currencyTapOverride();
   overrideStyle();
+  packAnimationOverride();
 };

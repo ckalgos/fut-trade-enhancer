@@ -106,4 +106,6 @@ export const enLocales = {
   increaseActiveListInfo: "Increases Number of Active Listing to 100",
   fixSbc: "Fix Sbcs",
   fixSbcInfo: "Fixes unsolvable Sbcs",
+  disablePackAnimation: "Disable Pack Animation",
+  disablePackAnimationInfo: "Disables animation during pack opening",
 };

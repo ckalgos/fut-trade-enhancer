@@ -313,11 +313,11 @@ export const overrideStyle = () => {
     small {
       white-space: break-spaces;
     }
-    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins {
+    .ut-navigation-bar-view .view-navbar-currency-coins {
       cursor: pointer;
       position: relative;
     }
-    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins::before {
+    .ut-navigation-bar-view .view-navbar-currency-coins::before {
       font-family: UltimateTeam-Icons,sans-serif;
       font-style: normal;
       font-variant: normal;
@@ -332,7 +332,7 @@ export const overrideStyle = () => {
       padding: 0.2rem;
       order: 1;
     }
-    .ut-navigation-bar-view.currency-purchase .view-navbar-currency-coins:before {
+    .ut-navigation-bar-view .view-navbar-currency-coins:before {
       margin-left: 3px;
       content: "\\E06A";
     }

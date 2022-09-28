@@ -113,4 +113,7 @@ export const esLocales = {
   increaseActiveListInfo: "Aumenta el Número de Listados Activos a 100",
   fixSbc: "Reparar Sbc",
   fixSbcInfo: "Corrige Sbcs irresolubles",
+  disablePackAnimation: "Desactivar animación del paquete",
+  disablePackAnimationInfo:
+    "Deshabilita la animación durante la apertura del paquete",
 };

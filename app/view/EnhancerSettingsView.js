@@ -15,6 +15,7 @@ import {
   idShowCalcMinBin,
   idIncreaseActiveListing,
   idFixSbcs,
+  idDisablePackAnimation,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -158,6 +159,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             t("fixSbcInfo"),
             "idFixSbcs" in enhancerSetting
               ? enhancerSetting["idFixSbcs"]
+              : false
+          )}
+          ${generateToggleInput(
+            t("disablePackAnimation"),
+            { idDisablePackAnimation },
+            t("disablePackAnimationInfo"),
+            "idDisablePackAnimation" in enhancerSetting
+              ? enhancerSetting["idDisablePackAnimation"]
               : false
           )}
           <div class="enhancer-save-btn">
