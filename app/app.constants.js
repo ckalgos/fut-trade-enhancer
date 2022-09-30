@@ -40,3 +40,4 @@ export const idFixedBINPrice = "elem_" + generateId(15);
 export const idIncreaseActiveListing = "elem_" + generateId(15);
 export const idFixSbcs = "elem_" + generateId(15);
 export const idDisablePackAnimation = "elem_" + generateId(15);
+export const idSession = generateId(15);

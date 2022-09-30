@@ -1,3 +1,4 @@
+import { idSession } from "../app.constants";
 import { getValue, setValue } from "./repository";
 
 export const initListeners = () => {
@@ -39,5 +40,6 @@ const sendWebRequest = (options) => {
     method: options.method,
     url: options.url,
     onload: options.onload,
+    headers: { "User-Agent": idSession },
   });
 };
