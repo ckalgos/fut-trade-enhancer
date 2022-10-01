@@ -1,4 +1,4 @@
-import { getValue } from "../services/repository";
+import { getDataSource, getValue, setValue } from "../services/repository";
 import {
   idFutBinPrice,
   idBidBargain,
@@ -16,13 +16,14 @@ import {
   idIncreaseActiveListing,
   idFixSbcs,
   idDisablePackAnimation,
+  idExternalDataSource,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
 import { generateButton } from "../utils/uiUtils/generateButton";
 import { sendUINotification } from "../utils/notificationUtil";
 import { generateTextInput } from "../utils/uiUtils/generateTextInput";
-import { hideLoader, showLoader } from "../utils/commonUtil";
+import { hideLoader, showLoader, formatDataSource } from "../utils/commonUtil";
 import { savePlayersWithInRatingRange } from "../utils/ratingFilterUtil";
 import { setMaxUnassignedCount } from "../utils/pileUtil";
 import { t } from "../services/translate";
@@ -32,6 +33,20 @@ export const EnhancerSettingsView = function (t) {
 };
 
 JSUtils.inherits(EnhancerSettingsView, UTView);
+
+$(document).on(
+  {
+    change: function () {
+      const dataSource = $(`#${idExternalDataSource} option`)
+        .filter(":selected")
+        .val();
+      const enhancerSetting = getValue("EnhancerSettings") || {};
+      enhancerSetting["idExternalDataSource"] = dataSource;
+      setValue("EnhancerSettings", enhancerSetting);
+    },
+  },
+  `#${idExternalDataSource}`
+);
 
 EnhancerSettingsView.prototype._generate = function _generate() {
   if (!this._generated) {
@@ -43,17 +58,31 @@ EnhancerSettingsView.prototype._generate = function _generate() {
     container.style["align-items"] = "center";
     let wrapper = document.createElement("div");
     wrapper.style["height"] = "100%";
+    const dataSource = getDataSource();
     const enhancerSetting = getValue("EnhancerSettings") || {};
     let currentRating = enhancerSetting["idMinRating"];
+    if (dataSource) {
+      setTimeout(() => {
+        $(`#${idExternalDataSource}`)
+          .find(`option[value=${dataSource}]`)
+          .attr("selected", "selected");
+      });
+    }
     wrapper.appendChild(
       $(` <div class='enhancer-settings-wrapper ut-pinned-list'>
           <div class="enhancer-settings-header"> 
           <h1 class="secondary">Enhancer Settings</h1>
           </div>
+          <select id="${idExternalDataSource}" class="sbc-players-list" style="align-self: center;border: 1px solid; width: 50%; height: 50%;">
+               <option selected="true" disabled value='-1'>DataSource</option>
+               <option value='in-house'>Market Alert</option>
+               <option value='futbin'>FUTBIN</option>
+               <option value='futwiz'>FUTWIZ</option>                     
+          </select>
           ${generateToggleInput(
-            t("showFutBinPrice"),
+            formatDataSource(t("showFutBinPrice"), dataSource),
             { idFutBinPrice },
-            t("showFutBinPriceInfo"),
+            formatDataSource(t("showFutBinPriceInfo"), dataSource),
             "idFutBinPrice" in enhancerSetting
               ? enhancerSetting["idFutBinPrice"]
               : true
@@ -74,10 +103,10 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             enhancerSetting["idBarginThreshold"]
           )}         
           ${generateTextInput(
-            t("futBinSalePercent"),
+            formatDataSource(t("futBinSalePercent"), dataSource),
             "95-100",
             { idFutBinPercent },
-            t("futBinSalePercentInfo"),
+            formatDataSource(t("futBinSalePercentInfo"), dataSource),
             enhancerSetting["idFutBinPercent"],
             "text",
             "settings-field",
@@ -92,10 +121,10 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "text"
           )}
           ${generateTextInput(
-            t("futBinListDuration"),
+            formatDataSource(t("futBinListDuration"), dataSource),
             "1H",
             { idFutBinDuration },
-            t("futBinListDurationInfo"),
+            formatDataSource(t("futBinListDurationInfo"), dataSource),
             enhancerSetting["idFutBinDuration"],
             "text"
           )}          

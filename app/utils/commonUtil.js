@@ -137,3 +137,8 @@ export const createElementFromHTML = (htmlString) => {
   div.innerHTML = htmlString.trim();
   return div.firstChild;
 };
+
+export const formatDataSource = function (string) {
+  var args = arguments;
+  return string.replace(/{dataSource}/g, (args[1] || "").toUpperCase());
+};

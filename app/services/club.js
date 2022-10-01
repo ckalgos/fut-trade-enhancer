@@ -1,9 +1,15 @@
-import { downloadCsv, wait, hideLoader, showLoader } from "../utils/commonUtil";
+import {
+  downloadCsv,
+  wait,
+  hideLoader,
+  showLoader,
+  formatDataSource,
+} from "../utils/commonUtil";
 import { MAX_CLUB_SEARCH } from "../app.constants";
-import { getValue } from "./repository";
-import { fetchPrices } from "./futbin";
+import { getDataSource, getValue } from "./repository";
 import { t } from "../services/translate";
 import { sendUINotification } from "../utils/notificationUtil";
+import { fetchPrices } from "./datasource";
 
 export const getSquadPlayerIds = () => {
   return new Promise((resolve, reject) => {
@@ -111,9 +117,13 @@ export const downloadClub = async () => {
   squadMembers = squadMembers.sort((a, b) => b.rating - a.rating);
 
   await fetchPrices(squadMembers);
+  const dataSource = getDataSource();
 
   let csvContent = "";
-  const headers = t("csvFileHeader");
+  const headers = formatDataSource(
+    t("csvFileHeader"),
+    dataSource.toUpperCase()
+  );
   csvContent += headers + "\r\n";
   for (const squadMember of squadMembers) {
     let rowRecord = "";
@@ -160,7 +170,9 @@ export const downloadClub = async () => {
     } else {
       rowRecord += "--NA--,";
     }
-    const existingValue = getValue(squadMember.definitionId);
+    const existingValue = getValue(
+      `${squadMember.definitionId}_${dataSource}_price`
+    );
     if (existingValue && existingValue.price) {
       rowRecord += existingValue.price + ",";
     } else {

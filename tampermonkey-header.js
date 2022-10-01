@@ -2,7 +2,7 @@ module.exports = {
   headers: {
     name: "FUT Trade Enhancer",
     namespace: "http://tampermonkey.net/",
-    version: "1.3.4",
+    version: "1.3.5",
     description: "FUT Trade Enhancer",
     author: "CK Algos",
     match: [
@@ -11,7 +11,14 @@ module.exports = {
     ],
     require: ["https://code.jquery.com/jquery-3.6.1.min.js"],
     grant: ["GM_xmlhttpRequest", "GM_download"],
-    connect: ["ea.com", "ea2.com", "futbin.com", "amazonaws.com", "futbin.org"],
+    connect: [
+      "ea.com",
+      "ea2.com",
+      "futwiz.com",
+      "futbin.com",
+      "amazonaws.com",
+      "futbin.org",
+    ],
     updateURL:
       "https://github.com/ckalgos/fut-trade-enhancer/releases/latest/download/fut-trade-enhancer.user.js",
     downloadURL:

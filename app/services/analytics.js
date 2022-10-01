@@ -1,4 +1,5 @@
 import { getValue, setValue } from "./repository";
+import { getUserPlatform } from "./user";
 const sendRequest = (url, payload, token = null) => {
   return fetch(url, {
     headers: {
@@ -38,8 +39,45 @@ const getToken = () => {
   return authToken;
 };
 
-export const trackMarketPrices = async (playerPrices) => {
-  return sendRequest(atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vYXVjdGlvbg=="), {
-    playerPrices,
+const formRequestPayLoad = (listRows) => {
+  const platform = getUserPlatform();
+  const trackPayLoad = [];
+  listRows.forEach((row) => {
+    const {
+      id,
+      definitionId,
+      _auction: {
+        buyNowPrice,
+        tradeId: auctionId,
+        expires: expiresOn,
+        _tradeState: tradeState,
+      },
+    } = row;
+
+    const expireDate = new Date();
+    expireDate.setSeconds(expireDate.getSeconds() + expiresOn);
+    tradeState === "active" &&
+      trackPayLoad.push({
+        definitionId,
+        price: buyNowPrice,
+        expiresOn: expireDate,
+        id: id + "",
+        auctionId,
+        platform,
+      });
   });
+
+  return trackPayLoad;
+};
+
+export const trackMarketPrices = async (items) => {
+  const requestPayload = formRequestPayLoad(items);
+  if (requestPayload.length) {
+    return sendRequest(
+      atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vYXVjdGlvbg=="),
+      {
+        prices: requestPayload,
+      }
+    );
+  }
 };

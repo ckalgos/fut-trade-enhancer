@@ -12,3 +12,8 @@ export const getValue = (key) => {
   }
   return value;
 };
+
+export const getDataSource = () => {
+  const enhancerSetting = getValue("EnhancerSettings") || {};
+  return enhancerSetting["idExternalDataSource"] || "futbin";
+};

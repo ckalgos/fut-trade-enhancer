@@ -1,43 +1,4 @@
-import { trackMarketPrices } from "../services/analytics";
-import { getUserPlatform } from "../services/user";
 import { appendCardPrice, appendSectionPrices } from "../utils/priceAppendUtil";
-
-const formRequestPayLoad = async (listRows) => {
-  const platform = getUserPlatform();
-  const trackPayLoad = [];
-  listRows.forEach(({ data }) => {
-    const {
-      id,
-      definitionId,
-      _auction: {
-        buyNowPrice,
-        tradeId: auctionId,
-        expires: expiresOn,
-        _tradeState: tradeState,
-      },
-      resourceId,
-      type,
-    } = data;
-
-    const expireDate = new Date();
-    expireDate.setSeconds(expireDate.getSeconds() + expiresOn);
-    tradeState === "active" &&
-      type === "player" &&
-      trackPayLoad.push({
-        definitionId,
-        price: buyNowPrice,
-        expiresOn: expireDate,
-        id: id + "",
-        auctionId,
-        platform,
-        resourceId,
-      });
-  });
-
-  if (trackPayLoad.length && trackPayLoad.length < 12) {
-    trackMarketPrices(trackPayLoad);
-  }
-};
 
 export const paginatedResultOverride = () => {
   const paginatedRenderList = UTPaginatedItemListView.prototype._renderItems;
@@ -54,7 +15,6 @@ export const paginatedResultOverride = () => {
         data,
       }))
     );
-    formRequestPayLoad(this.listRows);
     return result;
   };
 

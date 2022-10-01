@@ -1,12 +1,12 @@
-import { getCardName } from "../utils/futItemUtil";
-import { sendRequest } from "../utils/networkUtil";
-import { sendExternalRequest } from "./externalRequest";
-import { getValue, setValue } from "./repository";
-import { getUserPlatform } from "./user";
+import { getCardName } from "../../utils/futItemUtil";
+import { sendRequest } from "../../utils/networkUtil";
+import { sendExternalRequest } from "../externalRequest";
+import { getValue, setValue } from "../repository";
+import { getUserPlatform } from "../user";
 
 const supportedConsumables = new Set(["Position", "Chemistry Style"]);
 
-export const fetchPrices = async (items) => {
+const fetchPrices = async (items) => {
   const result = new Map();
 
   const missingPlayerIds = new Set();
@@ -17,9 +17,9 @@ export const fetchPrices = async (items) => {
       continue;
     }
 
-    const priceDetail = getValue(item.definitionId);
+    const priceDetail = getValue(`${item.definitionId}_futbin_price`);
     if (priceDetail) {
-      result.set(item.definitionId, priceDetail.price);
+      result.set(`${item.definitionId}_futbin_price`, priceDetail.price);
     } else if (item.isPlayer()) {
       missingPlayerIds.add(item.definitionId);
     } else if (
@@ -50,9 +50,9 @@ export const fetchPrices = async (items) => {
   return result;
 };
 
-export const getFutbinPlayerUrl = (player) => {
+const getPlayerUrl = (player) => {
   return new Promise((resolve, reject) => {
-    const existingValue = getValue(`${player.definitionId}_url`);
+    const existingValue = getValue(`${player.definitionId}_futbin_url`);
     if (existingValue) {
       resolve(existingValue);
       return;
@@ -86,7 +86,7 @@ export const getFutbinPlayerUrl = (player) => {
           );
         }
         const url = `https://www.futbin.com/23/player/${filteredPlayer[0].id}`;
-        setValue(`${player.definitionId}_url`, url);
+        setValue(`${player.definitionId}_futbin_url`, url);
         return resolve(url);
       },
     });
@@ -174,18 +174,21 @@ const fetchPlayerPrices = async (playerIds, result) => {
       const priceResponse = JSON.parse(futBinResponse);
 
       for (const id of [primaryId, ...playersIdArray]) {
-        const lcPrice = priceResponse[id].prices[platform].LCPrice;
+        const prices = priceResponse[id].prices[platform];
+        const lcPrice = prices.LCPrice;
         if (!lcPrice) {
           continue;
         }
         const cardPrice = parseInt(lcPrice.replace(/[,.]/g, ""));
 
+        const cacheKey = `${id}_futbin_price`;
         const cacheValue = {
           expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
           price: cardPrice,
         };
-        setValue(id, cacheValue);
-        result.set(id, cardPrice);
+
+        setValue(cacheKey, cacheValue);
+        result.set(cacheKey, cardPrice);
       }
     } catch (err) {
       console.log(err);
@@ -215,17 +218,23 @@ const fetchConsumablesPrices = async (missingConsumables, result) => {
       const consumableCards = missingConsumables.get(consumableType) || [];
       for (const { definitionId, subType } of consumableCards) {
         let cardPrice = consumablesPriceLookUp.get(subType);
+        const cacheKey = `${definitionId}_futbin_price`;
         if (cardPrice) {
           const cacheValue = {
             expiryTimeStamp: new Date(Date.now() + 15 * 60 * 1000),
             price: cardPrice,
           };
-          setValue(definitionId, cacheValue);
-          result.set(definitionId, cardPrice);
+          setValue(cacheKey, cacheValue);
+          result.set(cacheKey, cardPrice);
         }
       }
     } catch (err) {
       console.log(err);
     }
   }
+};
+
+export default {
+  getPlayerUrl,
+  fetchPrices,
 };

@@ -1,5 +1,5 @@
-import { fetchPrices } from "../services/futbin";
-import { getValue } from "../services/repository";
+import { fetchPrices } from "../services/datasource";
+import { getDataSource, getValue } from "../services/repository";
 import { relistCards, relistForFixedPrice } from "./reListUtil";
 import {
   appendContractInfo,
@@ -21,6 +21,7 @@ export const appendCardPrice = async (listRows, isFromPacks) => {
   for (const { data } of listRows) {
     cards.push(data);
   }
+  const dataSource = getDataSource();
   const prices = await fetchPrices(cards);
   let totalExternalPrice = 0;
   let totalBid = 0;
@@ -30,7 +31,7 @@ export const appendCardPrice = async (listRows, isFromPacks) => {
     const auctionElement = $(__auction);
     const rootElement = $(__root);
     const { definitionId, contract, _auction: auctionData } = data;
-    const cardPrice = prices.get(definitionId);
+    const cardPrice = prices.get(`${definitionId}_${dataSource}_price`);
     appendContractInfo(rootElement, contract);
     if (clubSquadIds.has(definitionId)) {
       appendDuplicateTag(rootElement);
@@ -46,7 +47,7 @@ export const appendCardPrice = async (listRows, isFromPacks) => {
     totalBid += bidPrice;
     totalBin += auctionData.buyNowPrice;
     totalExternalPrice += cardPrice || 0;
-    appendPrice("FutBin", auctionElement, cardPrice);
+    appendPrice(dataSource.toUpperCase(), auctionElement, cardPrice);
     checkAndAppendBarginIndicator(
       rootElement,
       auctionData.buyNowPrice,
@@ -84,10 +85,11 @@ export const appendSlotPrice = async (squadSlots) => {
   for (const { item } of squadSlots) {
     cards.push(item);
   }
+  const dataSource = getDataSource();
   const prices = await fetchPrices(cards);
   let total = 0;
   for (const { rootElement, item } of squadSlots) {
-    const cardPrice = prices.get(item.definitionId);
+    const cardPrice = prices.get(`${item.definitionId}_${dataSource}_price`);
     total += cardPrice || 0;
 
     if (cardPrice) {
@@ -95,16 +97,17 @@ export const appendSlotPrice = async (squadSlots) => {
       appendPriceToSlot(element, cardPrice);
     }
   }
-  appendSquadTotal("FutBin", total);
+  appendSquadTotal(dataSource.toUpperCase(), total);
 };
 
 export const appendSectionPrices = async (sectionData) => {
+  const dataSource = getDataSource();
   if (sectionData.listRows.length) {
     sectionData.isRelistSupported &&
       appendRelistExternal(
         sectionData.sectionHeader,
         sectionData.headerElement,
-        "FutBin",
+        dataSource.toUpperCase(),
         () => {
           relistCards(sectionData.sectionHeader);
         },
@@ -114,7 +117,11 @@ export const appendSectionPrices = async (sectionData) => {
       );
     appendCardPrice(sectionData.listRows).then((prices) => {
       setTimeout(() => {
-        appendSectionTotalPrices(sectionData.headerElement, "FutBin", prices);
+        appendSectionTotalPrices(
+          sectionData.headerElement,
+          dataSource.toUpperCase(),
+          prices
+        );
       }, 100);
     });
   }

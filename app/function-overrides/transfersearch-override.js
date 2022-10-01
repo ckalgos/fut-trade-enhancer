@@ -1,4 +1,5 @@
 import { MAX_CLUB_SEARCH, MAX_MARKET_SEARCH } from "../app.constants";
+import { trackMarketPrices } from "../services/analytics";
 import { getValue } from "../services/repository";
 import { getRandNum } from "../utils/commonUtil";
 
@@ -35,6 +36,12 @@ export const transferSearchOverride = () => {
       transferMarket: MAX_MARKET_SEARCH,
     };
     updateSearchCriteria(...params);
-    return transferSearch.call(this, ...params);
+    const searchResponse = transferSearch.call(this, ...params);
+    searchResponse.observe(this, function (sender, response) {
+      if (response.success) {
+        trackMarketPrices(response.data.items);
+      }
+    });
+    return searchResponse;
   };
 };

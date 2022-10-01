@@ -30,10 +30,12 @@ export const playerViewPanelOverride = () => {
   UTQuickListPanelView.prototype.initFutBinEvent = function (e) {
     if (e.type !== "player") {
       $(this._futbinListFor.__root).css("display", "none");
+      $(this.__root.parentNode).find(".viewon").css("display", "none");
       setValue("selectedPlayer", undefined);
       return;
     }
     $(this._futbinListFor.__root).css("display", "");
+    $(this.__root.parentNode).find(".viewon").css("display", "");
     setValue("selectedPlayer", e);
   };
 

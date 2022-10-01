@@ -1,11 +1,16 @@
 import { idFixedBINPrice, idFixedStartPrice } from "../app.constants";
 import { showPopUp } from "../function-overrides/popup-override";
-import { fetchPrices } from "../services/futbin";
-import { getValue } from "../services/repository";
-import { getRandNumberInRange, hideLoader, showLoader } from "./commonUtil";
+import { getDataSource, getValue } from "../services/repository";
+import {
+  getRandNumberInRange,
+  hideLoader,
+  showLoader,
+  formatDataSource,
+} from "./commonUtil";
 import { sendUINotification } from "./notificationUtil";
 import { listForPrice } from "./sellUtil";
 import { t } from "../services/translate";
+import { fetchPrices } from "../services/datasource";
 
 export const relistForFixedPrice = function (sectionHeader) {
   showPopUp(
@@ -102,16 +107,19 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
 
 export const listCards = async (cards, price, startPrice, isRelist) => {
   cards = cards.filter((card) => !card.untradeable);
+  const dataSource = getDataSource();
   if (!cards.length) {
     sendUINotification(t("noCardsToList"), UINotificationType.NEGATIVE);
     return;
   }
   showLoader();
   if (price) {
-    sendUINotification(`${t("listingCards")} ${price}`);
+    sendUINotification(
+      `${formatDataSource(t("listingCards"), dataSource)} ${price}`
+    );
     await listCardsForFixedPrice(cards, price, startPrice, isRelist);
   } else {
-    sendUINotification(t("listingCardsFutBin"));
+    sendUINotification(formatDataSource(t("listingCardsFutBin"), dataSource));
     await listCardsForFutBIN(cards, isRelist);
   }
   hideLoader();
@@ -125,10 +133,11 @@ const listCardsForFixedPrice = async (cards, price, startPrice, isRelist) => {
 };
 
 const listCardsForFutBIN = async (cards, isRelist) => {
+  const dataSource = getDataSource();
   await fetchPrices(cards);
 
   for (const card of cards) {
-    const existingValue = getValue(card.definitionId);
+    const existingValue = getValue(`${card.definitionId}_${dataSource}_price`);
     if (existingValue && existingValue.price) {
       await listCard(computeSalePrice(existingValue.price), card);
     } else {

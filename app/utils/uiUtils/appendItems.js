@@ -8,7 +8,7 @@ export const appendPrice = (dataSource, auctionElement, price) => {
               <span class="label">${dataSource}</span>
               <span class="currency-coins value">${
                 price ? price.toLocaleString() : "---"
-              }</span>
+              }</span>             
             </div>`);
   }
 };

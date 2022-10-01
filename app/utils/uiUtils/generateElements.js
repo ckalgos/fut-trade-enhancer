@@ -1,15 +1,16 @@
-import { getFutbinPlayerUrl } from "../../services/futbin";
-import { getValue } from "../../services/repository";
+import { getPlayerUrl } from "../../services/datasource";
+import { getDataSource, getValue } from "../../services/repository";
 import { createButton } from "../../view/ButtonView";
 import { sendUINotification } from "../notificationUtil";
 import { listCards } from "../reListUtil";
 import { calculatePlayerMinBin } from "../../services/minBinCalc";
 import { t } from "../../services/translate";
 import { downloadClub } from "../../services/club";
+import { formatDataSource } from "../commonUtil";
 
 export const generateListForFutBinBtn = () => {
   return createButton(
-    t("listFutBin"),
+    formatDataSource(t("listFutBin"), getDataSource()),
     () => {
       const selectedPlayer = getValue("selectedPlayer");
       selectedPlayer && listCards([selectedPlayer]);
@@ -53,19 +54,22 @@ export const generateCalcMinBin = () => {
 
 export const generateViewOnFutBinBtn = () => {
   return createButton(
-    t("viewFutBin"),
+    formatDataSource(t("viewFutBin"), getDataSource()),
     async () => {
       const selectedPlayer = getValue("selectedPlayer");
       if (!selectedPlayer) {
         return;
       }
-      const playerUrl = await getFutbinPlayerUrl(selectedPlayer);
+      const playerUrl = await getPlayerUrl(selectedPlayer);
       if (!playerUrl) {
-        sendUINotification(t("futBinUrlErr"), UINotificationType.NEGATIVE);
+        sendUINotification(
+          formatDataSource(t("futBinUrlErr"), getDataSource()),
+          UINotificationType.NEGATIVE
+        );
       }
       window.open(playerUrl, "_blank");
     },
-    "accordian"
+    "accordian viewon"
   );
 };
 
