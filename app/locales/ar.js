@@ -106,8 +106,6 @@ export const arLocales = {
   activeSquadMemberErr: "غير قادر على الحصول على لاعبي الفريق النشطين",
   increaseActiveList: "تجاوز حد القائمة النشطة",
   increaseActiveListInfo: "زيادة عدد القوائم النشطة إلى 100",
-  fixSbc: "إصلاح Sbcs",
-  fixSbcInfo: "إصلاحات Sbcs غير القابلة للحل",
   disablePackAnimation: "Disable Pack Animation",
   disablePackAnimationInfo: "تعطيل الرسوم المتحركة أثناء فتح الحزمة",
 };

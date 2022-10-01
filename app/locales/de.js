@@ -109,8 +109,6 @@ export const deLocales = {
   activeSquadMemberErr: "Aktive Squad-Spieler konnten nicht abgerufen werden",
   increaseActiveList: "Limit für aktive Einträge umgehen",
   increaseActiveListInfo: "Erhöht die Anzahl aktiver Einträge auf 100",
-  fixSbc: "SBCs reparieren",
-  fixSbcInfo: "Behebt unlösbare Sbcs",
   disablePackAnimation: "Pack-Animation deaktivieren",
   disablePackAnimationInfo:
     "Deaktiviert die Animation während des Pack-Öffnens",

@@ -14,7 +14,6 @@ import {
   idWatchListPileSize,
   idShowCalcMinBin,
   idIncreaseActiveListing,
-  idFixSbcs,
   idDisablePackAnimation,
   idExternalDataSource,
 } from "../app.constants";
@@ -73,12 +72,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           <div class="enhancer-settings-header"> 
           <h1 class="secondary">Enhancer Settings</h1>
           </div>
-          <select id="${idExternalDataSource}" class="sbc-players-list" style="align-self: center;border: 1px solid; width: 50%; height: 50%;">
-               <option selected="true" disabled value='-1'>DataSource</option>
-               <option value='in-house'>Market Alert</option>
-               <option value='futbin'>FUTBIN</option>
-               <option value='futwiz'>FUTWIZ</option>                     
-          </select>
+          <div class="price-filter  settings-field">
+            <select id="${idExternalDataSource}" class="sbc-players-list" style="align-self: center;border: 1px solid;">
+                 <option selected="true" disabled value='-1'>DataSource</option>
+                 <option value='in-house'>Market Alert</option>
+                 <option value='futbin'>FUTBIN</option>
+                 <option value='futwiz'>FUTWIZ</option>                     
+            </select>
+          </div>
           ${generateToggleInput(
             formatDataSource(t("showFutBinPrice"), dataSource),
             { idFutBinPrice },
@@ -181,15 +182,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "idIncreaseActiveListing" in enhancerSetting
               ? enhancerSetting["idIncreaseActiveListing"]
               : false
-          )}
-          ${generateToggleInput(
-            t("fixSbc"),
-            { idFixSbcs },
-            t("fixSbcInfo"),
-            "idFixSbcs" in enhancerSetting
-              ? enhancerSetting["idFixSbcs"]
-              : false
-          )}
+          )}           
           ${generateToggleInput(
             t("disablePackAnimation"),
             { idDisablePackAnimation },
