@@ -78,9 +78,6 @@ export const frLocales = {
   maxUnassignedItems: "Nombre maximum d'éléments non attribués",
   maxUnassignedItemsInfo:
     "Augmentez la valeur, à BIN sur les articles avec plus d'articles sur la pile non attribuée",
-  maxWatchListItems: "Nombre maximum d'éléments de la liste de surveillance",
-  maxWatchListItemsInfo:
-    "Augmentez la valeur, pour ENchérir sur des articles avec plus d'articles sur la pile non attribuée",
   hideBinPopUp: "Masquer la fenêtre contextuelle de la corbeille",
   hideBinPopUpInfo:
     "Confirme automatiquement la fenêtre contextuelle de la corbeille",
@@ -114,4 +111,9 @@ export const frLocales = {
   increaseActiveListInfo: "Augmente le nombre d'annonces actives à 100",
   disablePackAnimation: "Désactiver l'animation de pack",
   disablePackAnimationInfo: "Désactive l'animation lors de l'ouverture du pack",
+  errInsufficientCredits: "Crédits insuffisants pour acheter le pack",
+  autoBuyLowest: "Acheter automatiquement la carte la plus basse",
+  pageNumber: "Numéro de page",
+  pageNumberInfo:
+    "Le saut de page n'est pas recommandé, utilisez-le à vos risques et périls",
 };

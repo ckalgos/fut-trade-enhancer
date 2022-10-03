@@ -36,14 +36,7 @@ export const getCardName = (card) => {
       translationService
     );
   } else if (card.isPlayerPositionModifier()) {
-    return translationService
-      .localize(
-        "card.desc.training.pos." +
-          card._staticData.trainPosFrom +
-          "_" +
-          card._staticData.trainPosTo
-      )
-      .replace(" >> ", "->");
+    return "ALTERNATIVE POSITIONS";
   }
   return card._staticData.name;
 };

@@ -76,9 +76,6 @@ export const deLocales = {
   maxUnassignedItems: "Maximale Anzahl nicht zugewiesener Elemente",
   maxUnassignedItemsInfo:
     "Erhöhen Sie den Wert, um Artikel mit mehr Artikeln auf dem nicht zugewiesenen Stapel zu BIN",
-  maxWatchListItems: "Maximale Anzahl von Watchlist-Elementen",
-  maxWatchListItemsInfo:
-    "Erhöhen Sie den Wert, um auf Artikel mit mehr Artikeln auf dem nicht zugewiesenen Stapel zu BIETEN",
   hideBinPopUp: "Bin-Popup ausblenden",
   hideBinPopUpInfo: "Bestätigt automatisch das Bin-Popup",
   hideTransferFull: "Vollständiges Transfer-Popup ausblenden",
@@ -112,4 +109,9 @@ export const deLocales = {
   disablePackAnimation: "Pack-Animation deaktivieren",
   disablePackAnimationInfo:
     "Deaktiviert die Animation während des Pack-Öffnens",
+  errInsufficientCredits: "Nicht genügend Credits zum Kauf des Pakets",
+  autoBuyLowest: "Automatisch niedrigste Karte kaufen",
+  pageNumber: "Seitenzahl",
+  pageNumberInfo:
+    "Das Springen von Seiten wird nicht empfohlen, verwenden Sie es auf eigene Gefahr",
 };

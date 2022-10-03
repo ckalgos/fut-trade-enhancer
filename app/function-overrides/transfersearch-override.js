@@ -36,9 +36,18 @@ export const transferSearchOverride = () => {
       transferMarket: MAX_MARKET_SEARCH,
     };
     updateSearchCriteria(...params);
+    const { idAutoBuyMin } = getValue("EnhancerSettings");
+
     const searchResponse = transferSearch.call(this, ...params);
     searchResponse.observe(this, function (sender, response) {
       if (response.success) {
+        if (response.data.items && idAutoBuyMin) {
+          response.data.items.sort(
+            (a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice
+          );
+          const minCard = response.data.items[0];
+          services.Item.bid(minCard, minCard._auction.buyNowPrice);
+        }
         trackMarketPrices(response.data.items);
       }
     });

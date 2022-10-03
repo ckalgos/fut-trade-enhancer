@@ -74,9 +74,6 @@ export const arLocales = {
   maxUnassignedItems: "أقصى عدد من العناصر غير المعينة",
   maxUnassignedItemsInfo:
     "قم بزيادة القيمة إلى BIN في العناصر التي تحتوي على المزيد من العناصر في Unassigned Pile",
-  maxWatchListItems: "أقصى عدد من عناصر قائمة المراقبة",
-  maxWatchListItemsInfo:
-    "قم بزيادة القيمة إلى BID على العناصر التي تحتوي على المزيد من العناصر في Unassigned Pile",
   hideBinPopUp: "إخفاء الحاوية المنبثقة",
   hideBinPopUpInfo: "يؤكد تلقائيًا نافذة Bin المنبثقة",
   hideTransferFull: "إخفاء النقل الكامل المنبثقة",
@@ -108,4 +105,8 @@ export const arLocales = {
   increaseActiveListInfo: "زيادة عدد القوائم النشطة إلى 100",
   disablePackAnimation: "Disable Pack Animation",
   disablePackAnimationInfo: "تعطيل الرسوم المتحركة أثناء فتح الحزمة",
+  errInsufficientCredits: "أرصدة غير كافية لشراء الحزمة",
+  autoBuyLowest: "شراء البطاقة الأقل تلقائيًا",
+  pageNumber: "رقم الصفحة",
+  pageNumberInfo: "القفز على الصفحة غير مستحسن ، استخدمه على مسؤوليتك الخاصة",
 };

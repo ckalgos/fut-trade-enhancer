@@ -11,7 +11,6 @@ import {
   idUnassignedPileSize,
   idTransferFullPop,
   idShowSquadPrice,
-  idWatchListPileSize,
   idShowCalcMinBin,
   idIncreaseActiveListing,
   idDisablePackAnimation,
@@ -75,7 +74,6 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           <div class="price-filter  settings-field">
             <select id="${idExternalDataSource}" class="sbc-players-list" style="align-self: center;border: 1px solid;">
                  <option selected="true" disabled value='-1'>DataSource</option>
-                 <option value='in-house'>Market Alert</option>
                  <option value='futbin'>FUTBIN</option>
                  <option value='futwiz'>FUTWIZ</option>                     
             </select>
@@ -135,14 +133,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             { idUnassignedPileSize },
             t("maxUnassignedItemsInfo"),
             enhancerSetting["idUnassignedPileSize"]
-          )}  
-          ${generateTextInput(
-            t("maxWatchListItems"),
-            50,
-            { idWatchListPileSize },
-            t("maxWatchListItemsInfo"),
-            enhancerSetting["idWatchListPileSize"]
-          )}  
+          )}          
           ${generateToggleInput(
             t("hideBinPopUp"),
             { idHideBinPop },
@@ -162,7 +153,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
           ${generateToggleInput(
             t("showSquadPrice"),
             { idShowSquadPrice },
-            t("showSquadPriceInfo"),
+            formatDataSource(t("showSquadPriceInfo"), dataSource),
             "idShowSquadPrice" in enhancerSetting
               ? enhancerSetting["idShowSquadPrice"]
               : true

@@ -13,7 +13,7 @@ const clickHandler = (key, evt) => {
   setValue("EnhancerSettings", enhancerSetting);
 };
 
-const resetToDefault = (key) => {
+export const resetKeyToDefault = (key) => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
   enhancerSetting[key] = false;
   setValue("EnhancerSettings", enhancerSetting);
@@ -28,7 +28,7 @@ export const generateToggleInput = (
 ) => {
   const key = Object.keys(id)[0];
   if (isToggled) {
-    resetToDefault(key);
+    resetKeyToDefault(key);
     setTimeout(() => {
       $(`#${id[key]}`).click();
     });

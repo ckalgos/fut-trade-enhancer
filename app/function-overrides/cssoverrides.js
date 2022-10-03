@@ -336,6 +336,15 @@ export const overrideStyle = () => {
       margin-left: 3px;
       content: "\\E06A";
     }
+    .price-filter .ut-toggle-cell-view--label{
+      font-size: 19px;
+    }
+    .autoBuyMin {
+      width: 100% !important;
+    }
+    .autoBuyMin .ut-toggle-cell-view {
+      justify-content: flex-start;
+    }
     `;
   document.head.appendChild(style);
 };

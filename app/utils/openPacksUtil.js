@@ -1,6 +1,7 @@
 import {
   idPackDuplicatesAction,
   idPackNonPlayersAction,
+  idPackOpenCredits,
   idPackPlayersAction,
   idPacksCount,
 } from "../app.constants";
@@ -72,11 +73,23 @@ ${label}
  ${t("noOfPacks")}
  <input placeholder="3" id=${idPacksCount} type="number" class="ut-text-input-control fut-bin-buy" />
  <br /> <br />
+ ${GameCurrency.COINS}/${GameCurrency.POINTS}
+ <select class="sbc-players-list" id="${idPackOpenCredits}"
+    style="overflow-y : scroll">
+    <option value=${GameCurrency.COINS}>${services.Localization.localize(
+    "currency.coins"
+  )}</option>
+    <option value=${GameCurrency.POINTS}>${services.Localization.localize(
+    "currency.points"
+  )}</option>
+ </select>
+ <br /> <br />
  `;
 };
 
 const getPopUpValues = () => {
   const noOfPacks = parseInt($(`#${idPacksCount}`).val()) || 3;
+  const credits = $(`#${idPackOpenCredits}`).val() || GameCurrency.COINS;
   const playersHandler = $(`#${idPackPlayersAction}`).val();
   const nonPlayersHandler = $(`#${idPackNonPlayersAction}`).val();
   const duplicateHandler = $(`#${idPackDuplicatesAction}`).val();
@@ -85,6 +98,7 @@ const getPopUpValues = () => {
     playersHandler,
     nonPlayersHandler,
     duplicateHandler,
+    credits,
   };
 };
 
@@ -93,6 +107,7 @@ const buyRequiredNoOfPacks = async (pack, popUpValues) => {
   while (popUpValues.noOfPacks > 0) {
     const response = await buyPack(pack, popUpValues);
     if (!response.success) {
+      hideLoader();
       return sendUINotification(
         response.message || t("packOpeningErr"),
         UINotificationType.NEGATIVE
@@ -176,8 +191,27 @@ const handleItems = (items, action) => {
 };
 
 const buyPack = (pack, popUpValues) => {
+  if (repositories.Item.numItemsInCache(ItemPile.PURCHASED)) {
+    return {
+      success: false,
+      message: services.Localization.localize(
+        "popup.error.unassignedItemsEntitlementTitle"
+      ),
+    };
+  }
+
+  if (
+    !pack.prices._collection[popUpValues.credits] ||
+    pack.prices._collection[popUpValues.credits].amount >
+      services.User.getUser()[popUpValues.credits.toLowerCase()].amount
+  ) {
+    return {
+      success: false,
+      message: t("errInsufficientCredits"),
+    };
+  }
   return new Promise((resolve) => {
-    pack.purchase(GameCurrency.COINS).observe(this, function (sender, data) {
+    pack.purchase(popUpValues.credits).observe(this, function (sender, data) {
       if (data.success) {
         repositories.Item.setDirty(ItemPile.PURCHASED);
         sendPinEvents("Unassigned Items - List View");

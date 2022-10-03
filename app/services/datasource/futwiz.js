@@ -32,16 +32,16 @@ const fetchPrices = async (items) => {
 };
 
 const getPlayerPrices = async (player, result) => {
-  const filteredPlayer = await getMatchingPlayer(player);
-  const platform = getUserPlatform();
-  if (!filteredPlayer) {
-    return;
-  }
   try {
+    const filteredPlayer = await getMatchingPlayer(player);
+    const platform = getUserPlatform();
+    if (!filteredPlayer) {
+      return;
+    }
     const futWizResponse = await sendRequest(
       `https://www.futwiz.com/en/app/sold23/${filteredPlayer[0].lineid}/console`,
       "GET",
-      `${Math.floor(+new Date())}_fetchFutWizPlayerPrices`
+      `${player.definitionId}_fetchFutWizPlayerPrices`
     );
     const priceResponse = JSON.parse(futWizResponse);
     let price = priceResponse.prices[platform].bin;
@@ -86,7 +86,7 @@ const getMatchingPlayer = (item) => {
     sendExternalRequest({
       url: `https://www.futwiz.com/en/searches/player23/${playerName}`,
       method: "GET",
-      identifier: `${Math.floor(+new Date())}_getFutWizPlayerUrl`,
+      identifier: `${item.definitionId}_getFutWizPlayerUrl`,
       onload: (res) => {
         if (res.status !== 200) {
           return resolve();

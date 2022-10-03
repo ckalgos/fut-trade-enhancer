@@ -74,9 +74,6 @@ export const enLocales = {
   maxUnassignedItems: "Max number of unassigned items",
   maxUnassignedItemsInfo:
     "Increase the value, to BIN on items with more items on Unassigned Pile",
-  maxWatchListItems: "Max number of watchlist items",
-  maxWatchListItemsInfo:
-    "Increase the value, to BID on items with more items on Unassigned Pile",
   hideBinPopUp: "Hide Bin Popup",
   hideBinPopUpInfo: "Automatically confirms the Bin popup",
   hideTransferFull: "Hide Transfer full Popup",
@@ -108,4 +105,8 @@ export const enLocales = {
   increaseActiveListInfo: "Increases Number of Active Listing to 100",
   disablePackAnimation: "Disable Pack Animation",
   disablePackAnimationInfo: "Disables animation during pack opening",
+  errInsufficientCredits: "Insufficient credits to purchase pack",
+  autoBuyLowest: "Automatically Buy Lowest Card",
+  pageNumber: "Page Number",
+  pageNumberInfo: "Page jumping is not recommended, use it at your own risk",
 };

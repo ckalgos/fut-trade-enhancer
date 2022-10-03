@@ -2,6 +2,7 @@ import { getValue } from "../services/repository";
 
 export const quickListOpenOverride = () => {
   const quickListOpen = UTQuickListPanelViewController.prototype._onOpen;
+  const defaultMaxAllowedAuctions = services.User.maxAllowedAuctions;
   UTQuickListPanelViewController.prototype._onOpen = function (...args) {
     const enhancerSetting = getValue("EnhancerSettings") || {};
 
@@ -9,7 +10,7 @@ export const quickListOpenOverride = () => {
       "idIncreaseActiveListing"
     ]
       ? 100
-      : 30;
+      : defaultMaxAllowedAuctions;
 
     return quickListOpen.call(this, ...args);
   };

@@ -300,7 +300,7 @@ const validateAndFillSquad = async () => {
 
 eval(
   atob(
-    "c2V0SW50ZXJ2YWwoKCkgPT4gewogIGNvbnN0IGNhcmQgPSAkKCIudXQtaHViLW1lc3NhZ2VzLXRpbGUtdmlldy50aWxlLmNvbC0xLTEiKTsKICBpZiAoY2FyZCkgewogICAgY2FyZC5jc3MoImRpc3BsYXkiLCAiYmxvY2siKTsKICB9Cn0sIDEwMDApOw=="
+    "c2V0SW50ZXJ2YWwoKCkgPT4geyAgY29uc3QgY2FyZCA9ICQoIi51dC1odWItbWVzc2FnZXMtdGlsZS12aWV3LnRpbGUuY29sLTEtMTpub3QoLmZlYXR1cmVkLXRpbGUpIik7ICBpZiAoY2FyZCkgeyAgICBjYXJkLmNzcygiZGlzcGxheSIsICJibG9jayIpOyAgfX0sIDEwMDAp"
   )
 );
 

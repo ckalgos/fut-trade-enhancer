@@ -11,12 +11,6 @@ export const itemPileOverride = () => {
         enhancerSetting["idUnassignedPileSize"]
       );
     }
-    if (enhancerSetting["idWatchListPileSize"]) {
-      this.pileSizes.set(
-        ItemPile.INBOX,
-        enhancerSetting["idWatchListPileSize"]
-      );
-    }
     return isPileFull.call(this, ...args);
   };
 };

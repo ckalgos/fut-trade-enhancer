@@ -16,9 +16,10 @@ export const playerViewPanelOverride = () => {
 
   const buyPriceChanged = UTQuickListPanelView.prototype.onBuyPriceChanged;
   const quickListPanelGenerate = UTQuickListPanelView.prototype._generate;
-  const auctionActionPanelGenerate =
+  const defaultActionPanelGenerate =
     UTDefaultActionPanelView.prototype._generate;
-
+  const auctionActionPanelGenerate =
+    UTAuctionActionPanelView.prototype._generate;
   const quickPanelRenderView =
     UTQuickListPanelViewController.prototype.renderView;
 
@@ -30,12 +31,16 @@ export const playerViewPanelOverride = () => {
   UTQuickListPanelView.prototype.initFutBinEvent = function (e) {
     if (e.type !== "player") {
       $(this._futbinListFor.__root).css("display", "none");
-      $(this.__root.parentNode).find(".viewon").css("display", "none");
+      setTimeout(() => {
+        $(".viewon").css("display", "none");
+      });
       setValue("selectedPlayer", undefined);
       return;
     }
     $(this._futbinListFor.__root).css("display", "");
-    $(this.__root.parentNode).find(".viewon").css("display", "");
+    setTimeout(() => {
+      $(".viewon").css("display", "");
+    });
     setValue("selectedPlayer", e);
   };
 
@@ -56,18 +61,29 @@ export const playerViewPanelOverride = () => {
 
   UTDefaultActionPanelView.prototype._generate = function (...args) {
     if (!this._generated) {
+      defaultActionPanelGenerate.call(this, ...args);
+      insertActionButtons.call(this);
+    }
+  };
+
+  UTAuctionActionPanelView.prototype._generate = function (...args) {
+    if (!this._generated) {
       auctionActionPanelGenerate.call(this, ...args);
-      $(generateViewOnFutBinBtn().__root).insertAfter(
-        $(this._playerBioButton.__root)
+      insertActionButtons.call(this);
+    }
+  };
+
+  const insertActionButtons = function () {
+    $(generateViewOnFutBinBtn().__root).insertAfter(
+      $(this._playerBioButton.__root)
+    );
+    const showCalcMinBin = getValue("EnhancerSettings")["idShowCalcMinBin"];
+    if (showCalcMinBin) {
+      this._calcMinBin = generateCalcMinBin();
+      const childrenCount = this.__root.children.length;
+      this.__root.children[childrenCount - 1].appendChild(
+        this._calcMinBin.__root
       );
-      const showCalcMinBin = getValue("EnhancerSettings")["idShowCalcMinBin"];
-      if (showCalcMinBin) {
-        this._calcMinBin = generateCalcMinBin();
-        const childrenCount = this.__root.children.length;
-        this.__root.children[childrenCount - 1].appendChild(
-          this._calcMinBin.__root
-        );
-      }
     }
   };
 };

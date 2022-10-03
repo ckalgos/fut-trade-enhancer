@@ -77,9 +77,6 @@ export const esLocales = {
   maxUnassignedItems: "Número máximo de elementos sin asignar",
   maxUnassignedItemsInfo:
     "Aumentar el valor, a BIN en artículos con más artículos en la pila sin asignar",
-  maxWatchListItems: "Número máximo de elementos de la lista de seguimiento",
-  maxWatchListItemsInfo:
-    "Aumentar el valor, para PUJAR en artículos con más artículos en la pila sinasignar",
   hideBinPopUp: "Ocultar contenedor emergente",
   hideBinPopUpInfo:
     "Confirma automáticamente la ventana emergente del contenedor",
@@ -114,4 +111,9 @@ export const esLocales = {
   disablePackAnimation: "Desactivar animación del paquete",
   disablePackAnimationInfo:
     "Deshabilita la animación durante la apertura del paquete",
+  errInsufficientCredits: "Créditos insuficientes para comprar el paquete",
+  autoBuyLowest: "Comprar automáticamente la tarjeta más baja",
+  pageNumber: "Número de página",
+  pageNumberInfo:
+    "No se recomienda el salto de página, utilícelo bajo su propio riesgo",
 };

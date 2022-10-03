@@ -74,9 +74,6 @@ export const nlLocales = {
   maxUnassignedItems: "Maximum aantal niet-toegewezen items",
   maxUnassignedItemsInfo:
     "Verhoog de waarde naar BIN op items met meer items op niet-toegewezen stapel",
-  maxWatchListItems: "Maximum aantal volglijstitems",
-  maxWatchListItemsInfo:
-    "Verhoog de waarde om te bieden op items met meer items op niet-toegewezen stapel",
   hideBinPopUp: "Verberg Bin Pop-up",
   hideBinPopUpInfo: "Bevestigt automatisch de Bin-popup",
   hideTransferFull: "Verberg volledige pop-up voor overdracht",
@@ -109,4 +106,9 @@ export const nlLocales = {
   disablePackAnimation: "Pakanimatie uitschakelen",
   disablePackAnimationInfo:
     "Schakel animatie uit tijdens het openen van het pakket",
+  errInsufficientCredits: "Onvoldoende credits om pakket te kopen",
+  autoBuyLowest: "Koop automatisch de laagste kaart",
+  pageNumber: "Paginanummer",
+  pageNumberInfo:
+    "Pagina springen wordt niet aanbevolen, gebruik het op eigen risico",
 };
