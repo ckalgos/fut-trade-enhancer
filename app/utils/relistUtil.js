@@ -1,6 +1,11 @@
 import { idFixedBINPrice, idFixedStartPrice } from "../app.constants";
 import { showPopUp } from "../function-overrides/popup-override";
-import { getDataSource, getValue } from "../services/repository";
+import {
+  clearSelectedPlayersBySection,
+  getDataSource,
+  getSelectedPlayersBySection,
+  getValue,
+} from "../services/repository";
 import {
   getRandNumberInRange,
   hideLoader,
@@ -61,7 +66,26 @@ export const relistCards = function (sectionHeader, price, startPrice) {
   handleTransferListItems(sectionHeader, price, startPrice);
 };
 
+const handleSelectedItems = (sectionHeader, price, startPrice) => {
+  const selectedPlayersBySection = getSelectedPlayersBySection(sectionHeader);
+  if (selectedPlayersBySection.size) {
+    listCards(
+      Array.from(selectedPlayersBySection.values()),
+      price,
+      startPrice,
+      false
+    );
+    clearSelectedPlayersBySection(sectionHeader);
+    return true;
+  }
+  return false;
+};
+
 const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
+  const isHandled = handleSelectedItems(sectionHeader, price, startPrice);
+  if (isHandled) {
+    return;
+  }
   const isWatchList =
     services.Localization.localize("infopanel.label.alltoclub") ===
     sectionHeader;
@@ -79,6 +103,10 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
 };
 
 const handleTransferListItems = (sectionHeader, price, startPrice) => {
+  const isHandled = handleSelectedItems(sectionHeader, price, startPrice);
+  if (isHandled) {
+    return;
+  }
   services.Item.requestTransferItems().observe(
     this,
     async function (t, response) {

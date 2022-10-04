@@ -1,4 +1,5 @@
 import { idSectionPrices } from "../../app.constants";
+import { getSelectedPlayersBySection } from "../../services/repository";
 import { t } from "../../services/translate";
 import { generateSectionRelistBtn } from "./generateElements";
 
@@ -46,6 +47,40 @@ export const appendPriceToSlot = (rootElement, price) => {
         price ? price.toLocaleString() : "---"
       }</span>
     </div>`);
+};
+
+const handleCheckBoxToggle = (isChecked, selectedPlayersBySection, card) => {
+  if (!isChecked) {
+    selectedPlayersBySection.set(card.id, card);
+    $(`#${card.id}_check`).prop("checked", true);
+  } else {
+    selectedPlayersBySection.delete(card.id);
+    $(`#${card.id}_check`).prop("checked", false);
+  }
+};
+
+const eventMappers = new Set();
+
+export const appendCheckBox = (rootElement, section, card) => {
+  const selectedPlayersBySection = getSelectedPlayersBySection(section);
+  rootElement.find(".player-select").remove();
+
+  if (!eventMappers.has(card.id)) {
+    $(document).on("click touchend", `#${card.id}`, function (evt) {
+      const isChecked = selectedPlayersBySection.has(card.id);
+      handleCheckBoxToggle(isChecked, selectedPlayersBySection, card);
+    });
+    eventMappers.add(card.id);
+  }
+
+  const checkBox = $(
+    `<div id='${card.id}' class="price-filter player-select"><input type='checkbox' id='${card.id}_check' class="player-select" /></div>`
+  );
+  if (selectedPlayersBySection.get(card.id)) {
+    checkBox.find("input").prop("checked", true);
+  }
+
+  rootElement.prepend(checkBox);
 };
 
 export const appendSectionTotalPrices = (

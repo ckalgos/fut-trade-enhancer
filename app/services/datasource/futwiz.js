@@ -71,6 +71,9 @@ const getPlayerUrl = async (player) => {
     return existingValue;
   }
   const filteredPlayer = await getMatchingPlayer(player);
+  if (!filteredPlayer) {
+    return;
+  }
   const url = `https://www.futwiz.com/en/fifa23/player/${filteredPlayer[0].urlname}/${filteredPlayer[0].lineid}`;
   setValue(`${player.definitionId}_futwiz_url`, url);
   return url;
@@ -93,17 +96,25 @@ const getMatchingPlayer = (item) => {
         }
         const players = JSON.parse(res.response);
 
-        let filteredPlayer = players;
-        // .filter(
-        //   (p) => parseInt(p.rating) === item.rating
-        // );
-        if (filteredPlayer && filteredPlayer.length > 1) {
-          filteredPlayer = filteredPlayer.filter(
+        if (!players) {
+          return resolve();
+        }
+
+        let filteredPlayers = players.filter(
+          (p) => parseInt(p.rating) === item.rating
+        );
+
+        if (players && !filteredPlayers.length) {
+          filteredPlayers = players;
+        }
+
+        if (filteredPlayers && filteredPlayers.length > 1) {
+          filteredPlayers = filteredPlayers.filter(
             (p) =>
               p.rare === item.rareflag.toString() && p.club === item.teamId + ""
           );
         }
-        resolve(filteredPlayer);
+        resolve(filteredPlayers);
       },
     });
   });

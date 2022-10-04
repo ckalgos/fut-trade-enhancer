@@ -345,6 +345,14 @@ export const overrideStyle = () => {
     .autoBuyMin .ut-toggle-cell-view {
       justify-content: flex-start;
     }
+    .player-select {
+     position: absolute;
+      z-index: 20;
+    }
+    div.player-select {
+      width:75px;
+      height:75px;
+     }
     `;
   document.head.appendChild(style);
 };

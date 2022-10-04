@@ -17,3 +17,18 @@ export const getDataSource = () => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
   return enhancerSetting["idExternalDataSource"] || "futbin";
 };
+
+export const getSelectedPlayersBySection = (section) => {
+  const selectedPlayersBySection = getValue("selectedPlayers") || {};
+  if (!selectedPlayersBySection[section]) {
+    selectedPlayersBySection[section] = new Map();
+    setValue("selectedPlayers", selectedPlayersBySection);
+  }
+  return selectedPlayersBySection[section];
+};
+
+export const clearSelectedPlayersBySection = (section) => {
+  const selectedPlayersBySection = getValue("selectedPlayers") || {};
+  selectedPlayersBySection[section].clear();
+  return selectedPlayersBySection[section];
+};

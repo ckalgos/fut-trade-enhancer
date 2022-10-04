@@ -5,22 +5,19 @@ import {
   idPackPlayersAction,
   idPacksCount,
 } from "../app.constants";
-import { hideLoader, showLoader, wait } from "./commonUtil";
+import { formatDataSource, hideLoader, showLoader, wait } from "./commonUtil";
 import { sendPinEvents, sendUINotification } from "./notificationUtil";
 import { t } from "../services/translate";
 import { updateUserCredits } from "../services/user";
+import { getDataSource } from "../services/repository";
+import { listCards } from "./reListUtil";
 
 export const validateFormAndOpenPack = async (pack) => {
   const popUpValues = getPopUpValues();
   await buyRequiredNoOfPacks(pack, popUpValues);
 };
 
-let handlerForEachType;
-
 const setUpType = () => {
-  if (handlerForEachType) {
-    return;
-  }
   const defaultOptions = [
     {
       value: "moveClub",
@@ -34,13 +31,17 @@ const setUpType = () => {
       value: "quickSell",
       label: t("quickSell"),
     },
+    {
+      value: "listExternal",
+      label: formatDataSource(t("listFutBin"), getDataSource()),
+    },
   ];
-  handlerForEachType = [
+  return [
     { id: idPackPlayersAction, label: t("players"), actions: defaultOptions },
     {
       id: idPackNonPlayersAction,
       label: t("nonPlayers"),
-      actions: defaultOptions,
+      actions: defaultOptions.slice(0, 3),
     },
     {
       id: idPackDuplicatesAction,
@@ -51,7 +52,7 @@ const setUpType = () => {
 };
 
 export const purchasePopUpMessage = () => {
-  setUpType();
+  const handlerForEachType = setUpType();
   return `
 ${handlerForEachType
   .map(({ id, label, actions }) => {
@@ -165,16 +166,22 @@ const handleItems = (items, action) => {
     if (!items.length) {
       resolve("");
     }
-    if (action === "moveTransfers") {
+    if (action === "moveTransfers" || action === "listExternal") {
       if (repositories.Item.isPileFull(ItemPile.TRANSFER)) {
         return resolve(t("transferListFull"));
       }
-      services.Item.move(items, ItemPile.TRANSFER).observe(
-        this,
-        function (sender, data) {
-          resolve("");
-        }
-      );
+      if (action === "listExternal") {
+        await listCards(items);
+        showLoader();
+        resolve("");
+      } else {
+        services.Item.move(items, ItemPile.TRANSFER).observe(
+          this,
+          function (sender, data) {
+            resolve("");
+          }
+        );
+      }
     } else if (action === "moveClub") {
       services.Item.move(items, ItemPile.CLUB).observe(
         this,

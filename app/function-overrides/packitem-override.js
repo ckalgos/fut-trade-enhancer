@@ -11,7 +11,7 @@ export const packItemOverride = () => {
         __auction,
         data,
       })),
-      true
+      "packs"
     );
   };
 };

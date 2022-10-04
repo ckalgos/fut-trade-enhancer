@@ -20,6 +20,7 @@ import { quickListOpenOverride } from "./quicklistopen-override";
 import { currencyTapOverride } from "./currencytap-override";
 import { packAnimationOverride } from "./packanimation-override";
 import { filterViewOverride } from "./filterview-override";
+import { tableItemTapOverride } from "./tableitemtap-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -43,6 +44,7 @@ export const initOverrides = () => {
   currencyTapOverride();
   packAnimationOverride();
   filterViewOverride();
+  tableItemTapOverride();
 
   overrideStyle();
 };

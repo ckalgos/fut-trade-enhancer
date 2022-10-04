@@ -2,6 +2,7 @@ import { fetchPrices } from "../services/datasource";
 import { getDataSource, getValue } from "../services/repository";
 import { relistCards, relistForFixedPrice } from "./reListUtil";
 import {
+  appendCheckBox,
   appendContractInfo,
   appendDuplicateTag,
   appendPackPrice,
@@ -12,12 +13,21 @@ import {
   appendSquadTotal,
 } from "./uiUtils/appendItems";
 
-export const appendCardPrice = async (listRows, isFromPacks) => {
+export const appendCardPrice = async (listRows, section) => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
   if (!listRows.length || enhancerSetting["idFutBinPrice"] === false) {
     return;
   }
   const cards = [];
+  const isFromPacks = section === "packs";
+  const sectionAuctionData = listRows[0].data.getAuctionData();
+
+  const isSelectable =
+    !isFromPacks &&
+    section !== "club" &&
+    !sectionAuctionData.isSold() &&
+    !sectionAuctionData.isActiveTrade();
+
   for (const { data } of listRows) {
     cards.push(data);
   }
@@ -33,6 +43,7 @@ export const appendCardPrice = async (listRows, isFromPacks) => {
     const { definitionId, contract, _auction: auctionData } = data;
     const cardPrice = prices.get(`${definitionId}_${dataSource}_price`);
     appendContractInfo(rootElement, contract);
+    isSelectable && appendCheckBox(rootElement, section, data);
     if (clubSquadIds.has(definitionId)) {
       appendDuplicateTag(rootElement);
     }
@@ -115,14 +126,16 @@ export const appendSectionPrices = async (sectionData) => {
           relistForFixedPrice(sectionData.sectionHeader);
         }
       );
-    appendCardPrice(sectionData.listRows).then((prices) => {
-      setTimeout(() => {
-        appendSectionTotalPrices(
-          sectionData.headerElement,
-          dataSource.toUpperCase(),
-          prices
-        );
-      }, 100);
-    });
+    appendCardPrice(sectionData.listRows, sectionData.sectionHeader).then(
+      (prices) => {
+        setTimeout(() => {
+          appendSectionTotalPrices(
+            sectionData.headerElement,
+            dataSource.toUpperCase(),
+            prices
+          );
+        }, 100);
+      }
+    );
   }
 };

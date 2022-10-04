@@ -13,7 +13,8 @@ export const paginatedResultOverride = () => {
         __root,
         __auction,
         data,
-      }))
+      })),
+      "club"
     );
     return result;
   };
