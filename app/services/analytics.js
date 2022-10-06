@@ -46,6 +46,7 @@ const formRequestPayLoad = (listRows) => {
     const {
       id,
       definitionId,
+      type,
       _auction: {
         buyNowPrice,
         tradeId: auctionId,
@@ -57,6 +58,7 @@ const formRequestPayLoad = (listRows) => {
     const expireDate = new Date();
     expireDate.setSeconds(expireDate.getSeconds() + expiresOn);
     tradeState === "active" &&
+      type === "player" &&
       trackPayLoad.push({
         definitionId,
         price: buyNowPrice,
