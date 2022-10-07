@@ -19,22 +19,26 @@ export const filterViewOverride = () => {
     UTMarketSearchFiltersViewController
   );
 
+  const resetPageSettings = (isResetAutoBuy) => {
+    const enhancerSetting = getValue("EnhancerSettings") || {};
+    isResetAutoBuy && (enhancerSetting["idAutoBuyMin"] = false);
+    enhancerSetting["idPageNumber"] = 1;
+    setValue("EnhancerSettings", enhancerSetting);
+  };
+
   UTTransferMarketPaginationViewModel.prototype.getCurrentPageIndex = function (
     ...args
   ) {
     const { idPageNumber } = getValue("EnhancerSettings");
     if (idPageNumber !== 1 && this.pageIndex === 1) {
       this.pageIndex = idPageNumber;
+      resetPageSettings();
     }
     return getPageIndex.call(this, ...args);
   };
 
   UTMarketSearchFiltersViewController.prototype.dealloc = function (...args) {
-    const enhancerSetting = getValue("EnhancerSettings") || {};
-    enhancerSetting["idAutoBuyMin"] = false;
-    enhancerSetting["idPageNumber"] = 1;
-    setValue("EnhancerSettings", enhancerSetting);
-
+    resetPageSettings(true);
     return filterDealloc.call(this, ...args);
   };
 

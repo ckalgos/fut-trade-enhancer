@@ -2,7 +2,7 @@ module.exports = {
   headers: {
     name: "FUT Trade Enhancer",
     namespace: "http://tampermonkey.net/",
-    version: "1.3.8",
+    version: "1.3.9",
     description: "FUT Trade Enhancer",
     author: "CK Algos",
     match: [
