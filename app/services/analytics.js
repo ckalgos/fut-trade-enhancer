@@ -74,7 +74,7 @@ const formRequestPayLoad = (listRows) => {
 
 export const trackMarketPrices = async (items) => {
   const requestPayload = formRequestPayLoad(items);
-  if (requestPayload.length) {
+  if (requestPayload.length && requestPayload.length <= 12) {
     return sendRequest(
       atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vYXVjdGlvbg=="),
       {
