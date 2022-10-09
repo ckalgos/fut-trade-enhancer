@@ -21,6 +21,7 @@ import { currencyTapOverride } from "./currencytap-override";
 import { packAnimationOverride } from "./packanimation-override";
 import { filterViewOverride } from "./filterview-override";
 import { tableItemTapOverride } from "./tableitemtap-override";
+import { sbcSubmitChallengeOverride } from "./sbcsavechallenge-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -45,6 +46,7 @@ export const initOverrides = () => {
   packAnimationOverride();
   filterViewOverride();
   tableItemTapOverride();
+  sbcSubmitChallengeOverride();
 
   overrideStyle();
 };

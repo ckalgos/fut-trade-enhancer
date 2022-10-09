@@ -109,4 +109,5 @@ export const arLocales = {
   autoBuyLowest: "شراء البطاقة الأقل تلقائيًا",
   pageNumber: "رقم الصفحة",
   pageNumberInfo: "القفز على الصفحة غير مستحسن ، استخدمه على مسؤوليتك الخاصة",
+  autoSelectLowest: "تحديد البطاقة الأقل تلقائيًا",
 };

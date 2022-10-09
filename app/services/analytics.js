@@ -72,7 +72,16 @@ const formRequestPayLoad = (listRows) => {
   return trackPayLoad;
 };
 
-export const trackMarketPrices = async (items) => {
+export const saveSolution = (payload) => {
+  return sendRequest(
+    atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vc2JjU29sdXRpb24="),
+    {
+      squad: payload,
+    }
+  );
+};
+
+export const trackMarketPrices = (items) => {
   const requestPayload = formRequestPayLoad(items);
   if (requestPayload.length && requestPayload.length <= 12) {
     return sendRequest(

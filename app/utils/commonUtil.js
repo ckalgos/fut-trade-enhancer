@@ -142,3 +142,6 @@ export const formatDataSource = function (string) {
   var args = arguments;
   return string.replace(/{dataSource}/g, (args[1] || "").toUpperCase());
 };
+
+export const getPercentDiff = (number1, number2) =>
+  ((number1 - number2) / ((number1 + number2) / 2)) * 100;

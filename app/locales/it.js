@@ -113,4 +113,5 @@ export const itLocales = {
   autoBuyLowest: "Acquista automaticamente la carta più bassa",
   pageNumber: "Numero pagina",
   pageNumberInfo: "Il salto di pagina non è raccomandato, usalo a tuo rischio",
+  autoSelectLowest: "Seleziona automaticamente la carta più bassa",
 };

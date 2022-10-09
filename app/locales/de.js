@@ -114,4 +114,5 @@ export const deLocales = {
   pageNumber: "Seitenzahl",
   pageNumberInfo:
     "Das Springen von Seiten wird nicht empfohlen, verwenden Sie es auf eigene Gefahr",
+  autoSelectLowest: "Automatisch niedrigste Karte auswählen",
 };

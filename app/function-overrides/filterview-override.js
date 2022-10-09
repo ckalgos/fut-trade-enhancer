@@ -47,6 +47,7 @@ export const filterViewOverride = () => {
   ) {
     const result = filterViewApper.call(this, ...args);
     resetKeyToDefault("idAutoBuyMin");
+    const enhancerSetting = getValue("EnhancerSettings") || {};
     let view = this.getView();
     let root = $(view.__root);
     root.find(".settings-field").remove();
@@ -58,7 +59,7 @@ export const filterViewOverride = () => {
           t("autoBuyLowest"),
           { idAutoBuyMin },
           "",
-          false,
+          enhancerSetting["idAutoBuyMinGlobal"] || false,
           "settings-field autoBuyMin"
         )}`
       );

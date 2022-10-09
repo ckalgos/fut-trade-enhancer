@@ -43,3 +43,5 @@ export const idExternalDataSource = generateId(15);
 export const idPackOpenCredits = "elem_" + generateId(15);
 export const idAutoBuyMin = "elem_" + generateId(15);
 export const idPageNumber = "elem_" + generateId(15);
+export const idAutoBuyMinGlobal = "elem_" + generateId(15);
+export const idAutoSelectMin = "elem_" + generateId(15);

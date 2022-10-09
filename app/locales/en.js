@@ -109,4 +109,5 @@ export const enLocales = {
   autoBuyLowest: "Automatically Buy Lowest Card",
   pageNumber: "Page Number",
   pageNumberInfo: "Page jumping is not recommended, use it at your own risk",
+  autoSelectLowest: "Automatically Select Lowest Card",
 };

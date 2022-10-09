@@ -61,7 +61,7 @@ export const sbcViewOverride = () => {
     const sbcId = params.length ? params[0].id : "";
     setValue("squadId", sbcId);
     fetchAndAppendCommunitySbcs(sbcId);
-
+    console.log("sbcId", sbcId);
     setTimeout(async () => {
       if (!$(".futBinFill").length) {
         $(".challenge-content").append(

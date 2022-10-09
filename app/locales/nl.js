@@ -111,4 +111,5 @@ export const nlLocales = {
   pageNumber: "Paginanummer",
   pageNumberInfo:
     "Pagina springen wordt niet aanbevolen, gebruik het op eigen risico",
+  autoSelectLowest: "Automatisch laagste kaart selecteren",
 };

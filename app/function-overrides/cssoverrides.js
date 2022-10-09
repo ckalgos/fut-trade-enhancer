@@ -151,6 +151,7 @@ export const overrideStyle = () => {
     .show {
       display: unset !important;
       float: right;
+      margin-top: 5px;
     }
     .relistFut {
       margin-right: 10px;
@@ -352,6 +353,9 @@ export const overrideStyle = () => {
     div.player-select {
       width:75px;
       height:75px;
+     }
+     .boughtFor.futbinprice{
+      margin-right: 15px;
      }
     `;
   document.head.appendChild(style);

@@ -40,7 +40,12 @@ export const appendCardPrice = async (listRows, section) => {
   for (const { __auction, data, __root } of listRows) {
     const auctionElement = $(__auction);
     const rootElement = $(__root);
-    const { definitionId, contract, _auction: auctionData } = data;
+    const {
+      definitionId,
+      contract,
+      _auction: auctionData,
+      lastSalePrice,
+    } = data;
     const cardPrice = prices.get(`${definitionId}_${dataSource}_price`);
     appendContractInfo(rootElement, contract);
     isSelectable && appendCheckBox(rootElement, section, data);
@@ -58,7 +63,12 @@ export const appendCardPrice = async (listRows, section) => {
     totalBid += bidPrice;
     totalBin += auctionData.buyNowPrice;
     totalExternalPrice += cardPrice || 0;
-    appendPrice(dataSource.toUpperCase(), auctionElement, cardPrice);
+    appendPrice(
+      dataSource.toUpperCase(),
+      auctionElement,
+      cardPrice,
+      auctionData._tradeState === "inactive" ? lastSalePrice : 0
+    );
     checkAndAppendBarginIndicator(
       rootElement,
       auctionData.buyNowPrice,

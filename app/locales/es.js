@@ -116,4 +116,5 @@ export const esLocales = {
   pageNumber: "Número de página",
   pageNumberInfo:
     "No se recomienda el salto de página, utilícelo bajo su propio riesgo",
+  autoSelectLowest: "Seleccionar automáticamente la tarjeta más baja",
 };

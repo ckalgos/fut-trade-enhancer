@@ -37,18 +37,19 @@ export const transferSearchOverride = () => {
     };
     updateSearchCriteria(...params);
     const { idAutoBuyMin } = getValue("EnhancerSettings");
-
     const searchResponse = transferSearch.call(this, ...params);
     searchResponse.observe(this, function (sender, response) {
       if (response.success) {
-        if (response.data.items && idAutoBuyMin) {
-          response.data.items.sort(
-            (a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice
-          );
-          const minCard = response.data.items[0];
-          services.Item.bid(minCard, minCard._auction.buyNowPrice);
+        const items = [...(response.data.items || [])];
+        if (items.length) {
+          items.sort((a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice);
+          const minCard = items[0];
+
+          if (idAutoBuyMin) {
+            services.Item.bid(minCard, minCard._auction.buyNowPrice);
+          }
         }
-        trackMarketPrices(response.data.items);
+        trackMarketPrices(items);
       }
     });
     return searchResponse;

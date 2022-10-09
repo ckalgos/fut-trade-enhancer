@@ -116,4 +116,5 @@ export const frLocales = {
   pageNumber: "Numéro de page",
   pageNumberInfo:
     "Le saut de page n'est pas recommandé, utilisez-le à vos risques et périls",
+  autoSelectLowest: "Sélectionner automatiquement la carte la plus basse",
 };

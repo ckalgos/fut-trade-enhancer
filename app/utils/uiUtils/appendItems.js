@@ -1,17 +1,28 @@
 import { idSectionPrices } from "../../app.constants";
 import { getSelectedPlayersBySection } from "../../services/repository";
 import { t } from "../../services/translate";
+import { getPercentDiff } from "../commonUtil";
 import { generateSectionRelistBtn } from "./generateElements";
 
-export const appendPrice = (dataSource, auctionElement, price) => {
-  if (!auctionElement.find(".futbinprice").length) {
-    auctionElement.prepend(`<div class="auctionValue futbinprice">
-              <span class="label">${dataSource}</span>
-              <span class="currency-coins value">${
-                price ? price.toLocaleString() : "---"
-              }</span>             
-            </div>`);
+export const appendPrice = (dataSource, auctionElement, price, boughtFor) => {
+  let percentDiff = undefined;
+  if (boughtFor) {
+    percentDiff = getPercentDiff(price * 0.95, boughtFor);
+    appendPriceInfo(
+      services.Localization.localize("infopanel.label.prevBoughtPrice"),
+      auctionElement,
+      boughtFor,
+      "boughtFor"
+    );
   }
+
+  appendPriceInfo(
+    dataSource,
+    auctionElement,
+    price,
+    "futbinpricesel",
+    percentDiff
+  );
 };
 
 export const appendPackPrice = (packValue) => {
@@ -136,4 +147,27 @@ export const appendDuplicateTag = (rootElement) => {
 
 export const appendContractInfo = (rootElement, contract) => {
   rootElement.find(".ut-item-player-status--loan").text(contract);
+};
+
+const appendPriceInfo = (
+  label,
+  auctionElement,
+  price,
+  selector,
+  percentDiff
+) => {
+  const color =
+    percentDiff < 0 ? "orangered" : percentDiff > 0 ? "lime" : "darksalmon";
+  if (!auctionElement.find(`.${selector}`).length) {
+    auctionElement.prepend(`<div class="auctionValue ${selector} futbinprice">
+              <span class="label">${label} ${
+      percentDiff !== undefined
+        ? `<info style='color: ${color}'>(${percentDiff.toFixed(2)}%)</info>`
+        : ""
+    }</span>
+              <span class="currency-coins value">${
+                price ? price.toLocaleString() : "---"
+              }</span>             
+            </div>`);
+  }
 };
