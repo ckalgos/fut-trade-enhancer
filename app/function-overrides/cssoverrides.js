@@ -151,7 +151,6 @@ export const overrideStyle = () => {
     .show {
       display: unset !important;
       float: right;
-      margin-top: 5px;
     }
     .relistFut {
       margin-right: 10px;

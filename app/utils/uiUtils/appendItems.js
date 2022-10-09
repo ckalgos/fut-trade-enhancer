@@ -130,7 +130,7 @@ export const appendRelistExternal = (
 
 export const appendDuplicateTag = (rootElement) => {
   rootElement.find(".rowContent").append(
-    `<div class="show-duplicate active-tag">
+    `<div class="show-duplicate ut-list-tag-view ut-list-active-tag-view">
             <div class="label-container">
               <span class="fut_icon icon_squad">
               </span>
