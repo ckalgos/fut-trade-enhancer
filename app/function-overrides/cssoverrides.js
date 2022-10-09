@@ -357,6 +357,10 @@ export const overrideStyle = () => {
      .boughtFor.futbinprice{
       margin-right: 15px;
      }
+     .phone .priceholder{
+       display: flex !important;
+       flex-direction: column-reverse;
+    }
     `;
   document.head.appendChild(style);
 };

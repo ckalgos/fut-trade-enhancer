@@ -6,23 +6,19 @@ import { generateSectionRelistBtn } from "./generateElements";
 
 export const appendPrice = (dataSource, auctionElement, price, boughtFor) => {
   let percentDiff = undefined;
+  const element = $("<div class='futbinprice auctionValue priceholder'></div>");
   if (boughtFor) {
     percentDiff = getPercentDiff(price * 0.95, boughtFor);
     appendPriceInfo(
       services.Localization.localize("infopanel.label.prevBoughtPrice"),
-      auctionElement,
+      element,
       boughtFor,
       "boughtFor"
     );
   }
 
-  appendPriceInfo(
-    dataSource,
-    auctionElement,
-    price,
-    "futbinpricesel",
-    percentDiff
-  );
+  appendPriceInfo(dataSource, element, price, "futbinpricesel", percentDiff);
+  auctionElement.prepend(element);
 };
 
 export const appendPackPrice = (packValue) => {

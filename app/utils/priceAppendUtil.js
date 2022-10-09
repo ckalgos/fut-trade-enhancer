@@ -67,7 +67,10 @@ export const appendCardPrice = async (listRows, section) => {
       dataSource.toUpperCase(),
       auctionElement,
       cardPrice,
-      auctionData._tradeState === "inactive" ? lastSalePrice : 0
+      auctionData._tradeState === "inactive" &&
+        !rootElement.hasClass("has-action")
+        ? lastSalePrice
+        : 0
     );
     checkAndAppendBarginIndicator(
       rootElement,
