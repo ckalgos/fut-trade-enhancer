@@ -1,3 +1,4 @@
+import { sendRequest } from "../../utils/networkUtil";
 import { getValue, setValue } from "../repository";
 import { getUserPlatform } from "../user";
 
@@ -72,6 +73,15 @@ const fetchPricesFromServer = async (defIds, result) => {
       console.log(err);
     }
   }
+};
+
+export const fetchSbcs = async (challengeId) => {
+  const response = await sendRequest(
+    `https://api.futhelpers.com/sbcSolution?sbcId=${challengeId}`,
+    "GET",
+    `${Math.floor(+new Date())}_sbcSolution_${challengeId}`
+  );
+  return JSON.parse(response);
 };
 
 export default {

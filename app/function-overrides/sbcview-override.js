@@ -19,12 +19,14 @@ import {
   idSBCBuyFutBinPercent,
   idSBCPlayersToBuy,
   idSBCFUTBINSolution,
+  idSBCMarketSolution,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { getDataSource, getValue, setValue } from "../services/repository";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 import { t } from "../services/translate";
 import { fetchPrices } from "../services/datasource";
+import { fetchSbcs } from "../services/datasource/marketAlert";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
@@ -40,6 +42,22 @@ export const sbcViewOverride = () => {
       },
     },
     `#${idSBCFUTBINSolution}`
+  );
+
+  $(document).on(
+    {
+      change: async function () {
+        const players = $(`#${idSBCMarketSolution} option`)
+          .filter(":selected")
+          .val();
+        const squadPlayersLookup = await getSquadPlayerLookup();
+        positionPlayers(
+          players.split(",").map((id) => parseInt(id)),
+          squadPlayersLookup
+        );
+      },
+    },
+    `#${idSBCMarketSolution}`
   );
 
   UTSBCService.prototype.loadChallengeData = function (r) {
@@ -61,7 +79,7 @@ export const sbcViewOverride = () => {
     const sbcId = params.length ? params[0].id : "";
     setValue("squadId", sbcId);
     fetchAndAppendCommunitySbcs(sbcId);
-    console.log("sbcId", sbcId);
+    fetchAndAppendMarketAlertSbcs(sbcId);
     setTimeout(async () => {
       if (!$(".futBinFill").length) {
         $(".challenge-content").append(
@@ -110,6 +128,42 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
             "price"
           )} ${value.ps_price})</option>`
       )}
+   </select>`
+  );
+};
+
+const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
+  if (!isPhone()) {
+    return;
+  }
+  const sbcPromise = fetchSbcs(challengeId);
+  const squadPlayersLookupPromise = getSquadPlayerLookup();
+  const [{ sbcs }, squadPlayersLookup] = await Promise.all([
+    sbcPromise,
+    squadPlayersLookupPromise,
+  ]);
+  const sbcPlayers = sbcs
+    .map((value) => {
+      const totalPlayers = value.players.reduce((acc, curr) => {
+        if (squadPlayersLookup.get(curr)) {
+          acc++;
+        }
+        return acc;
+      }, 0);
+      return { totalPlayers, players: value.players };
+    })
+    .sort((a, b) => b.totalPlayers - a.totalPlayers);
+
+  $(`#${idSBCMarketSolution}`).remove();
+
+  $(".sbcSolutions").append(
+    `<select id="${idSBCMarketSolution}" class="sbc-players-list" style="border : 1px solid; width: 90%;">
+      <option selected="true" disabled value='-1'>${t(
+        "marketSBCSolutions"
+      )}</option>
+      ${sbcPlayers.map(({ players, totalPlayers }) => {
+        return `<option class="currency-coins" value='${players}'>Available Players(${totalPlayers})</option>`;
+      })}
    </select>`
   );
 };
@@ -319,11 +373,18 @@ const fillSquad = async (squadId) => {
     return hideLoader();
   }
 
-  const squadPlayers = futBinSquadPlayersInfo.map((currItem) => {
+  positionPlayers(
+    futBinSquadPlayersInfo.map((currItem) => currItem.definitionId),
+    squadPlayersLookup
+  );
+};
+
+const positionPlayers = (defIds, squadPlayersLookup) => {
+  const squadPlayers = defIds.map((currItem) => {
     if (!currItem) {
       return null;
     }
-    const key = currItem.definitionId;
+    const key = currItem;
     const clubPlayerInfo = squadPlayersLookup.get(key);
     const playerEntity = new UTItemEntity();
     playerEntity.id = clubPlayerInfo ? clubPlayerInfo.id : key;

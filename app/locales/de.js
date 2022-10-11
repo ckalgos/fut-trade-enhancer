@@ -5,6 +5,7 @@ export const deLocales = {
   autoFill: "Automatisches Ausfüllen",
   buyMissingPlayers: "Fehlende Spieler kaufen",
   futBinSBCSolutions: "---FUTBIN SBC-LÖSUNGEN---",
+  marketSBCSolutions: "---Market Alert SOLUTIONS---",
   noConceptPlayers: "Keine Konzeptspieler gefunden",
   futBinId: "FutBin-ID",
   sbcBuyMessage: "Der Bot wird versuchen, die folgenden Spieler zu kaufen",

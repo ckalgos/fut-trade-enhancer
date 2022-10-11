@@ -293,6 +293,8 @@ export const overrideStyle = () => {
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
+      gap: 10px;
     }
     .relist {
       margin-left: 10px;

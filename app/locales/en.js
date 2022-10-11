@@ -5,6 +5,7 @@ export const enLocales = {
   autoFill: "Auto Fill",
   buyMissingPlayers: "Buy Missing Players",
   futBinSBCSolutions: "---FUTBIN SBC SOLUTIONS---",
+  marketSBCSolutions: "---Market Alert SOLUTIONS---",
   noConceptPlayers: "No concept players found",
   futBinId: "FutBin Id",
   sbcBuyMessage: "Bot will try to buy the following players",

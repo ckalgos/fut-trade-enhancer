@@ -5,5 +5,5 @@ export const t = (key) => {
 
   const userLocaleLookup = locales[userLanguage] || locales["en"];
 
-  return userLocaleLookup[key] || key;
+  return userLocaleLookup[key] || locales["en"][key] || key;
 };
