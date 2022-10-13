@@ -116,4 +116,13 @@ export const deLocales = {
   pageNumberInfo:
     "Das Springen von Seiten wird nicht empfohlen, verwenden Sie es auf eigene Gefahr",
   autoSelectLowest: "Automatisch niedrigste Karte auswählen",
+  findSolvableSbcs: "Find Solvable Sbcs",
+  scanClubSbc: "Scannen Sie Ihre Vereinsspieler, um lösbare SBCs zu finden",
+  solvableUnAvailable: "Funktion ist nur in der Market Alert App verfügbar",
+  solveInfo:
+    "Der Bot wird Ihren Club scannen, um SBCs zu finden, die abgeschlossen werden können",
+  gatherChallengeInfo: "Informationen zu Herausforderungen sammeln",
+  gatherSquadInfo: "Vereinsspieler sammeln",
+  fetchingSolvableSbcs: "Lösbare Sbcs von Sbcs finden",
+  errSolvableSbcs: "Sbcs konnten nicht aufgelöst werden",
 };

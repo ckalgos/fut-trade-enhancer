@@ -112,4 +112,13 @@ export const nlLocales = {
   pageNumberInfo:
     "Pagina springen wordt niet aanbevolen, gebruik het op eigen risico",
   autoSelectLowest: "Automatisch laagste kaart selecteren",
+  findSolvableSbcs: "Find Solvable Sbcs",
+  scanClubSbc: "Scan je clubspelers om oplosbare sbc's te vinden",
+  solvableUnAvailable: "Functie is alleen beschikbaar in de Market Alert-app",
+  solveInfo:
+    "De bot scant uw club om sbc's te vinden die kunnen worden voltooid",
+  gatherChallengeInfo: "Verzamel informatie over Challenge Challenges",
+  gatherSquadInfo: "Verzamel clubspelers",
+  fetchingSolvableSbcs: "Sbcs oplosbare Sbcs vinden",
+  errSolvableSbcs: "Kan Sbcs niet oplossen",
 };

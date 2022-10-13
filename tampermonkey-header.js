@@ -2,7 +2,7 @@ module.exports = {
   headers: {
     name: "FUT Trade Enhancer",
     namespace: "http://tampermonkey.net/",
-    version: "1.4.1",
+    version: "1.4.2",
     description: "FUT Trade Enhancer",
     author: "CK Algos",
     match: [
@@ -18,6 +18,7 @@ module.exports = {
       "futbin.com",
       "amazonaws.com",
       "futbin.org",
+      "futhelpers.com",
     ],
     updateURL:
       "https://github.com/ckalgos/fut-trade-enhancer/releases/latest/download/fut-trade-enhancer.user.js",

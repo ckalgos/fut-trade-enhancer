@@ -93,6 +93,29 @@ const getPlayerUrl = (player) => {
   });
 };
 
+export const getAllChallanges = async () => {
+  const futBinUrl = `https://futbin.org/futbin/api/getALLSBCChallenges`;
+  return new Promise((resolve) => {
+    sendExternalRequest({
+      method: "GET",
+      identifier: `${Math.floor(+new Date())}getAllChallanges`,
+      url: futBinUrl,
+      onload: (res) => {
+        if (res.status !== 200) {
+          return resolve(new Map());
+        }
+
+        const { data } = JSON.parse(res.response);
+        const lookUp = data.reduce((acc, curr) => {
+          acc.set(curr.ChallengeID, curr.chal_name);
+          return acc;
+        }, new Map());
+        resolve(lookUp);
+      },
+    });
+  });
+};
+
 export const getAllSBCSForChallenge = async (challengeId) => {
   const futBinUrl = `https://futbin.org/futbin/api/getStcSquads?challenge=${challengeId}`;
   return new Promise((resolve) => {

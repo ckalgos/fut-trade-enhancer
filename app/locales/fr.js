@@ -117,4 +117,16 @@ export const frLocales = {
   pageNumberInfo:
     "Le saut de page n'est pas recommandé, utilisez-le à vos risques et périls",
   autoSelectLowest: "Sélectionner automatiquement la carte la plus basse",
+  findSolvableSbcs: "Rechercher Solvable Sbcs",
+  scanClubSbc:
+    "Scannez les joueurs de votre club pour trouver des sbcs résolubles",
+  solvableUnAvailable:
+    "La fonctionnalité n'est disponible que dans l'application Market Alert",
+  solveInfo:
+    "Le bot va scanner votre club pour trouver les sbcs qui peuvent être complétés",
+  gatherChallengeInfo:
+    "Recueillir des informations sur les Challenge Challenges",
+  gatherSquadInfo: "Recueillir les joueurs du club",
+  fetchingSolvableSbcs: "Recherche de Sbcs Sbcs résolubles",
+  errSolvableSbcs: "Impossible de résoudre Sbcs",
 };

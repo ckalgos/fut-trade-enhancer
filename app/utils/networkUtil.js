@@ -1,12 +1,13 @@
 import { sendExternalRequest } from "../services/externalRequest";
 import { wait } from "./commonUtil";
 
-export const sendRequest = (url, method, identifier) => {
+export const sendRequest = (url, method, identifier, data) => {
   return new Promise((resolve, reject) => {
     sendExternalRequest({
       method,
       identifier,
       url,
+      data,
       onload: (res) => {
         if (res.status !== 200) {
           return reject();

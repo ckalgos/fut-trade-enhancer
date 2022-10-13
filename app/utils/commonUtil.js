@@ -35,7 +35,7 @@ const downloadCsvPhone = (csvContent, fileName) => {
   window.ReactNativeWebView.postMessage(
     JSON.stringify({
       type: "downloadFile",
-      payload: { data: csvContent, fileName },
+      payload: { data: csvContent, fileName: `${fileName}.csv` },
     })
   );
 };

@@ -7,7 +7,13 @@ export const sbcSubmitChallengeOverride = () => {
       return t.item.definitionId;
     });
 
-    saveSolution({ sbcId: o.id, players, expiresOn: o.endTime });
+    saveSolution({
+      sbcId: o.id,
+      players,
+      expiresOn: o.endTime,
+      challengeName: o.name,
+      setName: s.name,
+    });
     return submitChallenge.call(this, o, s, i);
   };
 };

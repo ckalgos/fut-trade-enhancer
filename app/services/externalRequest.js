@@ -40,6 +40,7 @@ const sendWebRequest = (options) => {
     method: options.method,
     url: options.url,
     onload: options.onload,
+    data: options.data,
     headers: { "User-Agent": idSession },
   });
 };

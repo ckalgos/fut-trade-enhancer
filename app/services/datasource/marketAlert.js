@@ -31,6 +31,30 @@ const fetchPrices = async (items) => {
   return result;
 };
 
+export const fetchSolvableSbcs = async (payload) => {
+  const response = await sendRequest(
+    "https://api.futhelpers.com/sbcSolver",
+    "POST",
+    `${Math.floor(+new Date())}_fetchSolvableSbcs`,
+    {
+      playerIds: payload,
+    }
+  );
+  return JSON.parse(response);
+};
+
+export const fetchSbcs = async (challengeId, payload) => {
+  const response = await sendRequest(
+    `https://api.futhelpers.com/sbcsSolutions?sbcId=${challengeId}`,
+    "POST",
+    `${Math.floor(+new Date())}_sbcSolution_${challengeId}`,
+    {
+      playerIds: payload,
+    }
+  );
+  return JSON.parse(response);
+};
+
 const fetchPricesFromServer = async (defIds, result) => {
   const idsArray = Array.from(defIds);
   const platform = getUserPlatform();
@@ -74,16 +98,6 @@ const fetchPricesFromServer = async (defIds, result) => {
     }
   }
 };
-
-export const fetchSbcs = async (challengeId) => {
-  const response = await sendRequest(
-    `https://api.futhelpers.com/sbcSolution?sbcId=${challengeId}`,
-    "GET",
-    `${Math.floor(+new Date())}_sbcSolution_${challengeId}`
-  );
-  return JSON.parse(response);
-};
-
 export default {
   fetchPrices,
 };

@@ -7,6 +7,7 @@ import { generateSectionRelistBtn } from "./generateElements";
 export const appendPrice = (dataSource, auctionElement, price, boughtFor) => {
   let percentDiff = undefined;
   const element = $("<div class='futbinprice auctionValue priceholder'></div>");
+  auctionElement.find(".futbinprice").remove();
   if (boughtFor) {
     percentDiff = getPercentDiff(price * 0.95, boughtFor);
     appendPriceInfo(
@@ -154,16 +155,14 @@ const appendPriceInfo = (
 ) => {
   const color =
     percentDiff < 0 ? "orangered" : percentDiff > 0 ? "lime" : "darksalmon";
-  if (!auctionElement.find(`.${selector}`).length) {
-    auctionElement.prepend(`<div class="auctionValue ${selector} futbinprice">
+  auctionElement.prepend(`<div class="auctionValue ${selector} futbinprice">
               <span class="label">${label} ${
-      percentDiff !== undefined
-        ? `<info style='color: ${color}'>(${percentDiff.toFixed(2)}%)</info>`
-        : ""
-    }</span>
+    percentDiff !== undefined
+      ? `<info style='color: ${color}'>(${percentDiff.toFixed(2)}%)</info>`
+      : ""
+  }</span>
               <span class="currency-coins value">${
                 price ? price.toLocaleString() : "---"
               }</span>             
             </div>`);
-  }
 };

@@ -11,7 +11,7 @@ import {
   getSbcPlayersInfo,
 } from "../services/datasource/futbin";
 import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
-import { getSquadPlayerLookup } from "../services/club";
+import { getSquadPlayerIds, getSquadPlayerLookup } from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
 import {
   idBuySBCPlayers,
@@ -136,23 +136,8 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
   if (!isPhone()) {
     return;
   }
-  const sbcPromise = fetchSbcs(challengeId);
-  const squadPlayersLookupPromise = getSquadPlayerLookup();
-  const [{ sbcs }, squadPlayersLookup] = await Promise.all([
-    sbcPromise,
-    squadPlayersLookupPromise,
-  ]);
-  const sbcPlayers = sbcs
-    .map((value) => {
-      const totalPlayers = value.players.reduce((acc, curr) => {
-        if (squadPlayersLookup.get(curr)) {
-          acc++;
-        }
-        return acc;
-      }, 0);
-      return { totalPlayers, players: value.players };
-    })
-    .sort((a, b) => b.totalPlayers - a.totalPlayers);
+  const squadPlayers = await getSquadPlayerIds();
+  const { sbcs } = await fetchSbcs(challengeId, squadPlayers);
 
   $(`#${idSBCMarketSolution}`).remove();
 
@@ -161,8 +146,8 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
       <option selected="true" disabled value='-1'>${t(
         "marketSBCSolutions"
       )}</option>
-      ${sbcPlayers.map(({ players, totalPlayers }) => {
-        return `<option class="currency-coins" value='${players}'>Available Players(${totalPlayers})</option>`;
+      ${sbcs.map(({ players, availablePlayers }) => {
+        return `<option class="currency-coins" value='${players}'>Available Players(${availablePlayers})</option>`;
       })}
    </select>`
   );
