@@ -5,6 +5,7 @@ import {
   showLoader,
   formatDataSource,
   wait,
+  getCurrentViewController,
 } from "../utils/commonUtil";
 import {
   getAllSBCSForChallenge,
@@ -155,19 +156,12 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
 
 const getControllerInstance = () => {
   if (isPhone()) {
-    const childViews = getAppMain()
-      .getRootViewController()
-      .getPresentedViewController()
-      .getCurrentViewController()._childViewControllers;
+    const childViews = getCurrentViewController()._childViewControllers;
 
     return childViews[childViews.length - 2];
   }
 
-  return getAppMain()
-    .getRootViewController()
-    .getPresentedViewController()
-    .getCurrentViewController()
-    .getCurrentController()._leftController;
+  return getCurrentViewController().getCurrentController()._leftController;
 };
 
 const buyPlayersPopUp = () => {
@@ -359,7 +353,7 @@ const fillSquad = async (squadId) => {
   }
 
   positionPlayers(
-    futBinSquadPlayersInfo.map((currItem) => currItem.definitionId),
+    futBinSquadPlayersInfo.map((currItem) => currItem && currItem.definitionId),
     squadPlayersLookup
   );
 };

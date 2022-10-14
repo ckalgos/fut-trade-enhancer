@@ -47,6 +47,13 @@ export const wait = async (seconds = 1) => {
   );
 };
 
+export const getCurrentViewController = () => {
+  return getAppMain()
+    .getRootViewController()
+    .getPresentedViewController()
+    .getCurrentViewController();
+};
+
 export const getRandWaitTime = (range) => {
   if (range) {
     const [start, end] = range.split("-").map((a) => parseInt(a));

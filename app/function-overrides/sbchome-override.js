@@ -1,14 +1,29 @@
+import { fetchSolvableSbcs } from "../services/datasource/marketAlert";
 import { getSquadPlayerIds, getSquadPlayerLookup } from "../services/club";
 import { getAllChallanges } from "../services/datasource/futbin";
-import { fetchSolvableSbcs } from "../services/datasource/marketAlert";
 import { t } from "../services/translate";
-import { downloadCsv, hideLoader, showLoader } from "../utils/commonUtil";
-import { getCardQuality } from "../utils/futItemUtil";
+import {
+  getCurrentViewController,
+  hideLoader,
+  showLoader,
+} from "../utils/commonUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { showPopUp } from "./popup-override";
 
 export const sbcHomeOverride = () => {
   const populateTiles = UTSBCHubView.prototype.populateTiles;
+  const challengeRender = UTSBCChallengeTileView.prototype.render;
+
+  UTSBCChallengeTileView.prototype.render = function (...args) {
+    const result = challengeRender.call(this, ...args);
+    const challange = this._data;
+    if (challange.fromSolve) {
+      this.__subTitle.textContent = `Av. Players (${
+        challange.playersAvailable
+      }) - ${challange.percentageCompleted.toFixed(2)}% completed`;
+    }
+    return result;
+  };
 
   UTSBCHubView.prototype.populateTiles = function (set, challange) {
     const result = populateTiles.call(this, set, challange);
@@ -64,7 +79,7 @@ export const sbcHomeOverride = () => {
           continue;
         }
         let requiredPlayers = 0;
-        const playersNames = [];
+        let playersAvailable = 0;
         for (const playerId of sbc.players) {
           if (!playerId) {
             continue;
@@ -74,53 +89,67 @@ export const sbcHomeOverride = () => {
           if (!playerDetail) {
             continue;
           }
-          playersNames.push(
-            `${playerDetail._staticData.name} (${
-              playerDetail.rating
-            } ${getCardQuality(playerDetail)})`
-          );
+          playersAvailable++;
         }
-        const percentageCompleted = (
-          (playersNames.length / requiredPlayers) *
-          100
-        ).toFixed(2);
+        const percentageCompleted = (playersAvailable / requiredPlayers) * 100;
         sbcResult.push({
+          id: sbc._id,
           sbcName,
           requiredPlayers,
           percentageCompleted,
-          playersNames,
+          playersAvailable,
         });
       }
+      const currentNavigationController = getCurrentViewController()
+        .getCurrentController()
+        .getNavigationController();
 
-      downloadSolutionsAsSbc(sbcResult);
+      const challengesViewController = new UTSBCChallengesViewController();
+      challengesViewController.initWithSBCSet(
+        generateSbcSet(
+          sbcResult.sort(
+            (a, b) => b.percentageCompleted - a.percentageCompleted
+          )
+        )
+      ),
+        currentNavigationController.pushViewController(
+          challengesViewController,
+          true
+        );
     } catch (err) {
       sendUINotification(t("errSolvableSbcs"), UINotificationType.NEGATIVE);
     }
     hideLoader();
   };
 
-  const downloadSolutionsAsSbc = (sbcResult) => {
-    const club = services.User.getUser().getSelectedPersona().getCurrentClub();
-
-    const headers =
-      "Challenge,Players Required, Players Available, Percentage Completed, Player1, Player2, Player3, Player4, Player5, Player6, Player7, Player8, Player9, Player10, PLayer11";
-    let csvContent = "";
-    csvContent += headers + "\r\n";
-    for (const {
-      sbcName,
-      percentageCompleted,
-      playersNames,
-      requiredPlayers,
-    } of sbcResult.sort(
-      (a, b) => b.percentageCompleted - a.percentageCompleted
-    )) {
-      let rowRecord = sbcName + ",";
-      rowRecord += requiredPlayers + ",";
-      rowRecord += playersNames.length + ",";
-      rowRecord += percentageCompleted + ",";
-      rowRecord += playersNames.join(",");
-      csvContent += rowRecord + "\r\n";
-    }
-    downloadCsv(csvContent, `${club.name}_Sbc_Solutions`);
+  const generateSbcSet = (sbcResult) => {
+    return {
+      id: -1,
+      name: "Sbcs",
+      challengesCount: 1,
+      challengesCompletedCount: 1,
+      endTime: 1666112400,
+      challenges: new EAHashTable(),
+      awards: [],
+      notExpirable: true,
+      repeatabilityMode: SBCRepeatabilityMode.UNLIMITED,
+      getRepeatsRemaining: () => 0,
+      getRefreshTimeRemaining: () => 0,
+      getTimeRemaining: () => 0,
+      getChallenges: () => {
+        return sbcResult.map(
+          ({ id, sbcName, playersAvailable, percentageCompleted }) => ({
+            id,
+            name: `${sbcName}`,
+            playersAvailable,
+            percentageCompleted,
+            fromSolve: true,
+            isCompleted: () => true,
+            isInProgress: () => false,
+            hasNotStarted: () => false,
+          })
+        );
+      },
+    };
   };
 };
