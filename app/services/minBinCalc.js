@@ -13,11 +13,11 @@ export const calculatePlayerMinBin = async (player) => {
   searchModel.defaultSearchCriteria.category = searchCriteria.category;
 
   let allPrices = [];
-  let itemsToConsider = 5;
+  let itemsToConsider = 1;
   let isMinFound = false;
   let currentCount = 0;
   while (!isMinFound) {
-    if (++currentCount === 10) {
+    if (++currentCount === 1) {
       isMinFound = true;
     } else {
       sendPinEvents("Transfer Market Search");
@@ -32,7 +32,7 @@ export const calculatePlayerMinBin = async (player) => {
           ...items.map((i) => i._auction.buyNowPrice)
         );
 
-        if (items.length < 5) {
+        if (items.length < 1) {
           isMinFound = true;
         }
 
