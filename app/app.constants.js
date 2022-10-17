@@ -46,3 +46,5 @@ export const idPageNumber = "elem_" + generateId(15);
 export const idAutoBuyMinGlobal = "elem_" + generateId(15);
 export const idAutoSelectMin = "elem_" + generateId(15);
 export const idSBCMarketSolution = "elem_" + generateId(15);
+
+export const isMarketAlertApp = !!window.ReactNativeWebView;

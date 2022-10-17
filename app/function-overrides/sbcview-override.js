@@ -21,6 +21,7 @@ import {
   idSBCPlayersToBuy,
   idSBCFUTBINSolution,
   idSBCMarketSolution,
+  isMarketAlertApp,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { getDataSource, getValue, setValue } from "../services/repository";
@@ -134,7 +135,7 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
 };
 
 const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
-  if (!isPhone()) {
+  if (!isMarketAlertApp) {
     return;
   }
   const squadPlayers = await getSquadPlayerIds();

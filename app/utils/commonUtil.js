@@ -1,3 +1,5 @@
+import { isMarketAlertApp } from "../app.constants";
+
 export const addBtnListner = (selector, callback) => {
   $(document).on(
     {
@@ -15,7 +17,7 @@ export const addBtnListner = (selector, callback) => {
 };
 
 export const downloadCsv = (csvContent, fileName) => {
-  isPhone()
+  isMarketAlertApp
     ? downloadCsvPhone(csvContent, fileName)
     : downloadCsvWeb(csvContent, fileName);
 };

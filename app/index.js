@@ -1,3 +1,4 @@
+import { isMarketAlertApp } from "./app.constants";
 import { initOverrides } from "./function-overrides";
 import { initListeners } from "./services/externalRequest";
 import { setValue } from "./services/repository";
@@ -27,7 +28,7 @@ const initScript = function () {
 
   if (isAllLoaded) {
     initOverrides();
-    isPhone() && initListeners();
+    isMarketAlertApp && initListeners();
   } else {
     setTimeout(initScript, 1000);
   }

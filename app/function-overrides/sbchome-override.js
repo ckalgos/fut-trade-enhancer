@@ -9,6 +9,7 @@ import {
 } from "../utils/commonUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { showPopUp } from "./popup-override";
+import { isMarketAlertApp } from "../app.constants";
 
 export const sbcHomeOverride = () => {
   const populateTiles = UTSBCHubView.prototype.populateTiles;
@@ -55,9 +56,9 @@ export const sbcHomeOverride = () => {
         { labelEnum: enums.UIDialogOptions.CANCEL },
       ],
       t("findSolvableSbcs"),
-      !isPhone() ? t("solvableUnAvailable") : t("solveInfo"),
+      !isMarketAlertApp ? t("solvableUnAvailable") : t("solveInfo"),
       (text) => {
-        text === 2 && isPhone() && findSolvableSbcs(set);
+        text === 2 && isMarketAlertApp && findSolvableSbcs(set);
       }
     );
   };

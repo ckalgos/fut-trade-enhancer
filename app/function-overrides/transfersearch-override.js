@@ -2,6 +2,7 @@ import { MAX_CLUB_SEARCH, MAX_MARKET_SEARCH } from "../app.constants";
 import { trackMarketPrices } from "../services/analytics";
 import { getValue } from "../services/repository";
 import { getRandNum } from "../utils/commonUtil";
+import { resetKeyToDefault } from "../utils/uiUtils/generateToggleInput";
 
 export const transferSearchOverride = () => {
   const transferSearch = services.Item.searchTransferMarket;
@@ -37,6 +38,7 @@ export const transferSearchOverride = () => {
     };
     updateSearchCriteria(...params);
     const { idAutoBuyMin } = getValue("EnhancerSettings");
+    resetKeyToDefault("idAutoBuyMin");
     const searchResponse = transferSearch.call(this, ...params);
     searchResponse.observe(this, function (sender, response) {
       if (response.success) {

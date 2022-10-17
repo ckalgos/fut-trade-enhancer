@@ -3,6 +3,7 @@ import { imageLogos } from "../image.constants";
 import { formMessage } from "../utils/homeMessageUtil";
 import { showPopUp } from "./popup-override";
 import { atou } from "../utils/commonUtil";
+import { isMarketAlertApp } from "../app.constants";
 
 const getScriptMessages = () => {
   const persona = services.User.getUser().getSelectedPersona();
@@ -28,7 +29,8 @@ const getScriptMessages = () => {
     imageLogos,
     atob("bmF0aXZlSHVi")
   );
-  !isPhone() && messages.push(new UTArubaMessageEntity(message3, persona));
+  !isMarketAlertApp &&
+    messages.push(new UTArubaMessageEntity(message3, persona));
   messages.push(new UTArubaMessageEntity(message1, persona));
   messages.push(new UTArubaMessageEntity(message2, persona));
   return messages;
