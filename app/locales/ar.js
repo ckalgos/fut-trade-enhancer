@@ -98,8 +98,7 @@ export const arLocales = {
   calcAverage: "متوسط الحد الأدنى لـ BIN",
   showCalcMinBin: "Show Calculate Min BIN",
   showCalcMinBinInfo: "قم بتبديلها لإظهار خيار حساب Min BIN على لوحة المشغل",
-  clubToTransferListInfo:
-    "سيحاول الروبوت إرسال ما يصل إلى 90 عضوًا غير نشط من الفريق قابلين للتداول إلى قائمة الانتقالات",
+  sendToTransferListInfo: "سيحاول الروبوت إرسال حتى العناصر إلى قائمة النقل",
   activeSquadMemberErr: "غير قادر على الحصول على لاعبي الفريق النشطين",
   increaseActiveList: "تجاوز حد القائمة النشطة",
   increaseActiveListInfo: "زيادة عدد القوائم النشطة إلى 100",

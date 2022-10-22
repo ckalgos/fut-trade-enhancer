@@ -20,7 +20,7 @@ export const initListeners = () => {
 };
 
 export const sendExternalRequest = async (options) => {
-  if (isMarketAlertApp) {
+  if (isMarketAlertApp || isPhone()) {
     sendPhoneRequest(options);
   } else {
     sendWebRequest(options);

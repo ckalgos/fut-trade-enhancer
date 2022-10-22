@@ -101,8 +101,8 @@ export const itLocales = {
   showCalcMinBin: "Mostra Calcola BIN minimo",
   showCalcMinBinInfo:
     "Attivalo per mostrare l'opzione Calcola BIN minimo sul pannello del lettore",
-  clubToTransferListInfo:
-    "Il bot proverà a inviare fino a 90 membri della squadra non attivi scambiabili all'elenco dei trasferimenti",
+  sendToTransferListInfo:
+    "Il bot proverà a inviare fino a elementi all'elenco di trasferimento",
   activeSquadMemberErr: "Impossibile ottenere giocatori di squadra attivi",
   increaseActiveList: "Bypassa il limite di inserzione attiva",
   increaseActiveListInfo: "Aumenta il numero di annunci attivi a 100",

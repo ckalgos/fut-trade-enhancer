@@ -119,13 +119,14 @@ export const appendRelistExternal = (
   externalCallBack,
   fixedCallBack
 ) => {
-  if (!rootElement.find(".relist").length) {
-    rootElement.append(
+  if (!rootElement.find(".relistwrapper").length) {
+    rootElement.addClass("relistsection");
+    const element = $("<div class='relistwrapper'></div>");
+    element.append(
       generateSectionRelistBtn(externalCallBack, dataSource).__root
     );
-    rootElement.append(
-      generateSectionRelistBtn(fixedCallBack, t("fixed")).__root
-    );
+    element.append(generateSectionRelistBtn(fixedCallBack, t("fixed")).__root);
+    rootElement.append(element);
   }
 };
 

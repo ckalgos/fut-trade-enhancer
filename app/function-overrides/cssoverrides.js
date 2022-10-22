@@ -362,6 +362,18 @@ export const overrideStyle = () => {
        display: flex !important;
        flex-direction: column-reverse;
     }
+    .phone .ut-section-header-view.relistsection {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+    .relistwrapper{
+      display: flex;
+    }
+    .phone .relistwrapper{
+      width: 100%;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
     `;
   document.head.appendChild(style);
 };

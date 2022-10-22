@@ -99,8 +99,7 @@ export const enLocales = {
   showCalcMinBin: "Show Calculate Min BIN",
   showCalcMinBinInfo:
     "Toggle it on to show Calculate Min BIN option on player panel",
-  clubToTransferListInfo:
-    "Bot will try to send upto 90 tradeable non active squad members to Transfer list",
+  sendToTransferListInfo: "Bot will try to send items to Transfer list",
   activeSquadMemberErr: "Unable to get active squad players",
   increaseActiveList: "Bypass Active Listing Limit",
   increaseActiveListInfo: "Increases Number of Active Listing to 100",

@@ -102,8 +102,8 @@ export const deLocales = {
   showCalcMinBin: "Min. BIN berechnen anzeigen",
   showCalcMinBinInfo:
     "Schalten Sie es ein, um die Option 'Min. BIN berechnen' im Player-Panel anzuzeigen",
-  clubToTransferListInfo:
-    "Der Bot wird versuchen, bis zu 90 handelbare, nicht aktive Squad-Mitglieder auf die Transferliste zu schicken",
+  sendToTransferListInfo:
+    "Der Bot versucht, bis zu Elemente an die Übertragungsliste zu senden",
   activeSquadMemberErr: "Aktive Squad-Spieler konnten nicht abgerufen werden",
   increaseActiveList: "Limit für aktive Einträge umgehen",
   increaseActiveListInfo: "Erhöht die Anzahl aktiver Einträge auf 100",

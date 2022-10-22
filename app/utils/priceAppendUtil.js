@@ -1,6 +1,7 @@
 import { fetchPrices } from "../services/datasource";
 import { getDataSource, getValue } from "../services/repository";
 import { relistCards, relistForFixedPrice } from "./reListUtil";
+import { showMoveToTransferListPopup } from "./transferListUtil";
 import {
   appendCheckBox,
   appendContractInfo,
@@ -12,6 +13,8 @@ import {
   appendSectionTotalPrices,
   appendSquadTotal,
 } from "./uiUtils/appendItems";
+import { generateSendToTransferList } from "./uiUtils/generateElements";
+import { moveUnassignedToTransferList } from "./unassignedutil";
 
 export const appendCardPrice = async (listRows, section) => {
   const enhancerSetting = getValue("EnhancerSettings") || {};
@@ -127,6 +130,17 @@ export const appendSlotPrice = async (squadSlots) => {
 export const appendSectionPrices = async (sectionData) => {
   const dataSource = getDataSource();
   if (sectionData.listRows.length) {
+    const isUnassigned =
+      services.Localization.localize("infopanel.label.storeAllInClub") ===
+      sectionData.sectionHeader;
+    if (isUnassigned) {
+      sectionData.headerElement.append(
+        generateSendToTransferList(
+          () => showMoveToTransferListPopup(moveUnassignedToTransferList),
+          "relist"
+        ).__root
+      );
+    }
     sectionData.isRelistSupported &&
       appendRelistExternal(
         sectionData.sectionHeader,

@@ -98,8 +98,8 @@ export const nlLocales = {
   showCalcMinBin: "Toon Bereken Min BIN",
   showCalcMinBinInfo:
     "Schakel het in om de optie Bereken Min BIN weer te geven op het spelerspaneel",
-  clubToTransferListInfo:
-    "Bot zal proberen om tot 90 verhandelbare niet-actieve squadronleden naar de transferlijst te sturen",
+  sendToTransferListInfo:
+    "Bot zal proberen om maximaal items naar de overdrachtslijst te sturen",
   activeSquadMemberErr: "Kan geen actieve squadronspelers krijgen",
   increaseActiveList: "Actieve lijstlimiet overslaan",
   increaseActiveListInfo: "Verhoogt het aantal actieve vermeldingen tot 100",

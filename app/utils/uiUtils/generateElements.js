@@ -89,10 +89,10 @@ export const generateDownloadClubCsv = () => {
   );
 };
 
-export const generateSendToTransferList = (callBack) => {
+export const generateSendToTransferList = (callBack, classes) => {
   return createButton(
     services.Localization.localize("infopanel.label.sendTradePile"),
     callBack,
-    "btn-standard mini transferpile clubAction"
+    `btn-standard mini transferpile ${classes || ""}`
   );
 };
