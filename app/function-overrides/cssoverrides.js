@@ -379,6 +379,31 @@ export const overrideStyle = () => {
       align-items: flex-start !important;
       line-height: unset !important;
     }
-    `;
+    .follow {
+      background: #000000;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      padding: 4px;
+      width: 190px;
+      position: fixed;
+      right: -160px;
+      z-index: 1000;
+      font: normal normal 10px Arial;
+      -webkit-transition: all .25s ease;
+      -moz-transition: all .25s ease;
+      -ms-transition: all .25s ease;
+      -o-transition: all .25s ease;
+      transition: all .25s ease;
+    }   
+    .follow:hover {
+      right: 0;
+    }    
+    .follow a {
+      color: #fff !important;
+      text-decoration: none;
+      text-align: center;
+      line-height: 43px!important;
+      vertical-align: top!important;
+    }`;
   document.head.appendChild(style);
 };

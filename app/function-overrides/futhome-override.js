@@ -156,6 +156,13 @@ export const futHomeOverride = () => {
       this._scriptMessageTile.getRootElement().classList.add("col-1-1");
       setTimeout(() => {
         $(".layout-hub")[0].prepend(this._scriptMessageTile.getRootElement());
+        $(".layout-hub")[0].prepend(
+          $(
+            atob(
+              "PGRpdj4gICAgICAgICAgICAgICAgIAogICAgICAgIDxkaXYgc3R5bGU9J3RvcDogMTYwcHg7YmFja2dyb3VuZC1jb2xvcjogIzhiOWZmZicgY2xhc3M9ImZvbGxvdyI+CiAgICAgICAgPGkgc3R5bGU9J2ZvbnQtc2l6ZTogMjBweDtjb2xvcjogI2ZmZjtwYWRkaW5nOiAxMHB4IDA7d2lkdGg6IDI1cHg7bWFyZ2luLWxlZnQ6IDhweDsnIGNsYXNzPSJmYWIgZmEtZGlzY29yZCI+PC9pPgogICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vZGlzY29yZC5jb20vaW52aXRlL2NrdEhZbXAiIHRhcmdldD0iX2JsYW5rIj5Kb2luIHVzITwvYT4KICAgICAgICA8L2Rpdj4KICAgICAgICAgIDxkaXYgc3R5bGU9J3RvcDogMjE1cHg7YmFja2dyb3VuZC1jb2xvcjogI2QxMjc5OCcgY2xhc3M9ImZvbGxvdyI+CiAgICAgICAgICA8aSBzdHlsZT0nZm9udC1zaXplOiAyMHB4O2NvbG9yOiAjZmZmO3BhZGRpbmc6IDEwcHggMDt3aWR0aDogMjVweDttYXJnaW4tbGVmdDogOHB4OycgY2xhc3M9ImZhYiBmYS1pbnN0YWdyYW0iPjwvaT4KICAgICAgICAgIDxhIGhyZWY9Imh0dHBzOi8vd3d3Lmluc3RhZ3JhbS5jb20vY2thbGdvcy8iIHRhcmdldD0iX2JsYW5rIj5Gb2xsb3cgdXMhPC9hPgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgc3R5bGU9J3RvcDogMjcwcHg7YmFja2dyb3VuZC1jb2xvcjogIzAwYWJmMCcgY2xhc3M9ImZvbGxvdyI+CiAgICAgICAgICA8aSBzdHlsZT0nZm9udC1zaXplOiAyMHB4O2NvbG9yOiAjZmZmO3BhZGRpbmc6IDEwcHggMDt3aWR0aDogMjVweDttYXJnaW4tbGVmdDogOHB4OycgY2xhc3M9ImZhYiBmYS10d2l0dGVyIj48L2k+CiAgICAgICAgICA8YSBocmVmPSJodHRwczovL3R3aXR0ZXIuY29tL2ludGVudC9mb2xsb3c/cmVnaW9uPWZvbGxvd19saW5rJnNjcmVlbl9uYW1lPUFsZ29zQ2siIHRhcmdldD0iX2JsYW5rIj5Gb2xsb3cgdXMhPC9hPgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgc3R5bGU9J3RvcDogMzI1cHg7YmFja2dyb3VuZC1jb2xvcjogI0U1MkQyNycgY2xhc3M9ImZvbGxvdyI+CiAgICAgICAgPGkgc3R5bGU9J2ZvbnQtc2l6ZTogMjBweDtjb2xvcjogI2ZmZjtwYWRkaW5nOiAxMHB4IDA7d2lkdGg6IDI1cHg7bWFyZ2luLWxlZnQ6IDhweDsnIGNsYXNzPSJmYWIgZmEteW91dHViZSI+PC9pPgogICAgICAgIDxhIGhyZWY9Imh0dHBzOi8veW91dHViZS5jb20vY2thbGdvcz9zdWJfY29uZmlybWF0aW9uPTEiIHRhcmdldD0iX2JsYW5rIj5TdWJzY3JpYmUgdXMhPC9hPgogICAgICAgIDwvZGl2PgogICAgICA8L2Rpdj4="
+            )
+          )[0]
+        );
       });
     }
   };
