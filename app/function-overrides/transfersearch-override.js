@@ -43,11 +43,9 @@ export const transferSearchOverride = () => {
     const searchResponse = transferSearch.call(this, ...params);
     searchResponse.observe(this, function (sender, response) {
       if (response.success) {
-        response.data.items.sort(
-          (a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice
-        );
-        const items = response.data.items;
+        const items = [...(response.data.items || [])];
         if (items.length) {
+          items.sort((a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice);
           const minCard = items[0];
 
           if (idAutoBuyMin) {

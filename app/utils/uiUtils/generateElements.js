@@ -107,7 +107,21 @@ export const generateViewOnFutBinBtn = () => {
 export const generateSectionRelistBtn = (callBack, dataSource) => {
   return createButton(
     `${t("list")} ${dataSource}`,
-    callBack,
+    dataSource === t("fixed")
+      ? callBack
+      : () => {
+          showPopUp(
+            [
+              { labelEnum: enums.UIDialogOptions.YES },
+              { labelEnum: enums.UIDialogOptions.CANCEL },
+            ],
+            `${t("list")} ${dataSource}`,
+            `${t("list")} ${dataSource}`,
+            (text) => {
+              text === 0 && callBack();
+            }
+          );
+        },
     "relist call-to-action mini"
   );
 };

@@ -17,6 +17,8 @@ import {
   idExternalDataSource,
   idAutoBuyMinGlobal,
   idIncreaseSearchResult,
+  idAutoSelectMin,
+  isMarketAlertApp,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -200,7 +202,18 @@ EnhancerSettingsView.prototype._generate = function _generate() {
               ? enhancerSetting["idIncreaseSearchResult"]
               : false
           )}
-          
+          ${
+            !isMarketAlertApp
+              ? generateToggleInput(
+                  t("autoSelectLowest"),
+                  { idAutoSelectMin },
+                  t("autoSelectLowest"),
+                  "idAutoSelectMin" in enhancerSetting
+                    ? enhancerSetting["idAutoSelectMin"]
+                    : false
+                )
+              : ""
+          }              
           <div class="enhancer-save-btn">
             ${generateButton(
               idSaveSettingsBtn,

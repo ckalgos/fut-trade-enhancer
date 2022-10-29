@@ -112,7 +112,6 @@ export const enLocales = {
   pageNumber: "Page Number",
   pageNumberInfo: "Page jumping is not recommended, use it at your own risk",
   autoSelectLowest: "Automatically Select Lowest Card",
-
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scan your club players to find solvable sbcs",
   solvableUnAvailable: "The feature is available only on Market Alert App",
