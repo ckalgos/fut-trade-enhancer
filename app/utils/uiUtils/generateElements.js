@@ -7,13 +7,24 @@ import { calculatePlayerMinBin } from "../../services/minBinCalc";
 import { t } from "../../services/translate";
 import { downloadClub } from "../../services/club";
 import { formatDataSource } from "../commonUtil";
+import { showPopUp } from "../../function-overrides/popup-override";
 
 export const generateListForFutBinBtn = () => {
   return createButton(
     formatDataSource(t("listFutBin"), getDataSource()),
     () => {
       const selectedPlayer = getValue("selectedPlayer");
-      selectedPlayer && listCards([selectedPlayer]);
+      showPopUp(
+        [
+          { labelEnum: enums.UIDialogOptions.YES },
+          { labelEnum: enums.UIDialogOptions.CANCEL },
+        ],
+        formatDataSource(t("listFutBin"), getDataSource()),
+        formatDataSource(t("listFutBin"), getDataSource()),
+        (text) => {
+          text === 0 && selectedPlayer && listCards([selectedPlayer]);
+        }
+      );
     },
     "accordian"
   );
@@ -32,21 +43,41 @@ export const generateCalcMinBin = () => {
   return createButton(
     t("calcMinBin"),
     async function () {
-      const selectedPlayer = getValue("selectedPlayer");
-      if (!selectedPlayer) {
+      const selectedItem =
+        getValue("selectedPlayer") || getValue("selectedNonPlayer");
+      if (!selectedItem) {
         return;
       }
       const btnContext = $(this.getRootElement());
       btnContext.prop("disabled", true);
       btnContext.text(t("calcMinBin"));
       sendUINotification(t("calculatingMinBin"));
-      const playerMin = await calculatePlayerMinBin(selectedPlayer);
+      const playerMin = await calculatePlayerMinBin(selectedItem);
       btnContext.prop("disabled", false);
       if (!playerMin) {
         sendUINotification(t("calcMinBinErr"), UINotificationType.NEGATIVE);
         return;
       }
-      btnContext.text(`${t("calcAverage")} - (${playerMin})`);
+      btnContext.addClass("btnAverage");
+      btnContext.html(
+        `<span class="btn-text">
+          <ol>
+            <li>${t("calcMin")}</li>
+            <li>${t("calcAverage")}</li>
+            <li>${t("topCalcMin")}</li>
+          </ol>
+        </span>
+        <span class="btn-subtext">
+          <ol>
+            <li>${playerMin.min}</li>
+            <li>${playerMin.avgMin}</li>
+            ${playerMin.allPrices.reduce((acc, price) => {
+              acc += `<li>${price}</li>`;
+              return acc;
+            }, "")}
+          </ol>
+        </span>`
+      );
     },
     "accordian"
   );

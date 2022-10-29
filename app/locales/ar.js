@@ -96,6 +96,8 @@ export const arLocales = {
   calculatingMinBin: "حساب Min BIN ....",
   calcMinBinErr: "تعذر حساب min bin",
   calcAverage: "متوسط الحد الأدنى لـ BIN",
+  calcMin: "Min BIN",
+  topCalcMin: "أعلى 5 دقائق بن",
   showCalcMinBin: "Show Calculate Min BIN",
   showCalcMinBinInfo: "قم بتبديلها لإظهار خيار حساب Min BIN على لوحة المشغل",
   sendToTransferListInfo: "سيحاول الروبوت إرسال حتى العناصر إلى قائمة النقل",
@@ -117,4 +119,6 @@ export const arLocales = {
   gatherSquadInfo: "جمع لاعبي النادي",
   fetchingSolvableSbcs: "Finding Sbcs Solvable Sbcs",
   errSolvableSbcs: "غير قادر على حل Sbcs",
+  increaseSearchResult: "زيادة نتيجة البحث",
+  increaseSearchResultInfo: "زيادة عدد نتائج البحث من 21 إلى 51",
 };

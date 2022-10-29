@@ -99,6 +99,8 @@ export const deLocales = {
   calculatingMinBin: "Min BIN wird berechnet ....",
   calcMinBinErr: "Minimum-Bin kann nicht berechnet werden",
   calcAverage: "Durchschnittlicher Min BIN",
+  calcMin: "Min BIN",
+  topCalcMin: "Top 5 Min BIN",
   showCalcMinBin: "Min. BIN berechnen anzeigen",
   showCalcMinBinInfo:
     "Schalten Sie es ein, um die Option 'Min. BIN berechnen' im Player-Panel anzuzeigen",
@@ -125,4 +127,7 @@ export const deLocales = {
   gatherSquadInfo: "Vereinsspieler sammeln",
   fetchingSolvableSbcs: "Lösbare Sbcs von Sbcs finden",
   errSolvableSbcs: "Sbcs konnten nicht aufgelöst werden",
+  increaseSearchResult: "Suchergebnis erhöhen",
+  increaseSearchResultInfo:
+    "Erhöht die Anzahl der Suchergebnisse von 21 auf 51",
 };

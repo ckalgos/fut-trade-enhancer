@@ -35,6 +35,7 @@ export const playerViewPanelOverride = () => {
         $(".viewon").css("display", "none");
       });
       setValue("selectedPlayer", undefined);
+      setValue("selectedNonPlayer", e);
       return;
     }
     $(this._futbinListFor.__root).css("display", "");
@@ -42,6 +43,7 @@ export const playerViewPanelOverride = () => {
       $(".viewon").css("display", "");
     });
     setValue("selectedPlayer", e);
+    setValue("selectedNonPlayer", undefined);
   };
 
   UTQuickListPanelView.prototype._generate = function (...args) {

@@ -96,6 +96,8 @@ export const enLocales = {
   calculatingMinBin: "Calculating Min BIN ....",
   calcMinBinErr: "Unable to calculate min bin",
   calcAverage: "Average Min BIN",
+  calcMin: "Min BIN",
+  topCalcMin: "Top 5 Min BIN",
   showCalcMinBin: "Show Calculate Min BIN",
   showCalcMinBinInfo:
     "Toggle it on to show Calculate Min BIN option on player panel",
@@ -119,4 +121,6 @@ export const enLocales = {
   gatherSquadInfo: "Gathering Club Players",
   fetchingSolvableSbcs: "Finding Solvable Sbcs",
   errSolvableSbcs: "Unable to Solvable Sbcs",
+  increaseSearchResult: "Increase Search Result",
+  increaseSearchResultInfo: "Increases Search Result Count From 21 To 51",
 };

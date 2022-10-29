@@ -5,7 +5,7 @@ import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 export const calculatePlayerMinBin = async (player) => {
   const searchCriteria = new UTSearchCriteriaDTO();
   const searchModel = new UTBucketedItemSearchViewModel();
-  searchCriteria.type = SearchType.PLAYER;
+  searchCriteria.type = player.getSearchType() || SearchType.PLAYER;
   searchCriteria.defId = [player.definitionId];
   searchCriteria.category = SearchCategory.ANY;
   searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
@@ -52,9 +52,15 @@ export const calculatePlayerMinBin = async (player) => {
   allPrices = allPrices.sort((a, b) => a - b).slice(0, itemsToConsider);
 
   if (allPrices.length) {
-    return roundOffPrice(
+    const avgMin = roundOffPrice(
       allPrices.reduce((acc, curr) => acc + curr, 0) / allPrices.length
     );
+    const min = allPrices[0];
+    return {
+      min,
+      avgMin,
+      allPrices,
+    };
   }
 
   return null;

@@ -98,6 +98,8 @@ export const itLocales = {
   calculatingMinBin: "Calcolo Min BIN ....",
   calcMinBinErr: "Impossibile calcolare il bin minimo",
   calcAverage: "BIN minimo medio",
+  calcMin: "Min BIN",
+  topCalcMin: "Top 5 Min BIN",
   showCalcMinBin: "Mostra Calcola BIN minimo",
   showCalcMinBinInfo:
     "Attivalo per mostrare l'opzione Calcola BIN minimo sul pannello del lettore",
@@ -125,4 +127,7 @@ export const itLocales = {
   gatherSquadInfo: "Raccogli i giocatori del club",
   fetchingSolvableSbcs: "Trovare Sbcs risolvibili",
   errSolvableSbcs: "Impossibile risolvere Sbcs",
+  increaseSearchResult: "Aumenta il risultato della ricerca",
+  increaseSearchResultInfo:
+    "Aumenta il conteggio dei risultati della ricerca da 21 a 51",
 };

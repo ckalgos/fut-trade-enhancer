@@ -374,6 +374,11 @@ export const overrideStyle = () => {
       justify-content: flex-end;
       margin-top: 8px;
     }
+    .btnAverage {
+      height: unset !important;
+      align-items: flex-start !important;
+      line-height: unset !important;
+    }
     `;
   document.head.appendChild(style);
 };

@@ -66,26 +66,14 @@ export const relistCards = function (sectionHeader, price, startPrice) {
   handleTransferListItems(sectionHeader, price, startPrice);
 };
 
-const handleSelectedItems = (sectionHeader, price, startPrice) => {
+const getSelectedItems = (sectionHeader) => {
   const selectedPlayersBySection = getSelectedPlayersBySection(sectionHeader);
-  if (selectedPlayersBySection.size) {
-    listCards(
-      Array.from(selectedPlayersBySection.values()),
-      price,
-      startPrice,
-      false
-    );
-    clearSelectedPlayersBySection(sectionHeader);
-    return true;
-  }
-  return false;
+  return selectedPlayersBySection || new Map();
 };
 
 const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
-  const isHandled = handleSelectedItems(sectionHeader, price, startPrice);
-  if (isHandled) {
-    return;
-  }
+  const selectedItems = getSelectedItems(sectionHeader, price, startPrice);
+
   const isWatchList =
     services.Localization.localize("infopanel.label.alltoclub") ===
     sectionHeader;
@@ -95,7 +83,7 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
     let boughtItems = response.response.items;
     if (isWatchList) {
       boughtItems = boughtItems.filter(function (item) {
-        return item.getAuctionData().isWon();
+        return !selectedItems.has(item.id) && item.getAuctionData().isWon();
       });
     }
     listCards(boughtItems, price, startPrice, false);
@@ -103,10 +91,8 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
 };
 
 const handleTransferListItems = (sectionHeader, price, startPrice) => {
-  const isHandled = handleSelectedItems(sectionHeader, price, startPrice);
-  if (isHandled) {
-    return;
-  }
+  const selectedItems = getSelectedItems(sectionHeader, price, startPrice);
+
   services.Item.requestTransferItems().observe(
     this,
     async function (t, response) {
@@ -116,7 +102,10 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
       ) {
         let unSoldItems = response.response.items.filter(function (item) {
           var t = item.getAuctionData();
-          return t.isExpired() || (t.isValid() && t.isInactive());
+          return (
+            !selectedItems.has(item.id) &&
+            (t.isExpired() || (t.isValid() && t.isInactive()))
+          );
         });
 
         listCards(unSoldItems, price, startPrice, true);
@@ -125,7 +114,9 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
         services.Localization.localize("infopanel.label.addplayer")
       ) {
         const availableItems = response.response.items.filter(function (item) {
-          return !item.getAuctionData().isValid();
+          return (
+            !selectedItems.has(item.id) && !item.getAuctionData().isValid()
+          );
         });
         listCards(availableItems, price, startPrice, true);
       }

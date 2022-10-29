@@ -32,19 +32,22 @@ export const transferSearchOverride = () => {
   };
 
   services.Item.searchTransferMarket = function (...params) {
+    updateSearchCriteria(...params);
+    const { idAutoBuyMin, idIncreaseSearchResult } =
+      getValue("EnhancerSettings");
+    resetKeyToDefault("idAutoBuyMin");
     getAppMain().getConfigRepository().configs.itemsPerPage = {
       club: MAX_CLUB_SEARCH,
-      transferMarket: MAX_MARKET_SEARCH,
+      transferMarket: idIncreaseSearchResult ? 49 : MAX_MARKET_SEARCH,
     };
-    updateSearchCriteria(...params);
-    const { idAutoBuyMin } = getValue("EnhancerSettings");
-    resetKeyToDefault("idAutoBuyMin");
     const searchResponse = transferSearch.call(this, ...params);
     searchResponse.observe(this, function (sender, response) {
       if (response.success) {
-        const items = [...(response.data.items || [])];
+        response.data.items.sort(
+          (a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice
+        );
+        const items = response.data.items;
         if (items.length) {
-          items.sort((a, b) => a._auction.buyNowPrice - b._auction.buyNowPrice);
           const minCard = items[0];
 
           if (idAutoBuyMin) {

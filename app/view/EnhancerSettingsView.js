@@ -16,6 +16,7 @@ import {
   idDisablePackAnimation,
   idExternalDataSource,
   idAutoBuyMinGlobal,
+  idIncreaseSearchResult,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -191,6 +192,15 @@ EnhancerSettingsView.prototype._generate = function _generate() {
               ? enhancerSetting["idAutoBuyMinGlobal"]
               : false
           )}
+          ${generateToggleInput(
+            t("increaseSearchResult"),
+            { idIncreaseSearchResult },
+            t("increaseSearchResultInfo"),
+            "idIncreaseSearchResult" in enhancerSetting
+              ? enhancerSetting["idIncreaseSearchResult"]
+              : false
+          )}
+          
           <div class="enhancer-save-btn">
             ${generateButton(
               idSaveSettingsBtn,

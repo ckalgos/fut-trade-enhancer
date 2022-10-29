@@ -95,6 +95,8 @@ export const nlLocales = {
   calculatingMinBin: "Min BIN berekenen ...",
   calcMinBinErr: "Kan min bin niet berekenen",
   calcAverage: "Gemiddeld Min BIN",
+  calcMin: "Min BIN",
+  topCalcMin: "Top 5 Min BIN",
   showCalcMinBin: "Toon Bereken Min BIN",
   showCalcMinBinInfo:
     "Schakel het in om de optie Bereken Min BIN weer te geven op het spelerspaneel",
@@ -121,4 +123,6 @@ export const nlLocales = {
   gatherSquadInfo: "Verzamel clubspelers",
   fetchingSolvableSbcs: "Sbcs oplosbare Sbcs vinden",
   errSolvableSbcs: "Kan Sbcs niet oplossen",
+  increaseSearchResult: "Zoekresultaat verhogen",
+  increaseSearchResultInfo: "Verhoogt het aantal zoekresultaten van 21 naar 51",
 };

@@ -59,10 +59,10 @@ export const appendPriceToSlot = (rootElement, price) => {
 
 const handleCheckBoxToggle = (isChecked, selectedPlayersBySection, card) => {
   if (!isChecked) {
-    selectedPlayersBySection.set(card.id, card);
+    selectedPlayersBySection.delete(card.id);
     $(`#${card.id}_check`).prop("checked", true);
   } else {
-    selectedPlayersBySection.delete(card.id);
+    selectedPlayersBySection.set(card.id, card);
     $(`#${card.id}_check`).prop("checked", false);
   }
 };
@@ -75,7 +75,7 @@ export const appendCheckBox = (rootElement, section, card) => {
 
   if (!eventMappers.has(card.id)) {
     $(document).on("click touchend", `#${card.id}`, function (evt) {
-      const isChecked = selectedPlayersBySection.has(card.id);
+      const isChecked = !selectedPlayersBySection.has(card.id);
       handleCheckBoxToggle(isChecked, selectedPlayersBySection, card);
     });
     eventMappers.add(card.id);
@@ -84,7 +84,7 @@ export const appendCheckBox = (rootElement, section, card) => {
   const checkBox = $(
     `<div id='${card.id}' class="price-filter player-select"><input type='checkbox' id='${card.id}_check' class="player-select" /></div>`
   );
-  if (selectedPlayersBySection.get(card.id)) {
+  if (!selectedPlayersBySection.get(card.id)) {
     checkBox.find("input").prop("checked", true);
   }
 
