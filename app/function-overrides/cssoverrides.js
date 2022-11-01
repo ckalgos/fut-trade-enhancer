@@ -397,6 +397,12 @@ export const overrideStyle = () => {
     }   
     .follow:hover {
       right: 0;
+    }
+    .playerOverview .preferredPosition{
+      font-size:9px;
+      border-radius:50%;
+      margin-bottom:5px;
+      background: cornflowerblue;
     }    
     .follow a {
       color: #fff !important;

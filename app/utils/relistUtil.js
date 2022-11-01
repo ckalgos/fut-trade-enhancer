@@ -1,7 +1,6 @@
 import { idFixedBINPrice, idFixedStartPrice } from "../app.constants";
 import { showPopUp } from "../function-overrides/popup-override";
 import {
-  clearSelectedPlayersBySection,
   getDataSource,
   getSelectedPlayersBySection,
   getValue,
@@ -16,6 +15,7 @@ import { sendUINotification } from "./notificationUtil";
 import { listForPrice } from "./sellUtil";
 import { t } from "../services/translate";
 import { fetchPrices } from "../services/datasource";
+import { moveToClub } from "../utils/clubMoveUtil";
 
 export const relistForFixedPrice = function (sectionHeader) {
   showPopUp(
@@ -66,6 +66,18 @@ export const relistCards = function (sectionHeader, price, startPrice) {
   handleTransferListItems(sectionHeader, price, startPrice);
 };
 
+export const moveCardsToClub = function (sectionHeader) {
+  if (
+    [
+      services.Localization.localize("tradepile.button.relistall"),
+      services.Localization.localize("infopanel.label.addplayer"),
+    ].indexOf(sectionHeader) >= 0
+  ) {
+    handleTransferListItems(sectionHeader, undefined, undefined, true);
+    return;
+  }
+};
+
 const getSelectedItems = (sectionHeader) => {
   const selectedPlayersBySection = getSelectedPlayersBySection(sectionHeader);
   return selectedPlayersBySection || new Map();
@@ -90,7 +102,12 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
   });
 };
 
-const handleTransferListItems = (sectionHeader, price, startPrice) => {
+const handleTransferListItems = (
+  sectionHeader,
+  price,
+  startPrice,
+  isClubMove
+) => {
   const selectedItems = getSelectedItems(sectionHeader, price, startPrice);
 
   services.Item.requestTransferItems().observe(
@@ -108,7 +125,9 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
           );
         });
 
-        listCards(unSoldItems, price, startPrice, true);
+        isClubMove
+          ? moveToClub(unSoldItems)
+          : listCards(unSoldItems, price, startPrice, true);
       } else if (
         sectionHeader ===
         services.Localization.localize("infopanel.label.addplayer")
@@ -118,7 +137,9 @@ const handleTransferListItems = (sectionHeader, price, startPrice) => {
             !selectedItems.has(item.id) && !item.getAuctionData().isValid()
           );
         });
-        listCards(availableItems, price, startPrice, true);
+        isClubMove
+          ? moveToClub(availableItems)
+          : listCards(availableItems, price, startPrice, true);
       }
     }
   );

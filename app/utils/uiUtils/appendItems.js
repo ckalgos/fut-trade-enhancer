@@ -119,7 +119,8 @@ export const appendRelistExternal = (
   externalCallBack,
   fixedCallBack
 ) => {
-  if (!rootElement.find(".relistwrapper").length) {
+  const wrapper = rootElement.find(".relistwrapper");
+  if (!wrapper.length) {
     rootElement.addClass("relistsection");
     const element = $("<div class='relistwrapper'></div>");
     element.append(
@@ -127,7 +128,9 @@ export const appendRelistExternal = (
     );
     element.append(generateSectionRelistBtn(fixedCallBack, t("fixed")).__root);
     rootElement.append(element);
+    return element;
   }
+  return wrapper[0];
 };
 
 export const appendDuplicateTag = (rootElement) => {

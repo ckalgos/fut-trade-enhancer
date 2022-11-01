@@ -24,6 +24,7 @@ import { tableItemTapOverride } from "./tableitemtap-override";
 import { sbcSubmitChallengeOverride } from "./sbcsavechallenge-override";
 import { sbcHomeOverride } from "./sbchome-override";
 import { transferResultOverride } from "./transferresult-override";
+import { playerItemRenderOverride } from "./playerItemRender-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -51,6 +52,7 @@ export const initOverrides = () => {
   sbcSubmitChallengeOverride();
   sbcHomeOverride();
   transferResultOverride();
+  playerItemRenderOverride();
 
   overrideStyle();
 };

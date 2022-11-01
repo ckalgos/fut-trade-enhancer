@@ -138,6 +138,14 @@ export const generateSendToTransferList = (callBack, classes) => {
   return createButton(
     services.Localization.localize("infopanel.label.sendTradePile"),
     callBack,
-    `btn-standard mini transferpile ${classes || ""}`
+    `btn-standard mini call-to-action ${classes || ""}`
+  );
+};
+
+export const generateSendToClub = (callBack, classes) => {
+  return createButton(
+    services.Localization.localize("infopanel.label.club"),
+    callBack,
+    `btn-standard mini call-to-action ${classes || ""}`
   );
 };
