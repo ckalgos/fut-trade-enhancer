@@ -19,6 +19,7 @@ import {
   idIncreaseSearchResult,
   idAutoSelectMin,
   isMarketAlertApp,
+  idOnlyBargain,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -152,6 +153,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             t("hideTransferFullInfo"),
             "idTransferFullPop" in enhancerSetting
               ? enhancerSetting["idTransferFullPop"]
+              : false
+          )}
+          ${generateToggleInput(
+            t("showOnlyBargain"),
+            { idOnlyBargain },
+            t("showOnlyBargainInfo"),
+            "idOnlyBargain" in enhancerSetting
+              ? enhancerSetting["idOnlyBargain"]
               : false
           )}
           ${generateToggleInput(

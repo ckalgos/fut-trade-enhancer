@@ -122,4 +122,8 @@ export const enLocales = {
   errSolvableSbcs: "Unable to Solvable Sbcs",
   increaseSearchResult: "Increase Search Result",
   increaseSearchResultInfo: "Increases Search Result Count From 21 To 51",
+  showOnlyBargain: "Show only Bargains",
+  showOnlyBargainInfo: "Show only cards lesser than FUTBIN in searches",
+  selectAll: "Select All",
+  deSelectAll: "Deselect All",
 };

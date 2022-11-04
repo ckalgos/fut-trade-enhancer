@@ -48,3 +48,4 @@ export const idAutoSelectMin = "elem_" + generateId(15);
 export const idSBCMarketSolution = "elem_" + generateId(15);
 export const isMarketAlertApp = !!window.ReactNativeWebView;
 export const idIncreaseSearchResult = "elem_" + generateId(15);
+export const idOnlyBargain = "elem_" + generateId(15);

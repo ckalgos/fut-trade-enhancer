@@ -121,4 +121,8 @@ export const arLocales = {
   errSolvableSbcs: "غير قادر على حل Sbcs",
   increaseSearchResult: "زيادة نتيجة البحث",
   increaseSearchResultInfo: "زيادة عدد نتائج البحث من 21 إلى 51",
+  showOnlyBargain: "إظهار الصفقات فقط",
+  showOnlyBargainInfo: "إظهار البطاقات الأقل من FUTBIN فقط في عمليات البحث",
+  selectAll: "حدد الكل",
+  deSelectAll: "إلغاء تحديد الكل",
 };

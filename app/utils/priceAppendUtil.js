@@ -36,7 +36,8 @@ export const appendCardPrice = async (listRows, section) => {
     !isFromPacks &&
     section !== "club" &&
     !sectionAuctionData.isSold() &&
-    !sectionAuctionData.isActiveTrade();
+    !sectionAuctionData.isActiveTrade() &&
+    !sectionAuctionData.isOutbid();
 
   for (const { data } of listRows) {
     cards.push(data);
@@ -108,6 +109,8 @@ const checkAndAppendBarginIndicator = (
     (markBidBargain && bidPrice && futBinPrice > bidPrice)
   ) {
     rootElement.addClass("futbinLessPrice");
+  } else if (enhancerSetting["idOnlyBargain"]) {
+    rootElement.addClass("hideResult");
   }
 };
 
@@ -181,7 +184,9 @@ export const appendSectionPrices = async (sectionData) => {
           appendSectionTotalPrices(
             sectionData.headerElement,
             dataSource.toUpperCase(),
-            prices
+            prices,
+            sectionData.isRelistSupported,
+            sectionData.sectionHeader
           );
         }, 100);
       }

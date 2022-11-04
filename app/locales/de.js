@@ -130,4 +130,9 @@ export const deLocales = {
   increaseSearchResult: "Suchergebnis erhöhen",
   increaseSearchResultInfo:
     "Erhöht die Anzahl der Suchergebnisse von 21 auf 51",
+  showOnlyBargain: "Nur Schnäppchen anzeigen",
+  showOnlyBargainInfo:
+    "In Suchen nur Karten anzeigen, die kleiner als FUTBIN sind",
+  selectAll: "Alle auswählen",
+  deSelectAll: "Alle abwählen",
 };

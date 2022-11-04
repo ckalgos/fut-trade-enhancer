@@ -1,16 +1,6 @@
+import { sendRequest } from "../utils/networkUtil";
 import { getValue, setValue } from "./repository";
 import { getUserPlatform } from "./user";
-const sendRequest = (url, payload, token = null) => {
-  return fetch(url, {
-    headers: {
-      Accept: "'application/json'",
-      "Content-Type": "'application/json'",
-      Authorization: token ? "Bearer " + token : null,
-    },
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
-};
 
 const generateToken = () => {
   const email = getValue("useremail");
@@ -74,10 +64,14 @@ const formRequestPayLoad = (listRows) => {
 
 export const saveSolution = (payload) => {
   return sendRequest(
-    atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vc2JjU29sdXRpb24="),
-    {
+    atob(
+      "aHR0cHM6Ly9pamVwZ2pwNnUzM3dobDd2N3dkd2RjbWM1cTBuendjdy5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3Mv"
+    ),
+    "POST",
+    `${Math.floor(+new Date())}_saveSolution`,
+    JSON.stringify({
       squad: payload,
-    }
+    })
   );
 };
 
@@ -85,10 +79,14 @@ export const trackMarketPrices = (items) => {
   const requestPayload = formRequestPayLoad(items);
   if (requestPayload.length && requestPayload.length <= 12) {
     return sendRequest(
-      atob("aHR0cHM6Ly9hcGkuZnV0aGVscGVycy5jb20vYXVjdGlvbg=="),
-      {
+      atob(
+        "aHR0cHM6Ly9xenlhZnN0ZWR1N3N0cDV3NTU2NW54bWZtaTB2bWZvbi5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M="
+      ),
+      "POST",
+      `${Math.floor(+new Date())}_trackMarketPrices`,
+      JSON.stringify({
         prices: requestPayload,
-      }
+      })
     );
   }
 };

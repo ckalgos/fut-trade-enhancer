@@ -33,7 +33,9 @@ const fetchPrices = async (items) => {
 
 export const fetchSolvableSbcs = async (payload) => {
   const response = await sendRequest(
-    "https://api.futhelpers.com/sbcSolver",
+    atob(
+      "aHR0cHM6Ly9sa3kzM2ljeDRsZ29tMzN2cG9vdWZ1ZXZmYTBzcWlhcS5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M="
+    ),
     "POST",
     `${Math.floor(+new Date())}_fetchSolvableSbcs`,
     {
@@ -45,7 +47,9 @@ export const fetchSolvableSbcs = async (payload) => {
 
 export const fetchSbcs = async (challengeId, payload) => {
   const response = await sendRequest(
-    `https://api.futhelpers.com/sbcsSolutions?sbcId=${challengeId}`,
+    `${atob(
+      "aHR0cHM6Ly9hZWlkeDcycXUzMzVqdzdtYmFjeTJwMnd2aTB0Z2lwZi5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M/c2JjSWQ9"
+    )}${challengeId}`,
     "POST",
     `${Math.floor(+new Date())}_sbcSolution_${challengeId}`,
     {

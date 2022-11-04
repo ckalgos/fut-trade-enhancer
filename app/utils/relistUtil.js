@@ -79,8 +79,13 @@ export const moveCardsToClub = function (sectionHeader) {
 };
 
 const getSelectedItems = (sectionHeader) => {
-  const selectedPlayersBySection = getSelectedPlayersBySection(sectionHeader);
-  return selectedPlayersBySection || new Map();
+  const selectedPlayersBySection =
+    getSelectedPlayersBySection(sectionHeader) || new Map();
+  const result = new Set();
+  for (const [key, { selected }] of selectedPlayersBySection) {
+    selected && result.add(key);
+  }
+  return result;
 };
 
 const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
@@ -93,9 +98,12 @@ const handleWatchListOrUnAssignedItems = (sectionHeader, price, startPrice) => {
     isWatchList ? "requestWatchedItems" : "requestUnassignedItems"
   ]().observe(this, async function (t, response) {
     let boughtItems = response.response.items;
+    boughtItems = boughtItems.filter(function (item) {
+      return selectedItems.has(item.id);
+    });
     if (isWatchList) {
       boughtItems = boughtItems.filter(function (item) {
-        return !selectedItems.has(item.id) && item.getAuctionData().isWon();
+        return item.getAuctionData().isWon();
       });
     }
     listCards(boughtItems, price, startPrice, false);
@@ -120,7 +128,7 @@ const handleTransferListItems = (
         let unSoldItems = response.response.items.filter(function (item) {
           var t = item.getAuctionData();
           return (
-            !selectedItems.has(item.id) &&
+            selectedItems.has(item.id) &&
             (t.isExpired() || (t.isValid() && t.isInactive()))
           );
         });
@@ -133,9 +141,7 @@ const handleTransferListItems = (
         services.Localization.localize("infopanel.label.addplayer")
       ) {
         const availableItems = response.response.items.filter(function (item) {
-          return (
-            !selectedItems.has(item.id) && !item.getAuctionData().isValid()
-          );
+          return selectedItems.has(item.id) && !item.getAuctionData().isValid();
         });
         isClubMove
           ? moveToClub(availableItems)

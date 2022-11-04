@@ -125,4 +125,9 @@ export const nlLocales = {
   errSolvableSbcs: "Kan Sbcs niet oplossen",
   increaseSearchResult: "Zoekresultaat verhogen",
   increaseSearchResultInfo: "Verhoogt het aantal zoekresultaten van 21 naar 51",
+  showOnlyBargain: "Toon alleen koopjes",
+  showOnlyBargainInfo:
+    "Toon alleen kaarten kleiner dan FUTBIN in zoekopdrachten",
+  selectAll: "Alles selecteren",
+  deSelectAll: "Deselecteer alles",
 };

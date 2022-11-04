@@ -134,4 +134,9 @@ export const frLocales = {
   increaseSearchResult: "Augmenter le résultat de la recherche",
   increaseSearchResultInfo:
     "Augmente le nombre de résultats de recherche de 21 à 51",
+  showOnlyBargain: "Afficher uniquement les bonnes affaires",
+  showOnlyBargainInfo:
+    "Afficher uniquement les cartes inférieures à FUTBIN dans les recherches",
+  selectAll: "Sélectionner tout",
+  deSelectAll: "Désélectionner tout",
 };

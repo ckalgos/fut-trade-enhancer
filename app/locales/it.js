@@ -130,4 +130,8 @@ export const itLocales = {
   increaseSearchResult: "Aumenta il risultato della ricerca",
   increaseSearchResultInfo:
     "Aumenta il conteggio dei risultati della ricerca da 21 a 51",
+  showOnlyBargain: "Mostra solo occasioni",
+  showOnlyBargainInfo: "Mostra solo carte inferiori a FUTBIN nelle ricerche",
+  selectAll: "Seleziona tutto",
+  deSelectAll: "Deseleziona tutto",
 };

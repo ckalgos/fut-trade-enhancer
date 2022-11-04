@@ -1,5 +1,9 @@
 import { idSectionPrices } from "../../app.constants";
-import { getSelectedPlayersBySection } from "../../services/repository";
+import { showPopUp } from "../../function-overrides/popup-override";
+import {
+  getCheckedSection,
+  getSelectedPlayersBySection,
+} from "../../services/repository";
 import { t } from "../../services/translate";
 import { getPercentDiff } from "../commonUtil";
 import { generateSectionRelistBtn } from "./generateElements";
@@ -58,33 +62,34 @@ export const appendPriceToSlot = (rootElement, price) => {
 };
 
 const handleCheckBoxToggle = (isChecked, selectedPlayersBySection, card) => {
-  if (!isChecked) {
-    selectedPlayersBySection.delete(card.id);
-    $(`#${card.id}_check`).prop("checked", true);
-  } else {
-    selectedPlayersBySection.set(card.id, card);
-    $(`#${card.id}_check`).prop("checked", false);
-  }
+  selectedPlayersBySection.set(card.id, { card, selected: isChecked });
+  $(`#${card.id}_check`).prop("checked", isChecked);
 };
 
 const eventMappers = new Set();
 
 export const appendCheckBox = (rootElement, section, card) => {
   const selectedPlayersBySection = getSelectedPlayersBySection(section);
+  if (!selectedPlayersBySection.get(card.id)) {
+    selectedPlayersBySection.set(card.id, { card, selected: true });
+  }
   rootElement.find(".player-select").remove();
 
   if (!eventMappers.has(card.id)) {
     $(document).on("click touchend", `#${card.id}`, function (evt) {
-      const isChecked = !selectedPlayersBySection.has(card.id);
+      const isChecked = !selectedPlayersBySection.get(card.id).selected;
       handleCheckBoxToggle(isChecked, selectedPlayersBySection, card);
     });
     eventMappers.add(card.id);
   }
 
   const checkBox = $(
-    `<div id='${card.id}' class="price-filter player-select"><input type='checkbox' id='${card.id}_check' class="player-select" /></div>`
+    `<div id='${card.id}' class="price-filter player-select">
+      <input type='checkbox' id='${card.id}_check' class="player-select" />
+    </div>`
   );
-  if (!selectedPlayersBySection.get(card.id)) {
+
+  if (selectedPlayersBySection.get(card.id).selected) {
     checkBox.find("input").prop("checked", true);
   }
 
@@ -94,10 +99,56 @@ export const appendCheckBox = (rootElement, section, card) => {
 export const appendSectionTotalPrices = (
   rootElement,
   dataSource,
-  { totalBid, totalBin, totalExternalPrice }
+  { totalBid, totalBin, totalExternalPrice },
+  isRelistSupported,
+  sectionHeader
 ) => {
   rootElement.parent().find(`#${idSectionPrices}`).remove();
-  const sectionPrices = $(`<div id=${idSectionPrices} class="ut-button-group">
+  const sectionId = sectionHeader.replace(/\s/g, "");
+  let checked = getCheckedSection(sectionHeader).get(sectionHeader);
+  const selectedPlayersBySection =
+    getSelectedPlayersBySection(sectionHeader) || new Map();
+
+  if (isRelistSupported && !eventMappers.has(sectionId)) {
+    $(document).on("click touchend", `#${sectionId}_wrapper`, function (evt) {
+      const sectionMap = getCheckedSection(sectionHeader);
+      const checked = !sectionMap.get(sectionHeader);
+      showPopUp(
+        [
+          { labelEnum: enums.UIDialogOptions.OK },
+          { labelEnum: enums.UIDialogOptions.CANCEL },
+        ],
+        checked ? t("selectAll") : t("deSelectAll"),
+        checked ? t("selectAll") : t("deSelectAll"),
+        (text) => {
+          text === 2
+            ? (() => {
+                sectionMap.set(sectionHeader, checked);
+                for (const [key, value] of selectedPlayersBySection) {
+                  value.selected = checked;
+                  $(`#${key}_check`).prop("checked", checked);
+                }
+                $(`#${sectionId}_check`).prop("checked", checked);
+              })()
+            : $(`#${sectionId}_check`).prop("checked", !checked);
+        }
+      );
+    });
+
+    eventMappers.add(sectionId);
+  }
+
+  const sectionPrices =
+    $(`<div id=${idSectionPrices} style="position:relative" class="ut-button-group">
+   ${
+     isRelistSupported
+       ? `<div id='${sectionId}_wrapper' class="price-filter player-select">
+      <input id='${sectionId}_check' ${
+           checked && "checked"
+         } type='checkbox' class="player-select" />
+    </div>`
+       : ""
+   }
     <h3 class="ut-group-button cta price-totals ut-store-reveal-modal-list-view--wallet">
     <span  class="ut-store-reveal-modal-list-view--coins">${t(
       "bidTotal"
