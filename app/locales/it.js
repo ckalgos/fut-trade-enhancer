@@ -134,4 +134,6 @@ export const itLocales = {
   showOnlyBargainInfo: "Mostra solo carte inferiori a FUTBIN nelle ricerche",
   selectAll: "Seleziona tutto",
   deSelectAll: "Deseleziona tutto",
+  showAlternatePostion: "Mostra posizioni alternative",
+  showAlternatePostionInfo: "Mostrerà informazioni sulle posizioni alternative",
 };

@@ -20,6 +20,7 @@ import {
   idAutoSelectMin,
   isMarketAlertApp,
   idOnlyBargain,
+  idShowAlternatePosition,
 } from "../app.constants";
 import { generateToggleInput } from "../utils/uiUtils/generateToggleInput";
 import { insertSettings } from "../utils/dbUtil";
@@ -209,6 +210,14 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             t("increaseSearchResultInfo"),
             "idIncreaseSearchResult" in enhancerSetting
               ? enhancerSetting["idIncreaseSearchResult"]
+              : false
+          )}
+          ${generateToggleInput(
+            t("showAlternatePostion"),
+            { idShowAlternatePosition },
+            t("showAlternatePostionInfo"),
+            "idShowAlternatePosition" in enhancerSetting
+              ? enhancerSetting["idShowAlternatePosition"]
               : false
           )}
           ${

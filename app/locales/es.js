@@ -138,4 +138,6 @@ export const esLocales = {
     "Mostrar solo tarjetas menores a FUTBIN en las búsquedas",
   selectAll: "Seleccionar todo",
   deSelectAll: "Deseleccionar todo",
+  showAlternatePosion: "Mostrar posiciones alternativas",
+  showAlternatePostionInfo: "Mostrará información de posiciones alternativas",
 };

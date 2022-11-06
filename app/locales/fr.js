@@ -139,4 +139,7 @@ export const frLocales = {
     "Afficher uniquement les cartes inférieures à FUTBIN dans les recherches",
   selectAll: "Sélectionner tout",
   deSelectAll: "Désélectionner tout",
+  showAlternatePostion: "Afficher les positions alternatives",
+  showAlternatePostionInfo:
+    "Affichera les informations sur les positions alternatives",
 };

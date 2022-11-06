@@ -130,4 +130,7 @@ export const nlLocales = {
     "Toon alleen kaarten kleiner dan FUTBIN in zoekopdrachten",
   selectAll: "Alles selecteren",
   deSelectAll: "Deselecteer alles",
+  showAlternatePostion: "Toon alternatieve posities",
+  showAlternatePostionInfo:
+    "Zal informatie over alternatieve posities weergeven",
 };

@@ -61,35 +61,67 @@ export const appendPriceToSlot = (rootElement, price) => {
     </div>`);
 };
 
-const handleCheckBoxToggle = (isChecked, selectedPlayersBySection, card) => {
-  selectedPlayersBySection.set(card.id, { card, selected: isChecked });
-  $(`#${card.id}_check`).prop("checked", isChecked);
+const handleCheckBoxToggle = (isChecked, selectedPlayersBySection, id) => {
+  selectedPlayersBySection.set(id, isChecked);
+  $(`#${id}_check`).prop("checked", isChecked);
 };
 
-const eventMappers = new Set();
+$(document).on("click touchend", ".player-select-check", function (evt) {
+  const id = parseInt(evt.currentTarget.id);
+  const section = evt.currentTarget.dataset.section;
+  const selectedPlayersBySection = getSelectedPlayersBySection(section);
+  const isChecked = !selectedPlayersBySection.get(id);
+  handleCheckBoxToggle(isChecked, selectedPlayersBySection, id);
+});
+
+$(document).on("click touchend", ".section-select-check", function (evt) {
+  const data = evt.currentTarget;
+  const isRelistSupported = data.dataset.issupported === "true";
+  if (!isRelistSupported) {
+    return;
+  }
+  const sectionId = `#${evt.currentTarget.id}`.replace("wrapper", "check");
+  const sectionHeader = data.dataset.header;
+  const sectionMap = getCheckedSection(sectionHeader);
+  const checked = !sectionMap.get(sectionHeader);
+  showPopUp(
+    [
+      { labelEnum: enums.UIDialogOptions.OK },
+      { labelEnum: enums.UIDialogOptions.CANCEL },
+    ],
+    checked ? t("selectAll") : t("deSelectAll"),
+    checked ? t("selectAll") : t("deSelectAll"),
+    (text) => {
+      text === 2
+        ? (() => {
+            sectionMap.set(sectionHeader, checked);
+            const selectedPlayersBySection =
+              getSelectedPlayersBySection(sectionHeader) || new Map();
+            for (const [key] of selectedPlayersBySection) {
+              selectedPlayersBySection.set(key, checked);
+              $(`#${key}_check`).prop("checked", checked);
+            }
+            $(sectionId).prop("checked", checked);
+          })()
+        : $(sectionId).prop("checked", !checked);
+    }
+  );
+});
 
 export const appendCheckBox = (rootElement, section, card) => {
   const selectedPlayersBySection = getSelectedPlayersBySection(section);
-  if (!selectedPlayersBySection.get(card.id)) {
-    selectedPlayersBySection.set(card.id, { card, selected: true });
+  if (selectedPlayersBySection.get(card.id) === undefined) {
+    selectedPlayersBySection.set(card.id, true);
   }
   rootElement.find(".player-select").remove();
 
-  if (!eventMappers.has(card.id)) {
-    $(document).on("click touchend", `#${card.id}`, function (evt) {
-      const isChecked = !selectedPlayersBySection.get(card.id).selected;
-      handleCheckBoxToggle(isChecked, selectedPlayersBySection, card);
-    });
-    eventMappers.add(card.id);
-  }
-
   const checkBox = $(
-    `<div id='${card.id}' class="price-filter player-select">
+    `<div id='${card.id}' data-section='${section}' class="price-filter player-select player-select-check">
       <input type='checkbox' id='${card.id}_check' class="player-select" />
     </div>`
   );
 
-  if (selectedPlayersBySection.get(card.id).selected) {
+  if (selectedPlayersBySection.get(card.id)) {
     checkBox.find("input").prop("checked", true);
   }
 
@@ -106,43 +138,12 @@ export const appendSectionTotalPrices = (
   rootElement.parent().find(`#${idSectionPrices}`).remove();
   const sectionId = sectionHeader.replace(/\s/g, "");
   let checked = getCheckedSection(sectionHeader).get(sectionHeader);
-  const selectedPlayersBySection =
-    getSelectedPlayersBySection(sectionHeader) || new Map();
-
-  if (isRelistSupported && !eventMappers.has(sectionId)) {
-    $(document).on("click touchend", `#${sectionId}_wrapper`, function (evt) {
-      const sectionMap = getCheckedSection(sectionHeader);
-      const checked = !sectionMap.get(sectionHeader);
-      showPopUp(
-        [
-          { labelEnum: enums.UIDialogOptions.OK },
-          { labelEnum: enums.UIDialogOptions.CANCEL },
-        ],
-        checked ? t("selectAll") : t("deSelectAll"),
-        checked ? t("selectAll") : t("deSelectAll"),
-        (text) => {
-          text === 2
-            ? (() => {
-                sectionMap.set(sectionHeader, checked);
-                for (const [key, value] of selectedPlayersBySection) {
-                  value.selected = checked;
-                  $(`#${key}_check`).prop("checked", checked);
-                }
-                $(`#${sectionId}_check`).prop("checked", checked);
-              })()
-            : $(`#${sectionId}_check`).prop("checked", !checked);
-        }
-      );
-    });
-
-    eventMappers.add(sectionId);
-  }
 
   const sectionPrices =
     $(`<div id=${idSectionPrices} style="position:relative" class="ut-button-group">
    ${
      isRelistSupported
-       ? `<div id='${sectionId}_wrapper' class="price-filter player-select">
+       ? `<div id='${sectionId}_wrapper' data-issupported='${isRelistSupported}' data-header='${sectionHeader}' class="price-filter player-select section-select-check">
       <input id='${sectionId}_check' ${
            checked && "checked"
          } type='checkbox' class="player-select" />

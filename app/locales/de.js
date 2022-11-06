@@ -135,4 +135,6 @@ export const deLocales = {
     "In Suchen nur Karten anzeigen, die kleiner als FUTBIN sind",
   selectAll: "Alle auswählen",
   deSelectAll: "Alle abwählen",
+  showAlternatePostion: "Alternative Positionen anzeigen",
+  showAlternatePostionInfo: "Zeigt Informationen zu alternativen Positionen",
 };

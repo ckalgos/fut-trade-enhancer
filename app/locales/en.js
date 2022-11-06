@@ -126,4 +126,6 @@ export const enLocales = {
   showOnlyBargainInfo: "Show only cards lesser than FUTBIN in searches",
   selectAll: "Select All",
   deSelectAll: "Deselect All",
+  showAlternatePostion: "Show Alternate Positions",
+  showAlternatePostionInfo: "Will show Alternate Positions Info",
 };

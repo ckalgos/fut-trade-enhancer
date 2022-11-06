@@ -125,4 +125,6 @@ export const arLocales = {
   showOnlyBargainInfo: "إظهار البطاقات الأقل من FUTBIN فقط في عمليات البحث",
   selectAll: "حدد الكل",
   deSelectAll: "إلغاء تحديد الكل",
+  showAlternatePostion: "إظهار المناصب البديلة",
+  showAlternatePostionInfo: "سوف يعرض معلومات المناصب البديلة",
 };

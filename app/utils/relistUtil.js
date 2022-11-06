@@ -82,7 +82,7 @@ const getSelectedItems = (sectionHeader) => {
   const selectedPlayersBySection =
     getSelectedPlayersBySection(sectionHeader) || new Map();
   const result = new Set();
-  for (const [key, { selected }] of selectedPlayersBySection) {
+  for (const [key, selected] of selectedPlayersBySection) {
     selected && result.add(key);
   }
   return result;
