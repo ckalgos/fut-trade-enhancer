@@ -102,8 +102,6 @@ export const arLocales = {
   showCalcMinBinInfo: "قم بتبديلها لإظهار خيار حساب Min BIN على لوحة المشغل",
   sendToTransferListInfo: "سيحاول الروبوت إرسال حتى العناصر إلى قائمة النقل",
   activeSquadMemberErr: "غير قادر على الحصول على لاعبي الفريق النشطين",
-  increaseActiveList: "تجاوز حد القائمة النشطة",
-  increaseActiveListInfo: "زيادة عدد القوائم النشطة إلى 100",
   disablePackAnimation: "Disable Pack Animation",
   disablePackAnimationInfo: "تعطيل الرسوم المتحركة أثناء فتح الحزمة",
   errInsufficientCredits: "أرصدة غير كافية لشراء الحزمة",
@@ -113,7 +111,7 @@ export const arLocales = {
   autoSelectLowest: "تحديد البطاقة الأقل تلقائيًا",
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "افحص لاعبي النادي للعثور على sbcs قابلة للحل",
-  solvableUnAvailable: "الميزة متاحة فقط في تطبيق تنبيه السوق",
+  solvableUnAvailable: "استخدم تطبيق Market Alert لعرض نتيجة الفحص",
   solveInfo: "سيقوم البوت بفحص ناديك للعثور على sbcs الذي يمكن إكماله",
   gatherChallengeInfo: "جمع معلومات عن تحديات التحدي",
   gatherSquadInfo: "جمع لاعبي النادي",
@@ -127,4 +125,5 @@ export const arLocales = {
   deSelectAll: "إلغاء تحديد الكل",
   showAlternatePostion: "إظهار المناصب البديلة",
   showAlternatePostionInfo: "سوف يعرض معلومات المناصب البديلة",
+  levelError: `هذه الميزة متاحة فقط لمستخدمي مستوى" Enhancer Gold ". انتقل إلى علامة التبويب" Store "إذا كنت تريد الترقية`,
 };

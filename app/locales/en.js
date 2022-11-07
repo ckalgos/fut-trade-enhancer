@@ -103,8 +103,6 @@ export const enLocales = {
     "Toggle it on to show Calculate Min BIN option on player panel",
   sendToTransferListInfo: "Bot will try to send items to Transfer list",
   activeSquadMemberErr: "Unable to get active squad players",
-  increaseActiveList: "Bypass Active Listing Limit",
-  increaseActiveListInfo: "Increases Number of Active Listing to 100",
   disablePackAnimation: "Disable Pack Animation",
   disablePackAnimationInfo: "Disables animation during pack opening",
   errInsufficientCredits: "Insufficient credits to purchase pack",
@@ -114,9 +112,9 @@ export const enLocales = {
   autoSelectLowest: "Automatically Select Lowest Card",
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scan your club players to find solvable sbcs",
-  solvableUnAvailable: "The feature is available only on Market Alert App",
-  solveInfo: "Bot will scan you club to find what sbcs can be completed",
-  gatherChallengeInfo: "Gathering Challanges Info",
+  solvableUnAvailable: "Use the Market Alert App to view the scan result",
+  solveInfo: "Bot will scan your club to find what sbcs can be completed",
+  gatherChallengeInfo: "Gathering Challenges Info",
   gatherSquadInfo: "Gathering Club Players",
   fetchingSolvableSbcs: "Finding Solvable Sbcs",
   errSolvableSbcs: "Unable to Solvable Sbcs",
@@ -128,4 +126,6 @@ export const enLocales = {
   deSelectAll: "Deselect All",
   showAlternatePostion: "Show Alternate Positions",
   showAlternatePostionInfo: "Will show Alternate Positions Info",
+  levelError:
+    "This feature is only available to 'Enhancer Gold' level users. Go to 'Store' Tab if you want to upgrade",
 };

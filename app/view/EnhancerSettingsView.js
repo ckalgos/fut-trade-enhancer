@@ -12,7 +12,6 @@ import {
   idTransferFullPop,
   idShowSquadPrice,
   idShowCalcMinBin,
-  idIncreaseActiveListing,
   idDisablePackAnimation,
   idExternalDataSource,
   idAutoBuyMinGlobal,
@@ -179,15 +178,7 @@ EnhancerSettingsView.prototype._generate = function _generate() {
             "idShowCalcMinBin" in enhancerSetting
               ? enhancerSetting["idShowCalcMinBin"]
               : false
-          )}
-          ${generateToggleInput(
-            t("increaseActiveList"),
-            { idIncreaseActiveListing },
-            t("increaseActiveListInfo"),
-            "idIncreaseActiveListing" in enhancerSetting
-              ? enhancerSetting["idIncreaseActiveListing"]
-              : false
-          )}           
+          )}     
           ${generateToggleInput(
             t("disablePackAnimation"),
             { idDisablePackAnimation },

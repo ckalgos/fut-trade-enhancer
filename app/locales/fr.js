@@ -109,8 +109,6 @@ export const frLocales = {
   sendToTransferListInfo:
     "Le bot essaiera d'envoyer jusqu'à éléments à la liste de transfert",
   activeSquadMemberErr: "Impossible d'obtenir des joueurs d'équipe actifs",
-  increaseActiveList: " Contourner la limite d'inscriptions actives",
-  increaseActiveListInfo: "Augmente le nombre d'annonces actives à 100",
   disablePackAnimation: "Désactiver l'animation de pack",
   disablePackAnimationInfo: "Désactive l'animation lors de l'ouverture du pack",
   errInsufficientCredits: "Crédits insuffisants pour acheter le pack",
@@ -123,7 +121,7 @@ export const frLocales = {
   scanClubSbc:
     "Scannez les joueurs de votre club pour trouver des sbcs résolubles",
   solvableUnAvailable:
-    "La fonctionnalité n'est disponible que dans l'application Market Alert",
+    "Utilisez l'application Market Alert pour afficher le résultat de l'analyse",
   solveInfo:
     "Le bot va scanner votre club pour trouver les sbcs qui peuvent être complétés",
   gatherChallengeInfo:
@@ -142,4 +140,6 @@ export const frLocales = {
   showAlternatePostion: "Afficher les positions alternatives",
   showAlternatePostionInfo:
     "Affichera les informations sur les positions alternatives",
+  levelError:
+    "Cette fonctionnalité n'est disponible que pour les utilisateurs de niveau 'Enhancer Gold'. Accédez à l'onglet 'Store' si vous souhaitez mettre à niveau",
 };

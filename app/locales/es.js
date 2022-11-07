@@ -108,8 +108,6 @@ export const esLocales = {
   sendToTransferListInfo:
     "El bot intentará enviar hasta elementos a la lista de transferencias",
   activeSquadMemberErr: "No se pueden obtener jugadores activos del equipo",
-  increaseActiveList: "Omitir límite de listado activo",
-  increaseActiveListInfo: "Aumenta el Número de Listados Activos a 100",
   disablePackAnimation: "Desactivar animación del paquete",
   disablePackAnimationInfo:
     "Deshabilita la animación durante la apertura del paquete",
@@ -123,7 +121,7 @@ export const esLocales = {
   scanClubSbc:
     "Escanee los jugadores de su club para encontrar SBC solucionables",
   solvableUnAvailable:
-    "La función solo está disponible en la aplicación Market Alert",
+    "Use la aplicación Market Alert para ver el resultado del escaneo",
   solveInfo:
     "El bot escaneará su club para encontrar SBC que se puedan completar",
   gatherChallengeInfo: "Recopilar información sobre Desafíos Desafíos",
@@ -140,4 +138,6 @@ export const esLocales = {
   deSelectAll: "Deseleccionar todo",
   showAlternatePosion: "Mostrar posiciones alternativas",
   showAlternatePostionInfo: "Mostrará información de posiciones alternativas",
+  levelError:
+    "Esta función solo está disponible para usuarios de nivel 'Enhancer Gold'. Vaya a la pestaña 'Tienda' si desea actualizar",
 };

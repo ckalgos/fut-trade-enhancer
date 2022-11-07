@@ -13,6 +13,9 @@ export const initListeners = () => {
           callBack && callBack(res);
           return setValue(identifier, null);
         }
+        case "accessSet": {
+          return setValue("userAccess", data.response);
+        }
       }
     },
     true

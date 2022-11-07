@@ -107,8 +107,6 @@ export const deLocales = {
   sendToTransferListInfo:
     "Der Bot versucht, bis zu Elemente an die Übertragungsliste zu senden",
   activeSquadMemberErr: "Aktive Squad-Spieler konnten nicht abgerufen werden",
-  increaseActiveList: "Limit für aktive Einträge umgehen",
-  increaseActiveListInfo: "Erhöht die Anzahl aktiver Einträge auf 100",
   disablePackAnimation: "Pack-Animation deaktivieren",
   disablePackAnimationInfo:
     "Deaktiviert die Animation während des Pack-Öffnens",
@@ -120,7 +118,8 @@ export const deLocales = {
   autoSelectLowest: "Automatisch niedrigste Karte auswählen",
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scannen Sie Ihre Vereinsspieler, um lösbare SBCs zu finden",
-  solvableUnAvailable: "Funktion ist nur in der Market Alert App verfügbar",
+  solvableUnAvailable:
+    "Verwenden Sie die Market Alert App, um das Scanergebnis anzuzeigen",
   solveInfo:
     "Der Bot wird Ihren Club scannen, um SBCs zu finden, die abgeschlossen werden können",
   gatherChallengeInfo: "Informationen zu Herausforderungen sammeln",
@@ -137,4 +136,6 @@ export const deLocales = {
   deSelectAll: "Alle abwählen",
   showAlternatePostion: "Alternative Positionen anzeigen",
   showAlternatePostionInfo: "Zeigt Informationen zu alternativen Positionen",
+  levelError:
+    "Diese Funktion ist nur für Benutzer der Stufe 'Enhancer Gold' verfügbar. Gehen Sie zur Registerkarte 'Store', wenn Sie ein Upgrade durchführen möchten",
 };

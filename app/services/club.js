@@ -63,6 +63,7 @@ export const getNonActiveSquadPlayers = async function (isTradable) {
 
 export const getAllClubPlayers = function (filterLoaned, playerId) {
   return new Promise((resolve) => {
+    services.Club.clubDao.resetStatsCache();
     services.Club.getStats();
     const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;
     if (playerId) {

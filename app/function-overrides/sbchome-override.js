@@ -6,10 +6,12 @@ import {
   getCurrentViewController,
   hideLoader,
   showLoader,
+  wait,
 } from "../utils/commonUtil";
 import { sendUINotification } from "../utils/notificationUtil";
 import { showPopUp } from "./popup-override";
 import { isMarketAlertApp } from "../app.constants";
+import { getValue } from "../services/repository";
 
 export const sbcHomeOverride = () => {
   const populateTiles = UTSBCHubView.prototype.populateTiles;
@@ -32,21 +34,19 @@ export const sbcHomeOverride = () => {
       challange.name === services.Localization.localize("sbc.categories.all")
     ) {
       getSquadPlayerIds();
-      if (false) {
-        const solveSbcTile = new UTSBCSetTileView();
-        solveSbcTile.init();
-        solveSbcTile.title = t("findSolvableSbcs");
-        solveSbcTile.__tileContent.textContent = t("scanClubSbc");
-        solveSbcTile._progressBar.setProgress(100);
-        solveSbcTile.addTarget(
-          this,
-          () => findSolvableSbcsPopUp(set),
-          EventType.TAP
-        );
-        this.sbcSetTiles.unshift(solveSbcTile);
-        this.__sbcSetTiles.prepend(solveSbcTile.getRootElement());
-        solveSbcTile.render();
-      }
+      const solveSbcTile = new UTSBCSetTileView();
+      solveSbcTile.init();
+      solveSbcTile.title = t("findSolvableSbcs");
+      solveSbcTile.__tileContent.textContent = t("scanClubSbc");
+      solveSbcTile._progressBar.setProgress(100);
+      solveSbcTile.addTarget(
+        this,
+        () => findSolvableSbcsPopUp(set),
+        EventType.TAP
+      );
+      this.sbcSetTiles.unshift(solveSbcTile);
+      this.__sbcSetTiles.prepend(solveSbcTile.getRootElement());
+      solveSbcTile.render();
     }
     return result;
   };
@@ -58,9 +58,12 @@ export const sbcHomeOverride = () => {
         { labelEnum: enums.UIDialogOptions.CANCEL },
       ],
       t("findSolvableSbcs"),
-      !isMarketAlertApp ? t("solvableUnAvailable") : t("solveInfo"),
+      t("solveInfo"),
       (text) => {
-        text === 2 && isMarketAlertApp && findSolvableSbcs(set);
+        text === 2 &&
+          (!isMarketAlertApp
+            ? fakeFindSbcs("solvableUnAvailable")
+            : findSolvableSbcs(set));
       }
     );
   };
@@ -68,6 +71,10 @@ export const sbcHomeOverride = () => {
   const findSolvableSbcs = async (set) => {
     showLoader();
     try {
+      const accessLevel = getValue("userAccess");
+      if (!accessLevel || accessLevel === "tradeEnhancer") {
+        return fakeFindSbcs("levelError");
+      }
       sendUINotification(t("gatherChallengeInfo"));
       const challenges = await getAllChallanges();
       sendUINotification(t("gatherSquadInfo"));
@@ -122,6 +129,18 @@ export const sbcHomeOverride = () => {
     } catch (err) {
       sendUINotification(t("errSolvableSbcs"), UINotificationType.NEGATIVE);
     }
+    hideLoader();
+  };
+
+  const fakeFindSbcs = async (err) => {
+    showLoader();
+    sendUINotification(t("gatherChallengeInfo"));
+    await wait(3);
+    sendUINotification(t("gatherSquadInfo"));
+    await wait(3);
+    sendUINotification(t("fetchingSolvableSbcs"));
+    await wait(5);
+    sendUINotification(t(err), UINotificationType.NEGATIVE);
     hideLoader();
   };
 
