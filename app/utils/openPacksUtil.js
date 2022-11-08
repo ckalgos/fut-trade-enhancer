@@ -1,8 +1,9 @@
 import {
+  idPackCommonPlayersAction,
   idPackDuplicatesAction,
   idPackNonPlayersAction,
   idPackOpenCredits,
-  idPackPlayersAction,
+  idPackRarePlayersAction,
   idPacksCount,
 } from "../app.constants";
 import { formatDataSource, hideLoader, showLoader, wait } from "./commonUtil";
@@ -37,7 +38,11 @@ const setUpType = () => {
     },
   ];
   return [
-    { id: idPackPlayersAction, label: t("players"), actions: defaultOptions },
+    { id: idPackCommonPlayersAction, label: t("commonPlayers"), actions: defaultOptions },
+	{
+	  id: idPackRarePlayersAction, 
+	  label: t("rarePlayers"), 
+	  actions: defaultOptions },
     {
       id: idPackNonPlayersAction,
       label: t("nonPlayers"),
@@ -91,12 +96,14 @@ ${label}
 const getPopUpValues = () => {
   const noOfPacks = parseInt($(`#${idPacksCount}`).val()) || 3;
   const credits = $(`#${idPackOpenCredits}`).val() || GameCurrency.COINS;
-  const playersHandler = $(`#${idPackPlayersAction}`).val();
+  const commonplayersHandler = $(`#${idPackCommonPlayersAction}`).val();
+  const rareplayersHandler = $((`#${idPackRarePlayersAction}`).val();
   const nonPlayersHandler = $(`#${idPackNonPlayersAction}`).val();
   const duplicateHandler = $(`#${idPackDuplicatesAction}`).val();
   return {
     noOfPacks,
-    playersHandler,
+    commonplayersHandler,
+	rareplayersHandler,
     nonPlayersHandler,
     duplicateHandler,
     credits,
@@ -121,12 +128,20 @@ const buyRequiredNoOfPacks = async (pack, popUpValues) => {
   hideLoader();
 };
 
-const handleNonDuplicatePlayers = (items, action) => {
-  const nonDuplicatePlayersItems = items.filter(
-    (item) => !item.isDuplicate() && item.isPlayer()
+const handleNonDuplicateCommonPlayers = (items, action) => {
+  const nonDuplicateCommonPlayersItems = items.filter(
+    (item) => !item.isDuplicate() && item.isPlayer() && item.isCommon()
   );
-  sendUINotification(t("handlingNonDuplicatePlayers"));
-  return handleItems(nonDuplicatePlayersItems, action);
+  sendUINotification(t("handlingNonDuplicateCommonPlayers"));
+  return handleItems(nonDuplicateCommonPlayersItems, action);
+};
+
+const handleNonDuplicateRarePlayers = (items, action) => {
+  const nonDuplicateRarePlayersItems = items.filter(
+    (item) => !item.isDuplicate() && item.isPlayer() && item.isRare()
+  );
+  sendUINotification(t("handlingNonDuplicateRarePlayers"));
+  return handleItems(nonDuplicateRarePlayersItems, action);
 };
 
 const handleNonDuplicateNonPlayers = (items, action) => {
