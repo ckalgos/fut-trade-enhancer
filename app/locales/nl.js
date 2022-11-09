@@ -134,4 +134,7 @@ export const nlLocales = {
     "Zal informatie over alternatieve posities weergeven",
   levelError:
     "Deze functie is alleen beschikbaar voor gebruikers van 'Enhancer Gold'-niveau. Ga naar het tabblad 'Store' als u wilt upgraden",
+  generateSolution: "Genereer Oplossing",
+  generateSolutionInfo:
+    "Op basis van de gegeven SBC-vereisten zal de bot proberen een unieke oplossing te genereren die nog niet eerder is gebruikt",
 };

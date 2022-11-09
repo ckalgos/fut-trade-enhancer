@@ -59,6 +59,17 @@ export const fetchSbcs = async (challengeId, payload) => {
   return JSON.parse(response);
 };
 
+export const fetchUniqueSbc = async (challengeId) => {
+  const response = await sendRequest(
+    `${atob(
+      "aHR0cHM6Ly9rZWV5bGRmdWxmaHQ1NjNoZ3N3ZHJxamlnZTBudnR2ZS5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M/c2JjSWQ9"
+    )}${challengeId}`,
+    "GET",
+    `${Math.floor(+new Date())}_fetchUniqueSbc_${challengeId}`
+  );
+  return JSON.parse(response);
+};
+
 const fetchPricesFromServer = async (defIds, result) => {
   const idsArray = Array.from(defIds);
   const platform = getUserPlatform();

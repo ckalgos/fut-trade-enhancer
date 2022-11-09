@@ -138,4 +138,7 @@ export const deLocales = {
   showAlternatePostionInfo: "Zeigt Informationen zu alternativen Positionen",
   levelError:
     "Diese Funktion ist nur für Benutzer der Stufe 'Enhancer Gold' verfügbar. Gehen Sie zur Registerkarte 'Store', wenn Sie ein Upgrade durchführen möchten",
+  generateSolution: "Lösung generieren",
+  generateSolutionInfo:
+    "Basierend auf den gegebenen SBC-Anforderungen wird der Bot versuchen, eine eindeutige Lösung zu generieren, die zuvor noch nicht verwendet wurde",
 };

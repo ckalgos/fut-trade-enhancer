@@ -22,16 +22,35 @@ import {
   idSBCFUTBINSolution,
   idSBCMarketSolution,
   isMarketAlertApp,
+  idGenerateSBCSolution,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import { getDataSource, getValue, setValue } from "../services/repository";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 import { t } from "../services/translate";
 import { fetchPrices } from "../services/datasource";
-import { fetchSbcs } from "../services/datasource/marketAlert";
+import { fetchSbcs, fetchUniqueSbc } from "../services/datasource/marketAlert";
 
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
+
+  const squadActionInit = UTSquadActionsView.prototype.init;
+  UTSquadActionsView.prototype.init = function (...args) {
+    const response = squadActionInit.call(this, ...args);
+    const showBuy = this.eventDelegates[0]._inSquadContext;
+    showBuy &&
+      $(
+        generateButton(
+          idBuySBCPlayers,
+          t("buyMissingPlayers"),
+          () => {
+            buyPlayersPopUp();
+          },
+          "call-to-action"
+        )
+      ).insertAfter($(this._deleteBtn.__root));
+    return response;
+  };
 
   $(document).on(
     {
@@ -124,6 +143,29 @@ export const sbcViewOverride = () => {
       }
     });
   };
+};
+
+const generateUniqueSolution = async () => {
+  showPopUp(
+    [
+      { labelEnum: enums.UIDialogOptions.OK },
+      { labelEnum: enums.UIDialogOptions.CANCEL },
+    ],
+    t("generateSolution"),
+    t("generateSolutionInfo"),
+    (text) => {
+      text === 2 &&
+        (async () => {
+          const challengeId = getValue("squadId");
+          const {
+            sbc: { players },
+          } = await fetchUniqueSbc(challengeId);
+          if (players && players.length) {
+            await fillMarketAlertSbc(players);
+          }
+        })();
+    }
+  );
 };
 
 const fillMarketAlertSbc = async (players) => {

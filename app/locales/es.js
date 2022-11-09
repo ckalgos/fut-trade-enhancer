@@ -140,4 +140,7 @@ export const esLocales = {
   showAlternatePostionInfo: "Mostrará información de posiciones alternativas",
   levelError:
     "Esta función solo está disponible para usuarios de nivel 'Enhancer Gold'. Vaya a la pestaña 'Tienda' si desea actualizar",
+  generateSolution: "Generar Solución",
+  generateSolutionInfo:
+    "Según los requisitos de SBC dados, el bot intentará generar una solución única que no se haya usado antes",
 };

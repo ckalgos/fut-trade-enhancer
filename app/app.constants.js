@@ -49,3 +49,4 @@ export const isMarketAlertApp = !!window.ReactNativeWebView;
 export const idIncreaseSearchResult = "elem_" + generateId(15);
 export const idShowAlternatePosition = "elem_" + generateId(15);
 export const idOnlyBargain = "elem_" + generateId(15);
+export const idGenerateSBCSolution = "elem_" + generateId(15);

@@ -128,4 +128,7 @@ export const enLocales = {
   showAlternatePostionInfo: "Will show Alternate Positions Info",
   levelError:
     "This feature is only available to 'Enhancer Gold' level users. Go to 'Store' Tab if you want to upgrade",
+  generateSolution: "Generate Solution",
+  generateSolutionInfo:
+    "Based on the given SBC requirements bot will try to generate a unique solution not used before",
 };

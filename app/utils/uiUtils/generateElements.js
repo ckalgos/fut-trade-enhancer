@@ -145,7 +145,19 @@ export const generateSendToTransferList = (callBack, classes) => {
 export const generateSendToClub = (callBack, classes) => {
   return createButton(
     services.Localization.localize("infopanel.label.club"),
-    callBack,
+    () => {
+      showPopUp(
+        [
+          { labelEnum: enums.UIDialogOptions.YES },
+          { labelEnum: enums.UIDialogOptions.CANCEL },
+        ],
+        services.Localization.localize("infopanel.label.club"),
+        services.Localization.localize("infopanel.label.club"),
+        (text) => {
+          text === 0 && callBack();
+        }
+      );
+    },
     `btn-standard mini call-to-action ${classes || ""}`
   );
 };

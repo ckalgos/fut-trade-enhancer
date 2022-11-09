@@ -126,4 +126,7 @@ export const arLocales = {
   showAlternatePostion: "إظهار المناصب البديلة",
   showAlternatePostionInfo: "سوف يعرض معلومات المناصب البديلة",
   levelError: `هذه الميزة متاحة فقط لمستخدمي مستوى" Enhancer Gold ". انتقل إلى علامة التبويب" Store "إذا كنت تريد الترقية`,
+  generateSolution: "توليد الحل",
+  generateSolutionInfo:
+    "بناءً على متطلبات SBC المحددة ، سيحاول الروبوت إنشاء حل فريد لم يتم استخدامه من قبل",
 };
