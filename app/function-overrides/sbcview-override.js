@@ -84,7 +84,7 @@ export const sbcViewOverride = () => {
         const players = $(`#${idSBCMarketSolution} option`)
           .filter(":selected")
           .val();
-        if (!players)
+        if (players)
           fillMarketAlertSbc(players.split(",").map((id) => parseInt(id)));
       },
     },

@@ -1,4 +1,5 @@
 import { idSession, isMarketAlertApp } from "../app.constants";
+import { sendUINotification } from "../utils/notificationUtil";
 import { getValue, setValue } from "./repository";
 
 export const initListeners = () => {
@@ -14,11 +15,21 @@ export const initListeners = () => {
           return setValue(identifier, null);
         }
         case "accessSet": {
+          sendUINotification(
+            `User access level set to ${
+              data.response === "adBlocked"
+                ? "Enhancer Gold"
+                : "Enhancer Silver"
+            }`
+          );
           return setValue("userAccess", data.response);
         }
       }
     },
     true
+  );
+  window.ReactNativeWebView.postMessage(
+    JSON.stringify({ type: "enhancerInit" })
   );
 };
 
