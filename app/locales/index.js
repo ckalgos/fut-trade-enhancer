@@ -5,6 +5,7 @@ import { esLocales } from "./es";
 import { frLocales } from "./fr";
 import { itLocales } from "./it";
 import { nlLocales } from "./nl";
+import { ptLocales } from "./pt";
 
 export default {
   ar: arLocales,
@@ -14,4 +15,5 @@ export default {
   fr: frLocales,
   it: itLocales,
   nl: nlLocales,
+  pt: ptLocales,
 };
