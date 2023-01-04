@@ -7,7 +7,7 @@ import {
   wait,
   getCurrentViewController,
 } from "../utils/commonUtil";
-import {
+import futbin, {
   getAllSBCSForChallenge,
   getSbcPlayersInfo,
 } from "../services/datasource/futbin";
@@ -156,13 +156,75 @@ const generateUniqueSolution = async () => {
     (text) => {
       text === 2 &&
         (async () => {
-          const challengeId = getValue("squadId");
-          const {
-            sbc: { players },
-          } = await fetchUniqueSbc(challengeId);
-          if (players && players.length) {
-            await fillMarketAlertSbc(players);
+          showLoader();
+          if (!isMarketAlertApp) {
+            await wait(3);
+            sendUINotification(
+              t("solvableUnAvailable"),
+              UINotificationType.NEGATIVE
+            );
+            return hideLoader();
           }
+          const accessLevel = getValue("userAccess");
+          if (!accessLevel || accessLevel === "tradeEnhancer") {
+            await wait(3);
+            sendUINotification(t("levelError"), UINotificationType.NEGATIVE);
+            return hideLoader();
+          }
+          const challengeId = getValue("squadId");
+          try {
+            const solutions = await fetchUniqueSbc(challengeId);
+
+            const solutionPlayers = solutions.reduce((acc, { players }) => {
+              players.forEach((curr) => {
+                acc.set(curr, { definitionId: curr, isPlayer: () => true });
+              });
+              return acc;
+            }, new Map());
+
+            await futbin.fetchPrices(solutionPlayers.values());
+
+            const sbcs = solutions.map((sbc) => {
+              const price = (sbc.players || []).reduce((acc, curr) => {
+                acc += (getValue(`${curr}_futbin_price`) || { price: 0 }).price;
+                return acc;
+              }, 0);
+              sbc.price = price;
+              return sbc;
+            });
+            const cheapestFutSBC = parseInt(getValue("cheapestFutSBC") || 0);
+            let cheaperThanFutbin = true;
+            let filteredSbcs = sbcs.filter(
+              ({ price }) => price < cheapestFutSBC
+            );
+            if (!filteredSbcs.length) {
+              filteredSbcs = sbcs;
+              cheaperThanFutbin = false;
+            }
+            const filteredSbc =
+              filteredSbcs[getRandNum(0, filteredSbcs.length - 1)];
+            if (filteredSbc) {
+              if (cheaperThanFutbin && cheapestFutSBC) {
+                const percentDiff =
+                  ((cheapestFutSBC - filteredSbc.price) / cheapestFutSBC) * 100;
+                sendUINotification(
+                  `Generated Solution is ${percentDiff.toFixed(
+                    2
+                  )}% cheaper than current cheapest futbin solution`
+                );
+              }
+              if (
+                filteredSbc &&
+                filteredSbc.players &&
+                filteredSbc.players.length
+              ) {
+                await fillMarketAlertSbc(filteredSbc.players);
+              }
+            }
+          } catch (err) {
+            sendUINotification("Error Occured", UINotificationType.NEGATIVE);
+          }
+          hideLoader();
         })();
     }
   );
@@ -175,6 +237,7 @@ const fillMarketAlertSbc = async (players) => {
 
 const fetchAndAppendCommunitySbcs = async (challengeId) => {
   const squads = await getAllSBCSForChallenge(challengeId);
+  setValue("cheapestFutSBC", (squads[0] || {}).ps_price);
   $(`#${idSBCFUTBINSolution}`).remove();
   $(".sbcSolutions").append(
     `<select id="${idSBCFUTBINSolution}" class="sbc-players-list" style="border : 1px solid; width: 90%;">
@@ -356,7 +419,7 @@ const buyPlayer = (player, buyPrice) => {
       );
       searchCriteria.maxBuy = buyPrice;
 
-      searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
+      searchModel.searchFeature = ItemSearchFeature.MARKET;
       searchModel.defaultSearchCriteria.type = searchCriteria.type;
       searchModel.defaultSearchCriteria.category = searchCriteria.category;
       searchModel.updateSearchCriteria(searchCriteria);

@@ -180,9 +180,9 @@ export const appendRelistExternal = (
     );
     element.append(generateSectionRelistBtn(fixedCallBack, t("fixed")).__root);
     rootElement.append(element);
-    return element;
+    return [element, true];
   }
-  return wrapper[0];
+  return [wrapper[0], false];
 };
 
 export const appendDuplicateTag = (rootElement) => {

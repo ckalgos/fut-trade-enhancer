@@ -152,7 +152,7 @@ export const appendSectionPrices = async (sectionData) => {
       );
     }
     if (sectionData.isRelistSupported) {
-      const wrapperElement = appendRelistExternal(
+      const [wrapperElement, isNew] = appendRelistExternal(
         sectionData.sectionHeader,
         sectionData.headerElement,
         dataSource.toUpperCase(),
@@ -169,7 +169,8 @@ export const appendSectionPrices = async (sectionData) => {
           services.Localization.localize("infopanel.label.addplayer"),
         ].indexOf(sectionData.sectionHeader) >= 0
       ) {
-        wrapperElement &&
+        isNew &&
+          wrapperElement &&
           wrapperElement.append(
             generateSendToClub(
               () => moveCardsToClub(sectionData.sectionHeader),

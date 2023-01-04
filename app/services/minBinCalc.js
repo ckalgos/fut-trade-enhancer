@@ -8,7 +8,7 @@ export const calculatePlayerMinBin = async (player) => {
   searchCriteria.type = player.getSearchType() || SearchType.PLAYER;
   searchCriteria.defId = [player.definitionId];
   searchCriteria.category = SearchCategory.ANY;
-  searchModel.searchFeature = enums.ItemSearchFeature.MARKET;
+  searchModel.searchFeature = ItemSearchFeature.MARKET;
   searchModel.defaultSearchCriteria.type = searchCriteria.type;
   searchModel.defaultSearchCriteria.category = searchCriteria.category;
 

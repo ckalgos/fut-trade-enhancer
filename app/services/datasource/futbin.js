@@ -129,7 +129,11 @@ export const getAllSBCSForChallenge = async (challengeId) => {
         }
 
         const { squads } = JSON.parse(res.response);
-        resolve(squads);
+        resolve(
+          squads.sort(
+            ({ ps_price: aPrice }, { ps_price: bPrice }) => aPrice - bPrice
+          )
+        );
       },
     });
   });
