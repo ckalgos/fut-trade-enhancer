@@ -68,14 +68,18 @@ export const sbcViewOverride = () => {
   $(document).on(
     {
       change: async function () {
-        if (!isMarketAlertApp) {
+        const loggedInUser = getValue("loggedInUser");
+        if (!loggedInUser && !isMarketAlertApp) {
           return sendUINotification(
             t("solvableUnAvailable"),
             UINotificationType.NEGATIVE
           );
         }
         const accessLevel = getValue("userAccess");
-        if (!accessLevel || accessLevel === "tradeEnhancer") {
+        if (
+          (!accessLevel || accessLevel === "tradeEnhancer") &&
+          isMarketAlertApp
+        ) {
           return sendUINotification(
             t("levelError"),
             UINotificationType.NEGATIVE
@@ -256,7 +260,11 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
 
 const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
   const accessLevel = getValue("userAccess");
-  if (!isMarketAlertApp || !accessLevel || accessLevel === "tradeEnhancer") {
+  const loggedInUser = getValue("loggedInUser") || isMarketAlertApp;
+  if (
+    (isMarketAlertApp && (!accessLevel || accessLevel === "tradeEnhancer")) ||
+    !loggedInUser
+  ) {
     $(`#${idSBCMarketSolution}`).remove();
     await wait(1);
     return $(".sbcSolutions").append(
@@ -272,7 +280,12 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
      </select>`
     );
   }
-  const squadPlayers = await getSquadPlayerIds();
+  const level = new Set([6, 7, 8, 9, 16]).has(challengeId)
+    ? SearchLevel.BRONZE
+    : new Set([1167]).has(challengeId)
+    ? SearchLevel.SILVER
+    : undefined;
+  const squadPlayers = await getSquadPlayerIds(level);
   const { sbcs } = await fetchSbcs(challengeId, Array.from(squadPlayers));
 
   $(`#${idSBCMarketSolution}`).remove();

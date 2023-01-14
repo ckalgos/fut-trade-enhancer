@@ -121,7 +121,7 @@ export const esLocales = {
   scanClubSbc:
     "Escanee los jugadores de su club para encontrar SBC solucionables",
   solvableUnAvailable:
-    "Use la aplicación Market Alert para ver el resultado del escaneo",
+    "Inicie sesión en AB Server para ver el resultado del escaneo",
   solveInfo:
     "El bot escaneará su club para encontrar SBC que se puedan completar",
   gatherChallengeInfo: "Recopilar información sobre Desafíos Desafíos",

@@ -9,10 +9,17 @@ const getScriptMessages = () => {
   const persona = services.User.getUser().getSelectedPersona();
   const messages = [];
 
+  const message = formMessage(
+    p("c29sdmFibGVTYmNz"),
+    p("c2JjU3Vic2NyaWJl"),
+    imageLogos,
+    atob("c2JjYmVuZWZpdA==")
+  );
+
   const message1 = formMessage(
     p("am9pbkRpc2NvcmQ="),
-    p("ZnJlZVNjcmlwdA=="),
-    atob("aW1hZ2VzL3RpbGVGRVREZWZhdWx0LnBuZw=="),
+    isMarketAlertApp ? "" : p("ZnJlZVNjcmlwdA=="),
+    imageLogos,
     atob("d2VsY29tZWh1Yg==")
   );
 
@@ -29,6 +36,7 @@ const getScriptMessages = () => {
     imageLogos,
     atob("bmF0aXZlSHVi")
   );
+  messages.push(new UTArubaMessageEntity(message, persona));
   !isMarketAlertApp &&
     messages.push(new UTArubaMessageEntity(message3, persona));
   messages.push(new UTArubaMessageEntity(message1, persona));
@@ -114,6 +122,12 @@ export const futHomeOverride = () => {
           atob("X2JsYW5r")
         );
         return;
+      } else if (t.screen === atob("c2JjYmVuZWZpdA==")) {
+        window.open(
+          atob("aHR0cHM6Ly9zdWJzY3JpcHRpb24uZnV0aGVscGVycy5jb20v"),
+          atob("X2JsYW5r")
+        );
+        return;
       }
       JSUtils.isEmpty(t.goToLink) || this._handleLink(t);
     }
@@ -189,6 +203,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "2K7Zitin2LEg2KfZhNiq2KvYqNmK2Ko=",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "2KfZhtmC2LEg2YHZiNmCINmG2LjYp9mFINin2YTYqti02LrZitmEINin2YTZhdmG2KfYs9ioINmE2KrYq9io2YrYqiDYp9mE2KrYt9io2YrZgg==",
+    c29sdmFibGVTYmNz:
+      "2YrZhdmD2YbZgyDYp9mE2KLZhiDZhdiz2K0g2KfZhNmG2KfYr9mKINmE2YTYudir2YjYsSDYudmE2Ykgc2JjcyDZgtin2KjZhCDZhNmE2K3ZhCDZgdmKINis2YfYp9iyINin2YTZg9mF2KjZitmI2KrYsQ==",
+    c2JjU3Vic2NyaWJl: "2KfZhtmC2LEg2YTZhNin2LTYqtix2KfZgw==",
   },
   de: {
     "am9pbkRpc2NvcmQ=":
@@ -208,6 +225,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "SW5zdGFsbGF0aW9uc29wdGlvbg==",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "S2xpY2tlbiBTaWUgYXVmIGRhcyBlbnRzcHJlY2hlbmRlIEJldHJpZWJzc3lzdGVtLCB1bSBkaWUgQXBwIHp1IGluc3RhbGxpZXJlbg==",
+    c29sdmFibGVTYmNz:
+      "RHUga2FubnN0IGpldHp0IENsdWIgc2Nhbm5lbiwgdW0gbPZzYmFyZSBTQkNzIGF1ZiBkZW0gUEMgenUgZmluZGVu",
+    c2JjU3Vic2NyaWJl: "WnVtIEFib25uaWVyZW4ga2xpY2tlbg==",
   },
   en: {
     "am9pbkRpc2NvcmQ=":
@@ -225,6 +245,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "SW5zdGFsbGF0aW9uIG9wdGlvbg==",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "Q2xpY2sgdGhlIHJlc3BlY3RpdmUgT1MgdG8gaW5zdGFsbCB0aGUgYXBw",
+    c29sdmFibGVTYmNz:
+      "WW91IGNhbiBub3cgc2NhbiBjbHViIHRvIGZpbmQgc29sdmFibGUgc2JjcyBvbiBQQw==",
+    c2JjU3Vic2NyaWJl: "Q2xpY2sgdG8gc3Vic2NyaWJl",
   },
   es: {
     "am9pbkRpc2NvcmQ=":
@@ -245,6 +268,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "T3BjafNuIGRlIGluc3RhbGFjafNu",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "SGFnYSBjbGljIGVuIGVsIHNpc3RlbWFvcGVyYXRpdm8gcmVzcGVjdGl2byBwYXJhIGluc3RhbGFyIGxhIGFwbGljYWNp824=",
+    c29sdmFibGVTYmNz:
+      "QWhvcmEgcHVlZGUgZXNjYW5lYXIgZWwgY2x1YiBwYXJhIGVuY29udHJhciBTQkMgc29sdWNpb25hYmxlcyBlbiBsYSBQQw==",
+    c2JjU3Vic2NyaWJl: "SGF6IGNsaWMgcGFyYSBzdXNjcmliaXJ0ZQ==",
   },
   fr: {
     "am9pbkRpc2NvcmQ=":
@@ -265,6 +291,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "T3B0aW9uIGQnaW5zdGFsbGF0aW9u",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "Q2xpcXVleiBzdXIgbGUgc3lzdOhtZSBkJ2V4cGxvaXRhdGlvbiByZXNwZWN0aWYgcG91ciBpbnN0YWxsZXIgbCdhcHBsaWNhdGlvbg==",
+    c29sdmFibGVTYmNz:
+      "Vm91cyBwb3V2ZXogbWFpbnRlbmFudCBzY2FubmVyIGxlIGNsdWIgcG91ciB0cm91dmVyIGRlcyBzYmNzIHLpc29sdWJsZXMgc3VyIFBD",
+    c2JjU3Vic2NyaWJl: "Q2xpcXVleiBwb3VyIHZvdXMgYWJvbm5lcg==",
   },
   it: {
     "am9pbkRpc2NvcmQ=":
@@ -283,6 +312,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "T3B6aW9uZSBkaSBpbnN0YWxsYXppb25l",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "RmFpIGNsaWMgc3VsIHJpc3BldHRpdm8gc2lzdGVtYSBvcGVyYXRpdm8gcGVyIGluc3RhbGxhcmUgbCdhcHA=",
+    c29sdmFibGVTYmNz:
+      "T3JhIHB1b2kgc2NhbnNpb25hcmUgY2x1YiBwZXIgdHJvdmFyZSBzYmNzIHJpc29sdmliaWxpIG5lbCBQQw==",
+    c2JjU3Vic2NyaWJl: "Q2xpY2NhIHBlciBpc2NyaXZlcnRp",
   },
   nl: {
     "am9pbkRpc2NvcmQ=":
@@ -301,6 +333,9 @@ const values = {
     aW5zdGFsbGF0aW9uTXNn: "SW5zdGFsbGF0aWUgb3B0aWU=",
     aW5zdGFsbGF0aW9uT3B0aW9u:
       "S2xpayBvcCBoZXQgYmV0cmVmZmVuZGUgYmVzdHVyaW5nc3N5c3RlZW0gb20gZGUgYXBwIHRlIGluc3RhbGxlcmVu",
+    c29sdmFibGVTYmNz:
+      "SmUga3VudCBudSBjbHViIHNjYW5uZW4gb20gb3Bsb3NiYXJlIHNiY3Mgb3AgcGMgdGUgdmluZGVu",
+    c2JjU3Vic2NyaWJl: "S2xpayBvbSB0ZSBhYm9ubmVyZW4=",
   },
 };
 

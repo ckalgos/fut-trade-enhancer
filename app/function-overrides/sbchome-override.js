@@ -60,10 +60,12 @@ export const sbcHomeOverride = () => {
       t("findSolvableSbcs"),
       t("solveInfo"),
       (text) => {
-        text === 2 &&
-          (!isMarketAlertApp
+        if (text === 2) {
+          const isLoggedIn = getValue("loggedInUser") || isMarketAlertApp;
+          !isLoggedIn
             ? fakeFindSbcs("solvableUnAvailable")
-            : findSolvableSbcs(set));
+            : findSolvableSbcs(set);
+        }
       }
     );
   };
@@ -72,7 +74,10 @@ export const sbcHomeOverride = () => {
     showLoader();
     try {
       const accessLevel = getValue("userAccess");
-      if (!accessLevel || accessLevel === "tradeEnhancer") {
+      if (
+        (!accessLevel || accessLevel === "tradeEnhancer") &&
+        isMarketAlertApp
+      ) {
         return fakeFindSbcs("levelError");
       }
       sendUINotification(t("gatherChallengeInfo"));
@@ -127,7 +132,10 @@ export const sbcHomeOverride = () => {
           true
         );
     } catch (err) {
-      sendUINotification(t("errSolvableSbcs"), UINotificationType.NEGATIVE);
+      sendUINotification(
+        err === 401 ? "Invalid Subscription Status" : t("errSolvableSbcs"),
+        UINotificationType.NEGATIVE
+      );
     }
     hideLoader();
   };

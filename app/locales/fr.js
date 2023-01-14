@@ -120,8 +120,7 @@ export const frLocales = {
   findSolvableSbcs: "Rechercher Solvable Sbcs",
   scanClubSbc:
     "Scannez les joueurs de votre club pour trouver des sbcs résolubles",
-  solvableUnAvailable:
-    "Utilisez l'application Market Alert pour afficher le résultat de l'analyse",
+  solvableUnAvailable: "Login to AB Server to view the scan result",
   solveInfo:
     "Le bot va scanner votre club pour trouver les sbcs qui peuvent être complétés",
   gatherChallengeInfo:

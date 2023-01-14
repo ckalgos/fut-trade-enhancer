@@ -403,6 +403,16 @@ export const overrideStyle = () => {
       border-radius:50%;
       margin-bottom:5px;
       background: cornflowerblue;
+    }
+    .btn-sign{
+      background: linear-gradient(90deg,rgba(163,168,240,.6),rgba(105,111,221,.6)); 
+      font-size: 12px;
+      height: 45px;
+      letter-spacing: 2px;
+      text-transform: uppercase; 
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
     }    
     .follow a {
       color: #fff !important;

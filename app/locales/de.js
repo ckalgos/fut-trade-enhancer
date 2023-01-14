@@ -119,7 +119,7 @@ export const deLocales = {
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scannen Sie Ihre Vereinsspieler, um lösbare SBCs zu finden",
   solvableUnAvailable:
-    "Verwenden Sie die Market Alert App, um das Scanergebnis anzuzeigen",
+    "Melden Sie sich bei AB Server an, um das Scanergebnis anzuzeigen",
   solveInfo:
     "Der Bot wird Ihren Club scannen, um SBCs zu finden, die abgeschlossen werden können",
   gatherChallengeInfo: "Informationen zu Herausforderungen sammeln",

@@ -11,10 +11,10 @@ import { t } from "../services/translate";
 import { sendUINotification } from "../utils/notificationUtil";
 import { fetchPrices } from "./datasource";
 
-export const getSquadPlayerIds = () => {
+export const getSquadPlayerIds = (level) => {
   return new Promise((resolve, reject) => {
     const squadPlayerIds = new Set();
-    getAllClubPlayers(true).then((squadMembers) => {
+    getAllClubPlayers(true, null, level).then((squadMembers) => {
       squadMembers.forEach((member) => {
         squadPlayerIds.add(member.definitionId);
       });
@@ -61,13 +61,16 @@ export const getNonActiveSquadPlayers = async function (isTradable) {
   });
 };
 
-export const getAllClubPlayers = function (filterLoaned, playerId) {
+export const getAllClubPlayers = function (filterLoaned, playerId, level) {
   return new Promise((resolve) => {
     services.Club.clubDao.resetStatsCache();
     services.Club.getStats();
     const searchCriteria = new UTBucketedItemSearchViewModel().searchCriteria;
     if (playerId) {
       searchCriteria.defId = [playerId];
+    }
+    if (level) {
+      searchCriteria.level = level;
     }
     searchCriteria.count = MAX_CLUB_SEARCH;
     let gatheredSquad = [];

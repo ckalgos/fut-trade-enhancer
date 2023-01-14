@@ -111,7 +111,7 @@ export const arLocales = {
   autoSelectLowest: "تحديد البطاقة الأقل تلقائيًا",
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "افحص لاعبي النادي للعثور على sbcs قابلة للحل",
-  solvableUnAvailable: "استخدم تطبيق Market Alert لعرض نتيجة الفحص",
+  solvableUnAvailable: "قم بتسجيل الدخول إلى خادم AB لعرض نتيجة الفحص",
   solveInfo: "سيقوم البوت بفحص ناديك للعثور على sbcs الذي يمكن إكماله",
   gatherChallengeInfo: "جمع معلومات عن تحديات التحدي",
   gatherSquadInfo: "جمع لاعبي النادي",

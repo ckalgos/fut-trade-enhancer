@@ -10,7 +10,7 @@ export const sendRequest = (url, method, identifier, data) => {
       data,
       onload: (res) => {
         if (res.status !== 200 && res.status !== 201) {
-          return reject();
+          return reject(res.status);
         }
         return resolve(res.response);
       },

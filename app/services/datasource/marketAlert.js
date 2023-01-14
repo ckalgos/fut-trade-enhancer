@@ -1,3 +1,4 @@
+import { isMarketAlertApp } from "../../app.constants";
 import { sendRequest } from "../../utils/networkUtil";
 import { getValue, setValue } from "../repository";
 import { getUserPlatform } from "../user";
@@ -38,9 +39,9 @@ export const fetchSolvableSbcs = async (payload) => {
     ),
     "POST",
     `${Math.floor(+new Date())}_fetchSolvableSbcs`,
-    {
+    formatRequest({
       playerIds: payload,
-    }
+    })
   );
   return JSON.parse(response);
 };
@@ -52,9 +53,9 @@ export const fetchSbcs = async (challengeId, payload) => {
     )}${challengeId}`,
     "POST",
     `${Math.floor(+new Date())}_sbcSolution_${challengeId}`,
-    {
+    formatRequest({
       playerIds: payload,
-    }
+    })
   );
   return JSON.parse(response);
 };
@@ -68,6 +69,10 @@ export const fetchUniqueSbc = async (challengeId) => {
     `${Math.floor(+new Date())}_fetchUniqueSbc_${challengeId}`
   );
   return JSON.parse(response);
+};
+
+const formatRequest = (payload) => {
+  return isMarketAlertApp ? payload : JSON.stringify(payload);
 };
 
 const fetchPricesFromServer = async (defIds, result) => {

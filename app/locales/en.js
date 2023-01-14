@@ -112,7 +112,7 @@ export const enLocales = {
   autoSelectLowest: "Automatically Select Lowest Card",
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scan your club players to find solvable sbcs",
-  solvableUnAvailable: "Use the Market Alert App to view the scan result",
+  solvableUnAvailable: "Login to AB Server to view the scan result",
   solveInfo: "Bot will scan your club to find what sbcs can be completed",
   gatherChallengeInfo: "Gathering Challenges Info",
   gatherSquadInfo: "Gathering Club Players",

@@ -115,7 +115,7 @@ export const nlLocales = {
   findSolvableSbcs: "Find Solvable Sbcs",
   scanClubSbc: "Scan je clubspelers om oplosbare sbc's te vinden",
   solvableUnAvailable:
-    "Gebruik de Market Alert-app om het scanresultaat te bekijken",
+    "Log in op de AB-server om het scanresultaat te bekijken",
   solveInfo:
     "De bot scant uw club om sbc's te vinden die kunnen worden voltooid",
   gatherChallengeInfo: "Verzamel informatie over Challenge Challenges",

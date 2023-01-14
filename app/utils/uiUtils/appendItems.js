@@ -186,8 +186,9 @@ export const appendRelistExternal = (
 };
 
 export const appendDuplicateTag = (rootElement) => {
-  rootElement.find(".rowContent").append(
-    `<div class="show-duplicate ut-list-tag-view ut-list-active-tag-view">
+  if (!rootElement.find(".rowContent").find(".show-duplicate")[0]) {
+    rootElement.find(".rowContent").append(
+      `<div class="show-duplicate ut-list-tag-view ut-list-active-tag-view">
             <div class="label-container">
               <span class="fut_icon icon_squad">
               </span>
@@ -195,7 +196,8 @@ export const appendDuplicateTag = (rootElement) => {
               </span>
             </div>
         </div>`
-  );
+    );
+  }
 };
 
 export const appendContractInfo = (rootElement, contract) => {

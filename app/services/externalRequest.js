@@ -50,11 +50,21 @@ const sendPhoneRequest = (options) => {
 };
 
 const sendWebRequest = (options) => {
+  const { token } = getValue("loggedInUser") || {};
+  const isSbcRequest =
+    /_fetchSolvableSbcs/.test(options.identifier) ||
+    /_sbcSolution/.test(options.identifier);
+  const headers = {
+    "User-Agent": idSession,
+  };
+  if (isSbcRequest) {
+    headers.Authorization = `Bearer ${token}`;
+  }
   GM_xmlhttpRequest({
     method: options.method,
     url: options.url,
     onload: options.onload,
     data: options.data,
-    headers: { "User-Agent": idSession },
+    headers,
   });
 };
