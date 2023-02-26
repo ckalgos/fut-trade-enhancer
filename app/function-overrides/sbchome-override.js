@@ -3,7 +3,7 @@ import { getSquadPlayerIds, getSquadPlayerLookup } from "../services/club";
 import { getAllChallanges } from "../services/datasource/futbin";
 import { t } from "../services/translate";
 import {
-  getCurrentViewController,
+  getNavigationController,
   hideLoader,
   showLoader,
   wait,
@@ -115,9 +115,7 @@ export const sbcHomeOverride = () => {
           playersAvailable,
         });
       }
-      const currentNavigationController = getCurrentViewController()
-        .getCurrentController()
-        .getNavigationController();
+      const currentNavigationController = getNavigationController();
 
       const challengesViewController = new UTSBCChallengesViewController();
       challengesViewController.initWithSBCSet(

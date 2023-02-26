@@ -10,8 +10,15 @@ export const xmlRequestOverride = () => {
         if (this.readyState === 4) {
           if (this.responseURL.includes("/ut/game/fifa21/usermassinfo")) {
             let parsedRespose = JSON.parse(this.responseText);
-            if (parsedRespose)
-              setValue("unassigned", parsedRespose.userInfo.unassignedPileSize);
+            if (parsedRespose) {
+              const unassignedCount = parseInt(
+                parsedRespose.userInfo.unassignedPileSize.replace(/[,.]/g, "")
+              );
+              setValue(
+                "unassigned",
+                isNaN(unassignedCount) ? undefined : unassignedCount
+              );
+            }
           } else if (
             this.responseURL.includes(
               "https://gateway.ea.com/proxy/identity/pids/me"

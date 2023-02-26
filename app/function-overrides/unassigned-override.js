@@ -16,7 +16,7 @@ export const unassignedOverride = () => {
     if (response.success) {
       let unassigned = response.response.items.length;
       if (unassigned === 50) {
-        unassigned = getValue("unassigned");
+        unassigned = getValue("unassigned") || 50;
       }
       this.getView().renderUnassignedTile(unassigned);
     } else {

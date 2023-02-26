@@ -56,6 +56,12 @@ export const getCurrentViewController = () => {
     .getCurrentViewController();
 };
 
+export const getNavigationController = () => {
+  return getCurrentViewController()
+    .getCurrentController()
+    .getNavigationController();
+};
+
 export const getRandWaitTime = (range) => {
   if (range) {
     const [start, end] = range.split("-").map((a) => parseInt(a));

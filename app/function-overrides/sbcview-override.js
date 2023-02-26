@@ -280,12 +280,17 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
      </select>`
     );
   }
-  const level = new Set([6, 7, 8, 9, 16]).has(challengeId)
+  const level = new Set([6, 7, 8, 9, 10, 16]).has(challengeId)
     ? SearchLevel.BRONZE
-    : new Set([1167]).has(challengeId)
+    : challengeId === 11 || challengeId === 1167
     ? SearchLevel.SILVER
+    : challengeId === 12
+    ? SearchLevel.GOLD
     : undefined;
-  const squadPlayers = await getSquadPlayerIds(level);
+  const sort = new Set([10, 11, 12, 1167]).has(challengeId)
+    ? SearchSortOrder.ASCENDING
+    : undefined;
+  const squadPlayers = await getSquadPlayerIds(level, sort);
   const { sbcs } = await fetchSbcs(challengeId, Array.from(squadPlayers));
 
   $(`#${idSBCMarketSolution}`).remove();

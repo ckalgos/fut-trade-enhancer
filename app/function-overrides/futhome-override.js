@@ -2,8 +2,9 @@ import { MessageTileView } from "../view/MessageTileView";
 import { imageLogos } from "../image.constants";
 import { formMessage } from "../utils/homeMessageUtil";
 import { showPopUp } from "./popup-override";
-import { atou } from "../utils/commonUtil";
+import { atou, getNavigationController } from "../utils/commonUtil";
 import { isMarketAlertApp } from "../app.constants";
+import { getValue } from "../services/repository";
 
 const getScriptMessages = () => {
   const persona = services.User.getUser().getSelectedPersona();
@@ -56,7 +57,7 @@ const clickOption = () => {
     (t) => {
       if (t === atob("UGF5cGFs")) {
         window.open(
-          atob("aHR0cHM6Ly91cGdyYWRlLmNoYXQvY2thbGdvcw=="),
+          atob("aHR0cHM6Ly9zdG9yZS5mdXRoZWxwZXJzLmNvbS8="),
           atob("X2JsYW5r")
         );
       } else if (t === atob("WW91dHViZSBTdWJzY3JpcHRpb24=")) {
@@ -123,6 +124,12 @@ export const futHomeOverride = () => {
         );
         return;
       } else if (t.screen === atob("c2JjYmVuZWZpdA==")) {
+        const loggedInUser = getValue("loggedInUser");
+        if (loggedInUser) {
+          const hub = new UTSBCHubViewController();
+          hub.init();
+          return getNavigationController().pushViewController(hub);
+        }
         window.open(
           atob("aHR0cHM6Ly9zdWJzY3JpcHRpb24uZnV0aGVscGVycy5jb20v"),
           atob("X2JsYW5r")

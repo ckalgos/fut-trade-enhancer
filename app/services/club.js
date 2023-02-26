@@ -6,15 +6,15 @@ import {
   formatDataSource,
 } from "../utils/commonUtil";
 import { MAX_CLUB_SEARCH } from "../app.constants";
-import { getDataSource, getValue, setValue } from "./repository";
+import { getDataSource, getValue } from "./repository";
 import { t } from "../services/translate";
 import { sendUINotification } from "../utils/notificationUtil";
 import { fetchPrices } from "./datasource";
 
-export const getSquadPlayerIds = (level) => {
-  return new Promise((resolve, reject) => {
+export const getSquadPlayerIds = (level, sort) => {
+  return new Promise((resolve) => {
     const squadPlayerIds = new Set();
-    getAllClubPlayers(true, null, level).then((squadMembers) => {
+    getAllClubPlayers(true, null, level, sort).then((squadMembers) => {
       squadMembers.forEach((member) => {
         squadPlayerIds.add(member.definitionId);
       });
@@ -61,7 +61,12 @@ export const getNonActiveSquadPlayers = async function (isTradable) {
   });
 };
 
-export const getAllClubPlayers = function (filterLoaned, playerId, level) {
+export const getAllClubPlayers = function (
+  filterLoaned,
+  playerId,
+  level,
+  sort
+) {
   return new Promise((resolve) => {
     services.Club.clubDao.resetStatsCache();
     services.Club.getStats();
@@ -71,6 +76,9 @@ export const getAllClubPlayers = function (filterLoaned, playerId, level) {
     }
     if (level) {
       searchCriteria.level = level;
+    }
+    if (sort) {
+      searchCriteria._sort = sort;
     }
     searchCriteria.count = MAX_CLUB_SEARCH;
     let gatheredSquad = [];
