@@ -33,7 +33,9 @@ export const searchFilterViewOverride = () => {
 
   UTItemSearchView.prototype.setFilters = function (t, e) {
     uiSetFilters.call(this, t, e);
-    if (t.searchCriteria.category === "contract") {
+    if (t.searchCriteria.category === SearchCategory.MANAGER_LEAGUE) {
+      this.setFilterLock(enums.UISearchFilters.LEAGUE, false);
+    } else if (t.searchCriteria.category === SearchCategory.CONTRACT) {
       this.generateFilter(
         "contract.type",
         [

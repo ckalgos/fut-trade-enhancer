@@ -31,7 +31,8 @@ export const sbcHomeOverride = () => {
   UTSBCHubView.prototype.populateTiles = function (set, challange) {
     const result = populateTiles.call(this, set, challange);
     if (
-      challange.name === services.Localization.localize("sbc.categories.all")
+      challange.name === services.Localization.localize("sbc.categories.all") &&
+      false
     ) {
       getSquadPlayerIds();
       const solveSbcTile = new UTSBCSetTileView();

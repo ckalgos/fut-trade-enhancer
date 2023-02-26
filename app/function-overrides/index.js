@@ -25,6 +25,7 @@ import { sbcSubmitChallengeOverride } from "./sbcsavechallenge-override";
 import { sbcHomeOverride } from "./sbchome-override";
 import { transferResultOverride } from "./transferresult-override";
 import { playerItemRenderOverride } from "./playerItemRender-override";
+import { squadBuilderOverride } from "./squadbuilder-override";
 
 export const initOverrides = () => {
   xmlRequestOverride();
@@ -53,6 +54,7 @@ export const initOverrides = () => {
   sbcHomeOverride();
   transferResultOverride();
   playerItemRenderOverride();
+  squadBuilderOverride();
 
   overrideStyle();
 };

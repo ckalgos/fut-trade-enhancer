@@ -233,22 +233,6 @@ export const overrideStyle = () => {
       color: red;
       border: 1px solid;
     }
-    input[type="number"]{
-      padding: 0 .5em;
-      border-radius: 0;
-      background-color: #262c38;
-      border: 1px solid #4ee6eb;
-      box-sizing: border-box;
-      color: #4ee6eb;
-      font-family: UltimateTeam,sans-serif;
-      font-size: 1em;
-      height: 2.8em;
-      opacity: 1;
-      width: 100%;
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-    }
     .phone .ut-store-reveal-modal-list-view--wallet {
       flex: unset;
     }
@@ -307,10 +291,10 @@ export const overrideStyle = () => {
     .phone .downloadClub::before {
       font-size: 1.3rem;
       content: '\\E001'
-    }
-    .phone .transferpile::before {
+    }    
+    .transferpile::before {
       font-size: 1.3rem;
-      content: '\\E073'
+      content: '\\E07C' !important
     }
     small {
       white-space: break-spaces;
@@ -420,6 +404,31 @@ export const overrideStyle = () => {
       text-align: center;
       line-height: 43px!important;
       vertical-align: top!important;
-    }`;
+    }
+    .sb-setting{
+      margin-top: 15px;
+    }
+    .sb-setting button{
+      margin: 0px;
+    }
+    input[type="text"],
+    input[type="number"] {
+      padding: 0 0.5em;
+      border-radius: 0;
+      background-color: #262c38;
+      border: 1px solid #556c95;
+      box-sizing: border-box;
+      color: #f8eede;
+      font-family: UltimateTeam,sans-serif;
+      font-size: 1em;
+      height: 2.8em;
+      opacity: 1;
+      width: 100%;
+    }
+    input[type="text"],
+    input[type=number] {
+      -moz-appearance: textfield;
+    }
+    `;
   document.head.appendChild(style);
 };

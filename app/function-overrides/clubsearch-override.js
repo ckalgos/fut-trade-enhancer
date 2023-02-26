@@ -35,7 +35,7 @@ export const clubSearchOverride = () => {
       const downloadClubBtn = generateDownloadClubCsv();
       const sendToTransferList = generateSendToTransferList(
         () => showMoveToTransferListPopup(sendClubPlayersToTradePile),
-        "clubAction"
+        "clubAction transferpile"
       );
       this.__searchContainer.prepend(downloadClubBtn.__root);
       this.__searchContainer.prepend(sendToTransferList.__root);

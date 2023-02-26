@@ -11,10 +11,10 @@ import { t } from "../services/translate";
 import { sendUINotification } from "../utils/notificationUtil";
 import { fetchPrices } from "./datasource";
 
-export const getSquadPlayerIds = (level, sort) => {
+export const getSquadPlayerIds = (level, sort, rarity) => {
   return new Promise((resolve) => {
     const squadPlayerIds = new Set();
-    getAllClubPlayers(true, null, level, sort).then((squadMembers) => {
+    getAllClubPlayers(true, null, level, sort, rarity).then((squadMembers) => {
       squadMembers.forEach((member) => {
         squadPlayerIds.add(member.definitionId);
       });
@@ -65,7 +65,8 @@ export const getAllClubPlayers = function (
   filterLoaned,
   playerId,
   level,
-  sort
+  sort,
+  rarity
 ) {
   return new Promise((resolve) => {
     services.Club.clubDao.resetStatsCache();
@@ -79,6 +80,9 @@ export const getAllClubPlayers = function (
     }
     if (sort) {
       searchCriteria._sort = sort;
+    }
+    if (rarity) {
+      searchCriteria.rarities = [rarity];
     }
     searchCriteria.count = MAX_CLUB_SEARCH;
     let gatheredSquad = [];

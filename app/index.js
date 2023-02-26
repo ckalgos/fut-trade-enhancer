@@ -5,6 +5,7 @@ import { setValue } from "./services/repository";
 import { getPlayers, getSettings, initDatabase } from "./utils/dbUtil";
 import { setMaxUnassignedCount } from "./utils/pileUtil";
 import Amplify, { Auth } from "./external/amplify";
+import { setUserData } from "./utils/authUtil";
 
 if (!isMarketAlertApp) {
   Amplify.configure(
@@ -23,11 +24,6 @@ if (!isMarketAlertApp) {
   });
 }
 
-import {
-  formUserData,
-  getCurrentUser,
-  getUserAccessToken,
-} from "./utils/authUtil";
 const initScript = function () {
   let isAllLoaded = false;
   if (services.Localization) {
@@ -47,13 +43,7 @@ const initScript = function () {
     setValue("EnhancerSettings", {});
     setValue("PlayersRatingRange", []);
     if (!isMarketAlertApp) {
-      getUserAccessToken().then(async (token) => {
-        if (token) {
-          const userData = formUserData(await getCurrentUser());
-          userData.token = token;
-          setValue("loggedInUser", userData);
-        }
-      });
+      setUserData();
     }
     isAllLoaded = true;
   }

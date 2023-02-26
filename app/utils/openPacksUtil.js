@@ -1,6 +1,8 @@
 import {
+  idPackContractsAction,
   idPackDuplicatesAction,
-  idPackNonPlayersAction,
+  idPackManagersAction,
+  idPackOtherItemsAction,
   idPackOpenCredits,
   idPackPlayersAction,
   idPacksCount,
@@ -37,9 +39,23 @@ const setUpType = () => {
     },
   ];
   return [
-    { id: idPackPlayersAction, label: t("players"), actions: defaultOptions },
     {
-      id: idPackNonPlayersAction,
+      id: idPackPlayersAction,
+      label: services.Localization.localize("search.filters.players"),
+      actions: defaultOptions,
+    },
+    {
+      id: idPackManagersAction,
+      label: services.Localization.localize("roles.manager"),
+      actions: defaultOptions.slice(0, 3),
+    },
+    {
+      id: idPackContractsAction,
+      label: services.Localization.localize("card.title.contract"),
+      actions: defaultOptions.slice(0, 3),
+    },
+    {
+      id: idPackOtherItemsAction,
       label: t("nonPlayers"),
       actions: defaultOptions.slice(0, 3),
     },
@@ -92,12 +108,16 @@ const getPopUpValues = () => {
   const noOfPacks = parseInt($(`#${idPacksCount}`).val()) || 3;
   const credits = $(`#${idPackOpenCredits}`).val() || GameCurrency.COINS;
   const playersHandler = $(`#${idPackPlayersAction}`).val();
-  const nonPlayersHandler = $(`#${idPackNonPlayersAction}`).val();
+  const managersHandler = $(`#${idPackManagersAction}`).val();
+  const contractsHandler = $(`#${idPackContractsAction}`).val();
+  const otherItemsHandler = $(`#${idPackOtherItemsAction}`).val();
   const duplicateHandler = $(`#${idPackDuplicatesAction}`).val();
   return {
     noOfPacks,
     playersHandler,
-    nonPlayersHandler,
+    managersHandler,
+    contractsHandler,
+    otherItemsHandler,
     duplicateHandler,
     credits,
   };
@@ -125,16 +145,39 @@ const handleNonDuplicatePlayers = (items, action) => {
   const nonDuplicatePlayersItems = items.filter(
     (item) => !item.isDuplicate() && item.isPlayer()
   );
-  sendUINotification(t("handlingNonDuplicatePlayers"));
+  sendUINotification(t("handlingPlayers"));
   return handleItems(nonDuplicatePlayersItems, action);
 };
 
-const handleNonDuplicateNonPlayers = (items, action) => {
-  const nonDuplicateNonPlayersItems = items.filter(
-    (item) => !item.isDuplicate() && !item.isPlayer()
+const handleNonDuplicateManagers = (items, action) => {
+  const nonDuplicatePlayersItems = items.filter(
+    (item) => !item.isDuplicate() && item.isManager()
   );
-  sendUINotification(t("handlingNonDuplicateNonPlayers"));
-  return handleItems(nonDuplicateNonPlayersItems, action);
+  sendUINotification(t("handlingManagers"));
+  return handleItems(nonDuplicatePlayersItems, action);
+};
+
+const handleContracts = (items, action) => {
+  const nonDuplicatePlayersItems = items.filter(
+    (item) =>
+      !item.isDuplicate() &&
+      (item.isPlayerContract() || item.isManagerContract())
+  );
+  sendUINotification(t("handlingContracts"));
+  return handleItems(nonDuplicatePlayersItems, action);
+};
+
+const handleNonDuplicateOtherItems = (items, action) => {
+  const nonDuplicateOtherItems = items.filter(
+    (item) =>
+      !item.isDuplicate() &&
+      !item.isPlayer() &&
+      !item.isManager() &&
+      !item.isPlayerContract() &&
+      !item.isManagerContract()
+  );
+  sendUINotification(t("handlingOtherItems"));
+  return handleItems(nonDuplicateOtherItems, action);
 };
 
 const handleDuplicates = (items, action) => {
@@ -231,9 +274,19 @@ const buyPack = (pack, popUpValues) => {
               popUpValues.playersHandler
             );
             await wait(2);
-            response += await handleNonDuplicateNonPlayers(
+            response += await handleNonDuplicateManagers(
               items,
-              popUpValues.nonPlayersHandler
+              popUpValues.managersHandler
+            );
+            await wait(2);
+            response += await handleContracts(
+              items,
+              popUpValues.contractsHandler
+            );
+            await wait(2);
+            response += await handleNonDuplicateOtherItems(
+              items,
+              popUpValues.otherItemsHandler
             );
             await wait(2);
             response += await handleDuplicates(
