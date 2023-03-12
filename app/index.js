@@ -18,7 +18,7 @@ if (!isMarketAlertApp) {
   Auth.configure({
     oauth: JSON.parse(
       atob(
-        "eyJkb21haW4iOiJsb2dpbi5mdXRoZWxwZXJzLmNvbSIsInNjb3BlIjpbInBob25lIiwiZW1haWwiLCJwcm9maWxlIiwib3BlbmlkIiwiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iXSwicmVkaXJlY3RTaWduSW4iOiJodHRwczovL3d3dy5lYS5jb20vZmlmYS91bHRpbWF0ZS10ZWFtL3dlYi1hcHAvIiwicmVkaXJlY3RTaWduT3V0IjoiaHR0cHM6Ly93d3cuZWEuY29tL2ZpZmEvdWx0aW1hdGUtdGVhbS93ZWItYXBwLyIsInJlc3BvbnNlVHlwZSI6InRva2VuIn0="
+        "eyJkb21haW4iOiJsb2dpbi5mdXRoZWxwZXJzLmNvbSIsInNjb3BlIjpbInBob25lIiwiZW1haWwiLCJwcm9maWxlIiwib3BlbmlkIiwiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iXSwicmVkaXJlY3RTaWduSW4iOiJodHRwczovL3d3dy5lYS5jb20vZmlmYS91bHRpbWF0ZS10ZWFtL3dlYi1hcHAvIiwicmVkaXJlY3RTaWduT3V0IjoiaHR0cHM6Ly93d3cuZWEuY29tL2ZpZmEvdWx0aW1hdGUtdGVhbS93ZWItYXBwLyIsInJlc3BvbnNlVHlwZSI6ImNvZGUifQ=="
       )
     ),
   });

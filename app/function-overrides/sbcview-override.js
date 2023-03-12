@@ -12,7 +12,11 @@ import futbin, {
   getSbcPlayersInfo,
 } from "../services/datasource/futbin";
 import { sendPinEvents, sendUINotification } from "../utils/notificationUtil";
-import { getSquadPlayerIds, getSquadPlayerLookup } from "../services/club";
+import {
+  getSquadPlayerIds,
+  getSquadPlayerLookup,
+  getSquadPlayersForSbc,
+} from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
 import {
   idBuySBCPlayers,
@@ -261,6 +265,17 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
 const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
   const accessLevel = getValue("userAccess");
   const loggedInUser = getValue("loggedInUser") || isMarketAlertApp;
+  const { _squad, _challenge } = getControllerInstance();
+  const challengeRequirements = _challenge.eligibilityRequirements.map(
+    (eligibility) => ({
+      scope: eligibility.scope,
+      requirements: eligibility.kvPairs._collection,
+    })
+  );
+  challengeRequirements.push({
+    scope: SBCEligibilityScope.EXACT,
+    requirements: { "-1": [_squad.getNumOfRequiredPlayers()] },
+  });
   if (
     (isMarketAlertApp && (!accessLevel || accessLevel === "tradeEnhancer")) ||
     !loggedInUser
@@ -280,33 +295,16 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
      </select>`
     );
   }
-  const level = new Set([
-    6, 7, 8, 9, 10, 16, 630, 1371, 1553, 1625, 1631, 1114, 1223, 1254, 1270,
-    1314,
-  ]).has(challengeId)
-    ? SearchLevel.BRONZE
-    : new Set([
-        11, 1167, 1372, 1554, 1626, 1632, 1115, 1224, 1255, 1271, 1315,
-      ]).has(challengeId)
-    ? SearchLevel.SILVER
-    : challengeId === 12
-    ? SearchLevel.GOLD
-    : undefined;
 
-  const rarity = new Set([
-    1371, 1553, 1625, 1631, 1114, 1223, 1254, 1270, 1314, 1372, 1554, 1626,
-    1632, 1115, 1224, 1255, 1271, 1315,
-  ]).has(challengeId)
-    ? ItemRarity.RARE
-    : undefined;
-  const sort = new Set([
-    10, 11, 12, 1167, 630, 1371, 1372, 1553, 1554, 1625, 1626, 1631, 1632, 1114,
-    1115, 1223, 1224, 1254, 1255, 1270, 1271, 1314, 1315,
-  ]).has(challengeId)
-    ? SearchSortOrder.ASCENDING
-    : undefined;
-  const squadPlayers = await getSquadPlayerIds(level, sort, rarity);
-  const { sbcs } = await fetchSbcs(challengeId, Array.from(squadPlayers));
+  const squadPlayers = await getSquadPlayerIds();
+  const players = await getSquadPlayersForSbc({
+    sort: SearchSortOrder.ASCENDING,
+  });
+  const { sbcs } = await fetchSbcs(challengeId, {
+    players,
+    requirements: challengeRequirements,
+    brickIndices: _squad.getAllBrickIndices(),
+  });
 
   $(`#${idSBCMarketSolution}`).remove();
 
@@ -356,7 +354,8 @@ const getControllerInstance = () => {
     return childViews[childViews.length - 2];
   }
 
-  return getCurrentViewController().getCurrentController()._leftController;
+  return getCurrentViewController().getCurrentController()
+    ._childViewControllers[0];
 };
 
 const buyPlayersPopUp = () => {
@@ -569,6 +568,8 @@ const positionPlayers = (defIds, squadPlayersLookup) => {
   });
 
   const { _squad, _challenge } = getControllerInstance();
+
+  _squad.removeAllItems();
 
   _squad.setPlayers(squadPlayers, true);
 
