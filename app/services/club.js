@@ -14,7 +14,7 @@ import { fetchPrices } from "./datasource";
 export const getSquadPlayerIds = () => {
   return new Promise((resolve) => {
     const squadPlayerIds = new Set();
-    getAllClubPlayers(true, null).then((squadMembers) => {
+    getAllClubPlayers(true, null).then(([squadMembers]) => {
       squadMembers.forEach((member) => {
         squadPlayerIds.add(member.definitionId);
       });
@@ -27,10 +27,11 @@ export const getSquadPlayersForSbc = ({ level, sort, rarity }) => {
   return new Promise((resolve) => {
     const squadPlayers = [];
     getAllClubPlayers(true, null, { level, sort, rarity }).then(
-      (squadMembers) => {
+      ([squadMembers, isFromCache]) => {
         squadMembers.forEach((member) => {
           squadPlayers.push({
             definitionId: member.definitionId,
+            databaseId: member.databaseId,
             rating: member.rating,
             quality: member.isBronzeRating()
               ? 1
@@ -46,7 +47,10 @@ export const getSquadPlayersForSbc = ({ level, sort, rarity }) => {
             groups: member.groups,
           });
         });
-        resolve(squadPlayers.sort((a, b) => a.rating - b.rating));
+        resolve({
+          squadPlayers: squadPlayers.sort((a, b) => a.rating - b.rating),
+          isFromCache,
+        });
       }
     );
   });
@@ -55,7 +59,7 @@ export const getSquadPlayersForSbc = ({ level, sort, rarity }) => {
 export const getSquadPlayerLookup = () => {
   return new Promise((resolve, reject) => {
     const squadPlayersLookup = new Map();
-    getAllClubPlayers(true).then((squadMembers) => {
+    getAllClubPlayers(true).then(([squadMembers]) => {
       squadMembers.forEach((member) => {
         squadPlayersLookup.set(member.definitionId, member);
       });
@@ -128,7 +132,7 @@ export const getAllClubPlayers = function (
             await wait(1);
             getAllSquadMembers();
           } else {
-            resolve(gatheredSquad);
+            resolve([gatheredSquad, response.status === 304]);
           }
         }
       );
@@ -157,7 +161,7 @@ const getActiveSquadIds = (searchModel) => {
 
 export const downloadClub = async () => {
   showLoader();
-  let squadMembers = await getAllClubPlayers();
+  let [squadMembers] = await getAllClubPlayers();
   squadMembers = squadMembers.sort((a, b) => b.rating - a.rating);
 
   await fetchPrices(squadMembers);

@@ -29,12 +29,19 @@ import {
   idGenerateSBCSolution,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
-import { getDataSource, getValue, setValue } from "../services/repository";
+import {
+  getDataSource,
+  getMarketSolutions,
+  getValue,
+  setMarketSolutions,
+  setValue,
+} from "../services/repository";
 import { getSellBidPrice, roundOffPrice } from "../utils/priceUtil";
 import { t } from "../services/translate";
 import { fetchPrices } from "../services/datasource";
 import { fetchSbcs, fetchUniqueSbc } from "../services/datasource/marketAlert";
 
+let count = 0;
 export const sbcViewOverride = () => {
   const squladDetailPanelView = UTSBCSquadDetailPanelView.prototype.render;
 
@@ -116,6 +123,7 @@ export const sbcViewOverride = () => {
   UTSBCSquadDetailPanelView.prototype.render = function (...params) {
     squladDetailPanelView.call(this, ...params);
     const sbcId = params.length ? params[0].id : "";
+    const { _squad } = getControllerInstance();
     setValue("squadId", sbcId);
     fetchAndAppendCommunitySbcs(sbcId);
     fetchAndAppendMarketAlertSbcs(sbcId);
@@ -145,12 +153,42 @@ export const sbcViewOverride = () => {
               },
               "call-to-action"
             )}
+            ${
+              _squad.getNumOfRequiredPlayers() === 11
+                ? generateButton(
+                    idGenerateSBCSolution,
+                    t("generateSolution") + " (Beta)",
+                    () => {
+                      generateUniqueSolution();
+                    },
+                    "call-to-action"
+                  )
+                : ""
+            }
           `
           )
         );
       }
     });
   };
+};
+
+const showFeedback = async () => {
+  showPopUp(
+    [
+      { labelEnum: "Give feedback" },
+      { labelEnum: enums.UIDialogOptions.CANCEL },
+    ],
+    "Feedback",
+    "Make sure to leave a feedback on how the AI performed",
+    (text) => {
+      text === "Give feedback" &&
+        window.open(
+          "https://discord.gg/fut-ab-ck-algos-r-768336764447621122",
+          "_blank"
+        );
+    }
+  );
 };
 
 const generateUniqueSolution = async () => {
@@ -165,70 +203,86 @@ const generateUniqueSolution = async () => {
       text === 2 &&
         (async () => {
           showLoader();
-          if (!isMarketAlertApp) {
-            await wait(3);
-            sendUINotification(
-              t("solvableUnAvailable"),
-              UINotificationType.NEGATIVE
-            );
-            return hideLoader();
-          }
-          const accessLevel = getValue("userAccess");
-          if (!accessLevel || accessLevel === "tradeEnhancer") {
-            await wait(3);
-            sendUINotification(t("levelError"), UINotificationType.NEGATIVE);
-            return hideLoader();
-          }
           const challengeId = getValue("squadId");
           try {
-            const solutions = await fetchUniqueSbc(challengeId);
-
-            const solutionPlayers = solutions.reduce((acc, { players }) => {
-              players.forEach((curr) => {
-                acc.set(curr, { definitionId: curr, isPlayer: () => true });
-              });
-              return acc;
-            }, new Map());
-
-            await futbin.fetchPrices(solutionPlayers.values());
-
-            const sbcs = solutions.map((sbc) => {
-              const price = (sbc.players || []).reduce((acc, curr) => {
-                acc += (getValue(`${curr}_futbin_price`) || { price: 0 }).price;
-                return acc;
-              }, 0);
-              sbc.price = price;
-              return sbc;
+            sendUINotification("Fetching squad players");
+            const { squadPlayers: players } = await getSquadPlayersForSbc({
+              sort: SearchSortOrder.ASCENDING,
             });
-            const cheapestFutSBC = parseInt(getValue("cheapestFutSBC") || 0);
-            let cheaperThanFutbin = true;
-            let filteredSbcs = sbcs.filter(
-              ({ price }) => price < cheapestFutSBC
+            sendUINotification("Fetching latest prices for the players");
+            const prices = await fetchPrices(
+              players.map((player) => {
+                player.isPlayer = () => true;
+                return player;
+              })
             );
-            if (!filteredSbcs.length) {
-              filteredSbcs = sbcs;
-              cheaperThanFutbin = false;
+
+            const cheapestSBC = getValue("cheapestFutSBC");
+            const dataSource = getDataSource();
+            const playersWithPrices = players.map((player) => {
+              player.price =
+                prices.get(`${player.definitionId}_${dataSource}_price`) || 0;
+              return player;
+            });
+            const { _squad, _challenge } = getControllerInstance();
+            const challengeRequirements =
+              _challenge.eligibilityRequirements.map((eligibility) => ({
+                scope: eligibility.scope,
+                requirements: eligibility.kvPairs._collection,
+                count: eligibility.count,
+              }));
+            challengeRequirements.unshift({
+              scope: SBCEligibilityScope.EXACT,
+              count: _squad.getNumOfRequiredPlayers(),
+              requirements: { "-1": [_squad.getNumOfRequiredPlayers()] },
+            });
+            const formationName = _squad._formation.name;
+            sendUINotification(
+              "Trying to find an optimal squad using the given constraint"
+            );
+            const solutions = await fetchUniqueSbc(challengeId, {
+              players: playersWithPrices,
+              challengeRequirements,
+              formationName,
+            });
+            if (solutions.status !== 200) {
+              hideLoader();
+              return sendUINotification(
+                solutions.response || "Error Occured",
+                UINotificationType.NEGATIVE
+              );
             }
-            const filteredSbc =
-              filteredSbcs[getRandNum(0, filteredSbcs.length - 1)];
-            if (filteredSbc) {
-              if (cheaperThanFutbin && cheapestFutSBC) {
-                const percentDiff =
-                  ((cheapestFutSBC - filteredSbc.price) / cheapestFutSBC) * 100;
-                sendUINotification(
-                  `Generated Solution is ${percentDiff.toFixed(
-                    2
-                  )}% cheaper than current cheapest futbin solution`
-                );
-              }
-              if (
-                filteredSbc &&
-                filteredSbc.players &&
-                filteredSbc.players.length
-              ) {
-                await fillMarketAlertSbc(filteredSbc.players);
-              }
+            let squadPrice = 0;
+            let hasAllPrice = true;
+            const solutionPlayers = Object.values(solutions.players)
+              .sort(
+                (player1, player2) =>
+                  player1.positionIndex - player2.positionIndex
+              )
+              .map(({ definitionId, price }) => {
+                if (price) {
+                  squadPrice += price;
+                } else {
+                  hasAllPrice = false;
+                }
+                return +definitionId;
+              });
+            if (hasAllPrice && squadPrice < cheapestSBC) {
+              const percentDiff =
+                ((cheapestSBC - squadPrice) / cheapestSBC) * 100;
+              sendUINotification(
+                `Generated Solution is ${percentDiff.toFixed(
+                  2
+                )}% cheaper than current cheapest futbin solution`
+              );
             }
+            if (count % 5 === 0) {
+              setTimeout(() => {
+                showFeedback();
+                count++;
+              }, 3000);
+            }
+            fillMarketAlertSbc(solutionPlayers);
           } catch (err) {
             sendUINotification("Error Occured", UINotificationType.NEGATIVE);
           }
@@ -262,6 +316,8 @@ const fetchAndAppendCommunitySbcs = async (challengeId) => {
   );
 };
 
+const cacheSbcsId = new Set([1287, 1288, 1289, 1290]);
+
 const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
   const accessLevel = getValue("userAccess");
   const loggedInUser = getValue("loggedInUser") || isMarketAlertApp;
@@ -276,6 +332,7 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
     scope: SBCEligibilityScope.EXACT,
     requirements: { "-1": [_squad.getNumOfRequiredPlayers()] },
   });
+
   if (
     (isMarketAlertApp && (!accessLevel || accessLevel === "tradeEnhancer")) ||
     !loggedInUser
@@ -297,14 +354,22 @@ const fetchAndAppendMarketAlertSbcs = async (challengeId) => {
   }
 
   const squadPlayers = await getSquadPlayerIds();
-  const players = await getSquadPlayersForSbc({
+  const { squadPlayers: players, isFromCache } = await getSquadPlayersForSbc({
     sort: SearchSortOrder.ASCENDING,
   });
-  const { sbcs } = await fetchSbcs(challengeId, {
-    players,
-    requirements: challengeRequirements,
-    brickIndices: _squad.getAllBrickIndices(),
-  });
+  const solutionsInCache = getMarketSolutions(challengeId);
+  let sbcs;
+  if (isFromCache && solutionsInCache && cacheSbcsId.has(challengeId)) {
+    sbcs = solutionsInCache;
+  } else {
+    const { sbcs: remoteSbcs } = await fetchSbcs(challengeId, {
+      players,
+      requirements: challengeRequirements,
+      brickIndices: _squad.getAllBrickIndices(),
+    });
+    sbcs = remoteSbcs;
+    setMarketSolutions(challengeId, sbcs);
+  }
 
   $(`#${idSBCMarketSolution}`).remove();
 

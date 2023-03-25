@@ -41,3 +41,14 @@ export const clearSelectedPlayersBySection = (section) => {
   selectedPlayersBySection[section].clear();
   return selectedPlayersBySection[section];
 };
+
+export const setMarketSolutions = (challengeId, solution) => {
+  const sbcSolution = getValue("marketSolutions") || new Map();
+  sbcSolution.set(challengeId, solution);
+  setValue("marketSolutions", sbcSolution);
+};
+
+export const getMarketSolutions = (challengeId) => {
+  const sbcSolution = getValue("marketSolutions") || new Map();
+  return sbcSolution.get(challengeId);
+};

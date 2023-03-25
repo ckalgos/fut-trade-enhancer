@@ -58,13 +58,14 @@ export const fetchSbcs = async (challengeId, payload) => {
   return JSON.parse(response);
 };
 
-export const fetchUniqueSbc = async (challengeId) => {
+export const fetchUniqueSbc = async (challengeId, payload) => {
   const response = await sendRequest(
-    `${atob(
-      "aHR0cHM6Ly9rZWV5bGRmdWxmaHQ1NjNoZ3N3ZHJxamlnZTBudnR2ZS5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M/c2JjSWQ9"
-    )}${challengeId}`,
-    "GET",
-    `${Math.floor(+new Date())}_fetchUniqueSbc_${challengeId}`
+    atob(
+      "aHR0cHM6Ly9kbGhhaW5yaGl1amZuc2luaTdwdnd0ZzZ1ZTBrbHB6Yy5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3MvZ2V0X3ZhbA=="
+    ),
+    "POST",
+    `${Math.floor(+new Date())}_fetchUniqueSbc_${challengeId}`,
+    formatRequest(payload)
   );
   return JSON.parse(response);
 };

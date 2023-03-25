@@ -26,6 +26,7 @@ export const popupOverride = () => {
           atob("R2l0aHVi"),
           atob("QW5kcm9pZA=="),
           atob("aW9z"),
+          atob("R2l2ZSBmZWVkYmFjaw=="),
         ].includes(message)
       ) {
         return message;

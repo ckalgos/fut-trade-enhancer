@@ -2,15 +2,7 @@ import { Auth } from "../external/amplify";
 import { setValue } from "../services/repository";
 
 export const setUserData = async () => {
-  const token = await fetchAndSetData();
-  if (token) {
-    const interval = setInterval(async () => {
-      const refreshedToken = await fetchAndSetData();
-      if (!refreshedToken) {
-        clearInterval(interval);
-      }
-    }, 1800000);
-  }
+  await fetchAndSetData();
 };
 
 const fetchAndSetData = async () => {

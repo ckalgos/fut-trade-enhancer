@@ -53,6 +53,7 @@ const sendWebRequest = (options) => {
   const { token } = getValue("loggedInUser") || {};
   const isSbcRequest =
     /_fetchSolvableSbcs/.test(options.identifier) ||
+    /_fetchUniqueSbc/.test(options.identifier) ||
     /_sbcSolution/.test(options.identifier);
   const headers = {
     "User-Agent": idSession,
