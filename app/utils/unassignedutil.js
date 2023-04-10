@@ -18,7 +18,7 @@ export const moveUnassignedToTransferList = async () => {
   hideLoader();
 };
 
-const getUnassignedItems = () => {
+export const getUnassignedItems = () => {
   return new Promise((resolve) => {
     services.Item.requestUnassignedItems().observe(
       this,

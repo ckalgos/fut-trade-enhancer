@@ -18,6 +18,7 @@ import {
   getSquadPlayersForSbc,
 } from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
+import { getUnassignedItems } from "../utils/unassignedutil";
 import {
   idBuySBCPlayers,
   idFillSBC,
@@ -27,6 +28,7 @@ import {
   idSBCMarketSolution,
   isMarketAlertApp,
   idGenerateSBCSolution,
+  idGetUnassignedPlayers,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import {
@@ -144,7 +146,15 @@ export const sbcViewOverride = () => {
                 },
                 "call-to-action"
               )}
-            </div>            
+            </div>           
+            ${generateButton(
+              idGetUnassignedPlayers,
+              t("getUnassignedPlayers"),
+              () => {
+                getUnassignedPlayers();
+              },
+              "call-to-action"
+            )} 
             ${generateButton(
               idBuySBCPlayers,
               t("buyMissingPlayers"),
@@ -618,6 +628,7 @@ const fillSquad = async (squadId) => {
 };
 
 const positionPlayers = (defIds, squadPlayersLookup) => {
+  // get all players and set some default info to be used by squad filler
   const squadPlayers = defIds.map((currItem) => {
     if (!currItem) {
       return null;
@@ -657,4 +668,23 @@ const positionPlayers = (defIds, squadPlayersLookup) => {
       );
     }
   );
+};
+
+const getUnassignedPlayers = async () => {
+  showLoader();
+  sendUINotification(t("tryingToGetUnassignedPlayers"));
+  const squadPlayersLookupPromise = getSquadPlayerLookup();
+  const unassignedPlayersPromise = getUnassignedItems();
+  const [squadPlayersLookup, unassignedPlayersInfo] = await Promise.all([
+    squadPlayersLookupPromise,
+    unassignedPlayersPromise
+  ]);
+  console.log(squadPlayersLookup);
+  console.log(unassignedPlayersInfo);
+  positionPlayers(
+    unassignedPlayersInfo.map((currItem) => currItem && currItem.definitionId),
+    squadPlayersLookup
+  )
+  sendUINotification(t("unassignedCompleted"));
+  hideLoader();
 };

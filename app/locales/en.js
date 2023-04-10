@@ -133,4 +133,7 @@ export const enLocales = {
   generateSolution: "Generate Solution",
   generateSolutionInfo:
     "Based on the given SBC requirements bot will try to generate a unique solution not used before",
+  getUnassignedPlayers: "Get Unassigned Players",
+  tryingToGetUnassignedPlayers: "Trying to get unassigned players",
+  unassignedCompleted: "Getting unassigned players completed"
 };

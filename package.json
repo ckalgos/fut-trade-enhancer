@@ -3,11 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "watch": {
+    "build:dev": {
+      "patterns": [
+        "app"
+      ],
+      "extensions": "js,jsx"
+    }
+  },
   "scripts": {
     "build:dev": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "serve": "webpack serve --mode development",
-    "build:mobile": "npx babel  dist/fut-trade-enhancer.user.js --out-file dist/fut-trade-enhancer.mobile.js --presets babel-preset-es2015"
+    "build:mobile": "npx babel  dist/fut-trade-enhancer.user.js --out-file dist/fut-trade-enhancer.mobile.js --presets babel-preset-es2015",
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -21,6 +30,7 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
+    "npm-watch": "^0.11.0",
     "terser-webpack-plugin": "^5.1.4",
     "webpack-cli": "^4.10.0",
     "webpack-dev-server": "^3.11.2",

@@ -54,3 +54,4 @@ export const idOnlyBargain = "elem_" + generateId(15);
 export const idGenerateSBCSolution = "elem_" + generateId(15);
 export const idSquadBuildPlayerRating = "elem_" + generateId(15);
 export const idSquadBuildIgnorePosition = "elem_" + generateId(15);
+export const idGetDupePlayers = "elem_" + generateId(15);
