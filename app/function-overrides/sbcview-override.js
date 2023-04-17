@@ -628,7 +628,6 @@ const fillSquad = async (squadId) => {
 };
 
 const positionPlayers = (defIds, squadPlayersLookup) => {
-  // get all players and set some default info to be used by squad filler
   const squadPlayers = defIds.map((currItem) => {
     if (!currItem) {
       return null;
@@ -679,8 +678,6 @@ const getUnassignedPlayers = async () => {
     squadPlayersLookupPromise,
     unassignedPlayersPromise
   ]);
-  console.log(squadPlayersLookup);
-  console.log(unassignedPlayersInfo);
   positionPlayers(
     unassignedPlayersInfo.map((currItem) => currItem && currItem.definitionId),
     squadPlayersLookup
