@@ -31,32 +31,25 @@ const getToken = () => {
 
 const formRequestPayLoad = (listRows) => {
   const platform = getUserPlatform();
-  const trackPayLoad = [];
-  listRows.forEach((row) => {
-    const {
-      id,
-      definitionId,
-      type,
-      _auction: {
-        buyNowPrice,
-        tradeId: auctionId,
-        expires: expiresOn,
-        _tradeState: tradeState,
-      },
-    } = row;
-
+  const trackPayLoad = listRows.map((row) => {
     const expireDate = new Date();
-    expireDate.setSeconds(expireDate.getSeconds() + expiresOn);
-    tradeState === "active" &&
-      type === "player" &&
-      trackPayLoad.push({
-        definitionId,
-        price: buyNowPrice,
+    expireDate.setSeconds(expireDate.getSeconds() + row._auction.expires);
+    return {
+      assetId:
+        row._assetId || (row._metaData && row._metaData.id) || row.definitionId,
+      resourceId: row.definitionId,
+      auction: {
+        buyNowPrice: row._auction.buyNowPrice,
+        currentBid: row._auction.currentBid,
+        resourceId: row.definitionId,
         expiresOn: expireDate,
-        id: id + "",
-        auctionId,
-        platform,
-      });
+        platform: platform.toUpperCase(),
+        playStyle: row.playStyle,
+        startingBid: row._auction.startingBid,
+        tradeId: parseInt(row._auction.tradeId),
+        tradeState: row._auction._tradeState,
+      },
+    };
   });
 
   return trackPayLoad;
@@ -76,17 +69,15 @@ export const saveSolution = (payload) => {
 };
 
 export const trackMarketPrices = (items) => {
+  const { id: userId } = services.User.getUser();
   const requestPayload = formRequestPayLoad(items);
-  if (requestPayload.length && requestPayload.length <= 12) {
-    return sendRequest(
-      atob(
-        "aHR0cHM6Ly9xenlhZnN0ZWR1N3N0cDV3NTU2NW54bWZtaTB2bWZvbi5sYW1iZGEtdXJsLmV1LXdlc3QtMS5vbi5hd3M="
-      ),
-      "POST",
-      `${Math.floor(+new Date())}_trackMarketPrices`,
-      JSON.stringify({
-        prices: requestPayload,
-      })
-    );
-  }
+  return sendRequest(
+    "https://wxls53nz2plegcvsjhco3yqyke0hqrps.lambda-url.eu-west-1.on.aws/",
+    "POST",
+    `${Math.floor(+new Date())}_trackMarketPrices`,
+    JSON.stringify({
+      userId,
+      marketData: requestPayload,
+    })
+  );
 };

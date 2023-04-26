@@ -19,7 +19,9 @@ export const initListeners = () => {
             `User access level set to ${
               data.response === "adBlocked"
                 ? "Enhancer Gold"
-                : "Enhancer Silver"
+                : data.response === "tradeEnhancer"
+                ? "Enhancer Silver"
+                : "Enhancer Free"
             }`
           );
           return setValue("userAccess", data.response);
@@ -60,6 +62,7 @@ const sendWebRequest = (options) => {
   };
   if (isSbcRequest) {
     headers.Authorization = `Bearer ${token}`;
+    headers["Content-Type"] = `application/json`;
   }
   GM_xmlhttpRequest({
     method: options.method,
