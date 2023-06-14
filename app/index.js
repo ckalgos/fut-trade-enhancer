@@ -6,6 +6,7 @@ import { getPlayers, getSettings, initDatabase } from "./utils/dbUtil";
 import { setMaxUnassignedCount } from "./utils/pileUtil";
 import Amplify, { Auth } from "./external/amplify";
 import { setUserData } from "./utils/authUtil";
+import { getAllClubPlayers } from "./services/club";
 
 if (!isMarketAlertApp) {
   Amplify.configure(
@@ -50,9 +51,49 @@ const initScript = function () {
 
   if (isAllLoaded) {
     initOverrides();
+    isMarketAlertApp && fetchClubPlayers();
     isMarketAlertApp && initListeners();
   } else {
     setTimeout(initScript, 1000);
+  }
+};
+
+const fetchClubPlayers = () => {
+  let isHomePageLoaded = false;
+  if (
+    services.Localization &&
+    $("h1.title").html() === services.Localization.localize("navbar.label.home")
+  ) {
+    isHomePageLoaded = true;
+  }
+  if (isHomePageLoaded) {
+    getAllClubPlayers().then(([players]) => {
+      const clubPlayersData = players.map((player) => ({
+        name: player._staticData.name,
+        assetId: player.assetId,
+        definitionId: player.definitionId,
+        rating: player.rating,
+        isSpecial: player.isSpecial(),
+        position: player.preferredPosition,
+        nation: player.nationId,
+        league: player.nationId,
+        club: player.teamId,
+        boughtPrice: player.lastSalePrice,
+        isLoaned: player.loans > 0,
+        untradeable: player.untradeable,
+        imageGuid: player.guidAssetId,
+        games: player._stats[0],
+        goals: player._stats[1],
+      }));
+      window.ReactNativeWebView.postMessage(
+        JSON.stringify({
+          type: "clubPlayersData",
+          payload: clubPlayersData,
+        })
+      );
+    });
+  } else {
+    setTimeout(fetchClubPlayers, 2000);
   }
 };
 
