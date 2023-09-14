@@ -9,6 +9,8 @@
 <p align="center"> 
   <h3 align="center">Fifa Trade Enhancer</h3>
 
+You can install the script from Chrome Store - https://chrome.google.com/webstore/detail/boffdonfioidojlcpmfnkngipappmcoh
+
   <p align="center">
     Fifa Trade Enhancer For Web App!
     <br />  
