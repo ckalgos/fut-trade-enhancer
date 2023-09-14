@@ -18,6 +18,7 @@ import {
   getSquadPlayersForSbc,
 } from "../services/club";
 import { generateButton } from "../utils/uiUtils/generateButton";
+import { getUnassignedItems } from "../utils/unassignedutil";
 import {
   idBuySBCPlayers,
   idFillSBC,
@@ -27,6 +28,7 @@ import {
   idSBCMarketSolution,
   isMarketAlertApp,
   idGenerateSBCSolution,
+  idGetUnassignedPlayers,
 } from "../app.constants";
 import { showPopUp } from "./popup-override";
 import {
@@ -144,7 +146,15 @@ export const sbcViewOverride = () => {
                 },
                 "call-to-action"
               )}
-            </div>            
+            </div>           
+            ${generateButton(
+              idGetUnassignedPlayers,
+              t("getUnassignedPlayers"),
+              () => {
+                getUnassignedPlayers();
+              },
+              "call-to-action"
+            )} 
             ${generateButton(
               idBuySBCPlayers,
               t("buyMissingPlayers"),
@@ -657,4 +667,21 @@ const positionPlayers = (defIds, squadPlayersLookup) => {
       );
     }
   );
+};
+
+const getUnassignedPlayers = async () => {
+  showLoader();
+  sendUINotification(t("tryingToGetUnassignedPlayers"));
+  const squadPlayersLookupPromise = getSquadPlayerLookup();
+  const unassignedPlayersPromise = getUnassignedItems();
+  const [squadPlayersLookup, unassignedPlayersInfo] = await Promise.all([
+    squadPlayersLookupPromise,
+    unassignedPlayersPromise
+  ]);
+  positionPlayers(
+    unassignedPlayersInfo.map((currItem) => currItem && currItem.definitionId),
+    squadPlayersLookup
+  )
+  sendUINotification(t("unassignedCompleted"));
+  hideLoader();
 };
